@@ -1,4 +1,4 @@
-import * as joinRequestServices from "../dataServices/joinRequestServices.js";
+import * as joinRequestServices from "../dataServices/joinRequestSevices.js";
 
 // קבלת כל הבקשות (או לפי סינון)
 export const getJoinRequests = async (req, res) => {

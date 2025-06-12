@@ -1,13 +1,12 @@
 import express from 'express';
-import { getAllCavrutas, getCavrutaById, createCavruta, updateCavruta, deleteCavruta } from '../controllers/CavrutaController.js';
-
+import { getChavrutas, createChavruta, updateChavruta, deleteChavruta } from '../controllers/chavrutaController.js';
 const router = express.Router();
 
 // Get all users
-router.get('/', getAllCavrutas);
-router.get('/:id', getCavrutaById);
-router.post('/', createCavruta);
-router.put('/:id', updateCavruta);
-router.delete('/:id', deleteCavruta);
+router.get('/', getChavrutas);
+//router.get('/:id', getCavrutaById);
+router.post('/', createChavruta);
+router.put('/:id', updateChavruta);
+router.delete('/:id', deleteChavruta);
 
 export default router;

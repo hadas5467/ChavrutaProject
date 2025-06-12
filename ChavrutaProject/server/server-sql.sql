@@ -8,8 +8,8 @@
 
 =======
 >>>>>>> 60c617eda13affcb8bf817b08623574e46cbb66d
-CREATE DATABASE IF NOT EXISTS chevruta_db;
-USE chevruta_db;
+CREATE DATABASE IF NOT EXISTS chavruta_db;
+USE chavruta_db;
 
 
 CREATE TABLE USERS (

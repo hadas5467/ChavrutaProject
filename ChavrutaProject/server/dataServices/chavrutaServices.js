@@ -20,7 +20,7 @@ export const findByFilter = async (filter = {}) => {
   if (conditions.length > 0) {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
-  const [rows] = await pool.promise().query(sql, params);
+  const [rows] = await pool.query(sql, params);
   return rows;
 };
 
@@ -30,7 +30,7 @@ export const create = async (chavruta) => {
   const params = [
     chavruta.user1, chavruta.user2, chavruta.callId
   ];
-  const [result] = await pool.promise().query(sql, params);
+  const [result] = await pool.query(sql, params);
   return { chavrutaId: result.insertId, ...chavruta };
 };
 
@@ -46,12 +46,12 @@ export const update = async (chavrutaId, chavruta) => {
   if (fields.length === 0) return null;
   params.push(chavrutaId);
   const sql = `UPDATE CHAVRUTA SET ${fields.join(', ')} WHERE chavrutaId = ?`;
-  const [result] = await pool.promise().query(sql, params);
+  const [result] = await pool.query(sql, params);
   return result;
 };
 
 export const deleteChavruta = async (chavrutaId) => {
   const sql = 'DELETE FROM CHAVRUTA WHERE chavrutaId = ?';
-  const [result] = await pool.promise().query(sql, [chavrutaId]);
+  const [result] = await pool.query(sql, [chavrutaId]);
   return result;
 };
