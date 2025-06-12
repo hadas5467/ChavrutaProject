@@ -3,9 +3,9 @@ import * as userServices from "../dataServices/userServices.js";
 
 export const loginUser = async (req, res) => {
 
-  const { userName, password } = req.query;
+  const { gmail, password } = req.query;
   try {
-    const user = await userServices.findByUserNameAndPassword(userName, password);
+    const user = await userServices.findByGmail(gmail, password);
     if (!user) {
       return res.status(401).json({ match: false, message: 'אינך רשום למערכת' });
     }
@@ -25,7 +25,7 @@ export const getUsers = async (req, res) => {
     let filter = {};
     if (userName) filter.userName = userName;
     if (email) filter.email = email;
-    const users = await userServices.findByUserNameAndEmail(filter);
+    const users = await userServices.findByFilter(filter);
     if (!users || users.length === 0) {
       return res.status(404).json({ message: "No users found" });
     }

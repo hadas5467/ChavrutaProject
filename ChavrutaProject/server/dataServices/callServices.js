@@ -16,7 +16,7 @@ export const findByFilter = async (filter = {}) => {
   if (conditions.length > 0) {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
-  const [rows] = await pool.promise().query(sql, params);
+  const [rows] = await pool.query(sql, params);
   return rows;
 };
 
@@ -27,7 +27,7 @@ export const create = async (call) => {
     call.userId, call.place, call.learningFormat, call.time,
     call.subject, call.age, call.notes, call.material
   ];
-  const [result] = await pool.promise().query(sql, params);
+  const [result] = await pool.query(sql, params);
   return { callId: result.insertId, ...call };
 };
 
@@ -43,12 +43,12 @@ export const update = async (callId, call) => {
   if (fields.length === 0) return null;
   params.push(callId);
   const sql = `UPDATE CALLS SET ${fields.join(', ')} WHERE callId = ?`;
-  const [result] = await pool.promise().query(sql, params);
+  const [result] = await pool.query(sql, params);
   return result;
 };
 
 export const deleteCall = async (callId) => {
   const sql = 'DELETE FROM CALLS WHERE callId = ?';
-  const [result] = await pool.promise().query(sql, [callId]);
+  const [result] = await pool.query(sql, [callId]);
   return result;
 };
