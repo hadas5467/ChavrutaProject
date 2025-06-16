@@ -67,7 +67,7 @@ export const create = async (user) => {
   // 1. יצירת משתמש בטבלת USERS (ללא סיסמה)
   const sqlUser = `INSERT INTO USERS 
     (user, role, name, phone, gmail, age, sex, sector, profile, contactMethod)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const paramsUser = [
     user.user,
     user.role || 'user',
