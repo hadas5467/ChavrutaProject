@@ -1,6 +1,6 @@
 import express from 'express';
 import { getCalls, createCall, updateCall, deleteCall } from '../controllers/callController.js';
-import { verifyToken } from '../middlewares/authenticate.js';
+import { verifyToken } from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
 const authorizeCallOwner = authorizeOwner({
   tableName: 'CALLS',

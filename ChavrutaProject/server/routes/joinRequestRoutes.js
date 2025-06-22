@@ -1,6 +1,6 @@
 import express from 'express';
 import {  getJoinRequests, createJoinRequest, updateJoinRequest, deleteJoinRequest } from '../controllers/joinRequestController.js';
-import { verifyToken } from '../middlewares/authenticate.js';
+import { verifyToken } from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
 const authorizeJoinRequestOwner = authorizeOwner({
   tableName: 'JOIN_REQUESTS',

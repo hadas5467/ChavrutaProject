@@ -1,6 +1,6 @@
 import express from 'express';
 import { getUsers, loginUser, createUser, updateUser, deleteUser } from '../controllers/userController.js';
-import { verifyToken } from '../middlewares/authenticate.js';
+import { verifyToken } from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
 const authorizeUserOwner = authorizeOwner({
   tableName: 'USERS',

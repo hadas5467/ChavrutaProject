@@ -1,6 +1,6 @@
 import express from 'express';
 import { updateChavruta, getChavrutas, createChavruta, deleteChavruta } from '../controllers/ChavrutaController.js';
-import { verifyToken } from '../middlewares/authenticate.js';
+import {verifyToken} from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
 const router = express.Router();
 const authorizeChavrutaOwner = authorizeOwner({
