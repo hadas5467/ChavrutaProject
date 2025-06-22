@@ -2,13 +2,13 @@ import users from "./routes/userRoutes.js";
 import calls from "./routes/callRoutes.js"
 import chavrutas from "./routes/chavrutaRoutes.js";
 import joinRequests from "./routes/joinRequestRoutes.js";
-
+import express from "express";
+import cors from "cors";
 
 const app = express();
 
 // Middlewares
-app.use(cors(
-  ));
+app.use(cors());
 
 app.use(express.json());
 

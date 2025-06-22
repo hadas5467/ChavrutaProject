@@ -9,7 +9,7 @@ export const getChavrutas = async (req, res) => {
     let filter = {};
     if (chavrutaName) filter.chavrutaName = chavrutaName;
     if (topic) filter.topic = topic;
-    const chavrutas = await chavrutaServices.findByNameAndTopic(filter);
+    const chavrutas = await chavrutaServices.findByFilter(filter);
     if (!chavrutas || chavrutas.length === 0) {
       return res.status(404).json({ message: "No chavrutas found" });
     }

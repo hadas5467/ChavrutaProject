@@ -24,14 +24,14 @@ export const findByFilter = async (filter = {}) => {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
 
-  const [rows] = await pool.promise().query(sql, params);
+  const [rows] = await pool.query(sql, params);
   return rows;
 };
 
 // קבלת משתמש לפי gmail (לצורך login)
 export const findByGmail = async (gmail) => {
   const sql = 'SELECT * FROM USERS WHERE  gmail = ? LIMIT 1';
-  const [rows] = await pool.promise().query(sql, [gmail]);
+  const [rows] = await pool.query(sql, [gmail]);
   return rows[0];
 };
 
@@ -45,7 +45,7 @@ export const login = async (gmail, password) => {
     WHERE U.gmail = ?
     LIMIT 1
   `;
-  const [rows1] = await pool.promise().query(sql1, [gmail]);
+  const [rows1] = await pool.query(sql1, [gmail]);
   const userAuth = rows1[0];
 
   if (!userAuth) return null;
@@ -56,7 +56,7 @@ export const login = async (gmail, password) => {
 
   // שלב 2: הסיסמה תקינה – שלוף את פרטי המשתמש המלאים
   const sql2 = `SELECT * FROM USERS WHERE userId = ? LIMIT 1`;
-  const [rows2] = await pool.promise().query(sql2, [userAuth.userId]);
+  const [rows2] = await pool.query(sql2, [userAuth.userId]);
   return rows2[0] || null;
 };
 
@@ -80,11 +80,11 @@ export const create = async (user) => {
     user.profile,
     user.contactMethod
   ];
-  const [result] = await pool.promise().query(sqlUser, paramsUser);
+  const [result] = await pool.query(sqlUser, paramsUser);
 
   // 2. שמירת הסיסמה בטבלת PASSWORDS
   const sqlPass = `INSERT INTO PASSWORDS (userId, passwordHash) VALUES (?, ?)`;
-  await pool.promise().query(sqlPass, [result.insertId, hashedPassword]);
+  await pool.query(sqlPass, [result.insertId, hashedPassword]);
 
   return { userId: result.insertId, ...user, password: undefined };
 };
@@ -102,7 +102,7 @@ export const update = async (userId, user) => {
   if (fields.length === 0) return null;
   params.push(userId);
   const sql = `UPDATE USERS SET ${fields.join(', ')} WHERE userId = ?`;
-  const [result] = await pool.promise().query(sql, params);
+  const [result] = await pool.query(sql, params);
   return result;
 };
 
@@ -110,13 +110,14 @@ export const update = async (userId, user) => {
 export const updatePassword = async (userId, newPassword) => {
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   const sql = 'UPDATE USERS SET password = ? WHERE userId = ?';
-  const [result] = await pool.promise().query(sql, [hashedPassword, userId]);
+  const [result] = await pool.query(sql, [hashedPassword, userId]);
   return result;
 };
 
 // מחיקת משתמש
 export const deleteUser = async (userId) => {
+  console.log('Deleting user with ID:', userId);
   const sql = 'DELETE FROM USERS WHERE userId = ?';
-  const [result] = await pool.promise().query(sql, [userId]);
+  const [result] = await pool.query(sql, [userId]);
   return result;
 };
