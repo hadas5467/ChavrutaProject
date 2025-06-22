@@ -116,6 +116,7 @@ export const updatePassword = async (userId, newPassword) => {
 
 // מחיקת משתמש
 export const deleteUser = async (userId) => {
+  console.log('Deleting user with ID:', userId);
   const sql = 'DELETE FROM USERS WHERE userId = ?';
   const [result] = await pool.query(sql, [userId]);
   return result;

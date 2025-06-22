@@ -25,7 +25,7 @@ export const getUsers = async (req, res) => {
     let filter = {};
     if (userName) filter.userName = userName;
     if (email) filter.email = email;
-    const users = await userServices.findByUserNameAndEmail(filter);
+    const users = await userServices.findByFilter(filter);
     if (!users || users.length === 0) {
       return res.status(404).json({ message: "No users found" });
     }
@@ -72,7 +72,7 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
-        let result = await moudleUsers.remove(id);  // שימי לב לשם חדש remove
+        let result = await userServices.deleteUser(id);  // שימי לב לשם חדש remove
         res.status(200).json(result);
     } catch (error) {
         res.status(500).send('שגיאה במחיקת המשתמש', error.message);
