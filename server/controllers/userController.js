@@ -39,6 +39,7 @@ export const getUsers = async (req, res) => {
 // יצירת משתמש חדש
 export const createUser = async (req, res) => {
   try {
+       console.log("Register API hit", req.body);
     let newUser = await userServices.create(req.body);
    const token = generateToken(newUser); // 👈 כאן נוצרת ה-JWT
 

@@ -288,7 +288,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 // import { useAuth } from '../context/AuthContext';
-import { apiService } from '../apiService'
+import { addData } from '../apiService.js'
 import { UserPlus, User, Mail, Lock, Phone, Calendar, Eye, EyeOff } from 'lucide-react';
 import {
     languageMap,
@@ -336,10 +336,11 @@ const SignUp = () => {
         setLoading(true);
         setError('');
         try {
-            const result = await apiService.add("/api/users/register",formData);
-          
+            const result = await addData("users/register",formData);
+
             navigate('/');
         } catch (err) {
+             console.error("Signup error:", err);
             setError('שגיאה בהרשמה. אנא נסה שוב.');
         } finally {
             setLoading(false);
