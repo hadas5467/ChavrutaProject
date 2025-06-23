@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 // import { useAuth } from '../context/AuthContext';
+import { apiService } from '../apiService'
 import { UserPlus, User, Mail, Lock, Phone, Calendar, Eye, EyeOff } from 'lucide-react';
 import {
     languageMap,
@@ -48,7 +49,8 @@ const SignUp = () => {
         setLoading(true);
         setError('');
         try {
-            //  await signup(formData);
+            const result = await apiService.add("/api/users/register",formData);
+          
             navigate('/');
         } catch (err) {
             setError('שגיאה בהרשמה. אנא נסה שוב.');

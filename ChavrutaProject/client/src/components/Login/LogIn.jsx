@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-//import { useAuth } from '../context/AuthContext';
+import { apiService } from '../apiService'
 import { LogIn, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import '../../css/LogIn.css'
 
@@ -20,6 +20,7 @@ const LoginPage = () => {
     setError('');
 
     try {
+      const result = await apiService.add("/api/users/logIn",{email, password});
       //await login(email, password);
       navigate('/');
     } catch (err) {
