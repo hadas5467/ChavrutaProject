@@ -39,7 +39,7 @@ export const create = async (joinRequest) => {
     joinRequest.status ?? 'pending'
   ];
   const [result] = await pool.query(sql, params);
-  return { joinRequestId: result.insertId, ...joinRequest };
+  return { id: result.insertId, ...joinRequest };
 };
 
 // עדכון בקשת הצטרפות

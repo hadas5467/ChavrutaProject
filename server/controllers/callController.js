@@ -3,7 +3,7 @@ import * as callServices from "../dataServices/callServices.js";
 // קבלת כל השיחות (או לפי סינון)
 export const getCalls = async (req, res) => {
   try {
-    const { userId, place, learningFormat, subject, ageRange, isActive } = req.query;
+    const { userId, place, learningFormat, subject, ageRange, isActive, callId } = req.query;
     let filter = {};
     if (userId) filter.userId = userId;
     if (place) filter.place = place;
@@ -11,6 +11,7 @@ export const getCalls = async (req, res) => {
     if (subject) filter.subject = subject;
     if (ageRange) filter.ageRange = ageRange;
     if (isActive !== undefined) filter.isActive = isActive;
+    if (callId) filter.callId = callId;
 
     const calls = await callServices.findByFilter(filter);
     // תמיד מחזירים 200 עם מערך (גם אם ריק)

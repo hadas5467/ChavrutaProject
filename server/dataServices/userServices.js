@@ -53,7 +53,7 @@ export const login = async (gmail, password) => {
   if (!isMatch) return null;
 
   const sql2 = `SELECT * FROM USERS WHERE userId = ? LIMIT 1`;
-  const [rows2] = await pool.query(sql2, [userAuth.userId]);
+  const [rows2] = await pool.query(sql2, [userAuth.id]);
   return rows2[0] || null;
 };
 
@@ -92,7 +92,7 @@ export const create = async (user) => {
   const sqlPass = `INSERT INTO PASSWORDS (userId, passwordHash) VALUES (?, ?)`;
   await pool.query(sqlPass, [result.insertId, hashedPassword]);
 
-  return { userId: result.insertId, ...user };
+  return { id: result.insertId, ...user };
 };
 
 // עדכון משתמש
