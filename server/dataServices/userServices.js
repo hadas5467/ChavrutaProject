@@ -1,15 +1,17 @@
 import pool from './DB.js';
 import bcrypt from 'bcrypt';
 
-// קבלת משתמשים עם סינון (user, gmail, role וכו')
+// קבלת משתמשים עם סינון
 export const findByFilter = async (filter = {}) => {
-  let sql = 'SELECT userId, user, role, name, phone, gmail, age, sex, sector, profile, contactMethod FROM USERS';
+  let sql = `
+    SELECT userId, role, name, phone, gmail, age, sex, sector, profile, contactMethod
+    FROM USERS`;
   const params = [];
   const conditions = [];
 
-  if (filter.user) {
-    conditions.push('user = ?');
-    params.push(filter.user);
+  if (filter.userId) {
+    conditions.push('userId = ?');
+    params.push(filter.userId);
   }
   if (filter.gmail) {
     conditions.push('gmail = ?');
@@ -18,6 +20,10 @@ export const findByFilter = async (filter = {}) => {
   if (filter.role) {
     conditions.push('role = ?');
     params.push(filter.role);
+  }
+  if (filter.sex) {
+    conditions.push('sex = ?');
+    params.push(filter.sex);
   }
 
   if (conditions.length > 0) {
@@ -28,16 +34,10 @@ export const findByFilter = async (filter = {}) => {
   return rows;
 };
 
-// קבלת משתמש לפי gmail (לצורך login)
-export const findByGmail = async (gmail) => {
-  const sql = 'SELECT * FROM USERS WHERE  gmail = ? LIMIT 1';
-  const [rows] = await pool.query(sql, [gmail]);
-  return rows[0];
-};
+
 
 // בדיקת התחברות (gmail + סיסמה)
 export const login = async (gmail, password) => {
-  // שלב 1: שליפת userId וה-hash בלבד
   const sql1 = `
     SELECT U.userId, P.passwordHash
     FROM USERS U
@@ -47,76 +47,93 @@ export const login = async (gmail, password) => {
   `;
   const [rows1] = await pool.query(sql1, [gmail]);
   const userAuth = rows1[0];
-
   if (!userAuth) return null;
 
-  // בדיקת הסיסמה
   const isMatch = await bcrypt.compare(password, userAuth.passwordHash);
   if (!isMatch) return null;
 
-  // שלב 2: הסיסמה תקינה – שלוף את פרטי המשתמש המלאים
   const sql2 = `SELECT * FROM USERS WHERE userId = ? LIMIT 1`;
   const [rows2] = await pool.query(sql2, [userAuth.userId]);
   return rows2[0] || null;
 };
 
-// יצירת משתמש חדש (עם הצפנת סיסמה)
+// יצירת משתמש חדש
 export const create = async (user) => {
   const hashedPassword = await bcrypt.hash(user.password, 10);
-console.log("Creating user:", user);
-  // 1. יצירת משתמש בטבלת USERS (ללא סיסמה)
-  const sqlUser = `INSERT INTO USERS 
-    (user, role, name, phone, gmail, age, sex, sector, profile, contactMethod)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+  const sqlUser = `
+    INSERT INTO USERS 
+      (role, name, phone, gmail, age, sex, sector, profile, contactMethod, city, country, languages, bio, experienceLevel, availability, availabilityStatus, tags)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
   const paramsUser = [
-    user.user || "כלום זמני",
     user.role || 'user',
-    user.fullName,
-    user.phoneNumber,
-    user.email,
+    user.name,
+    user.phone || null,
+    user.gmail,
     user.age,
-    user.sex || 'זכר',
-    'חילוני/ת',
-    user.profile || 'default',
-   'SMS'
+    user.sex,
+    user.sector,
+    user.profile || null,
+    user.contactMethod || 'system',
+    user.city || null,
+    user.country || null,
+    user.languages || null,
+    user.bio || null,
+    user.experienceLevel || 'beginner',
+    JSON.stringify(user.availability || {}),
+    user.availabilityStatus || 'available_now',
+    user.tags || null
   ];
+
   const [result] = await pool.query(sqlUser, paramsUser);
 
-  // 2. שמירת הסיסמה בטבלת PASSWORDS
   const sqlPass = `INSERT INTO PASSWORDS (userId, passwordHash) VALUES (?, ?)`;
   await pool.query(sqlPass, [result.insertId, hashedPassword]);
 
   return { userId: result.insertId, ...user };
 };
 
-// עדכון משתמש (ללא סיסמה)
+// עדכון משתמש
 export const update = async (userId, user) => {
   const fields = [];
   const params = [];
-  for (const key of ['user', 'role', 'name', 'phone', 'gmail', 'age', 'sex', 'sector', 'profile', 'contactMethod']) {
+  const allowedKeys = [
+    'role', 'name', 'phone', 'gmail', 'age', 'sex', 'sector',
+    'profile', 'contactMethod', 'city', 'country', 'languages',
+    'bio', 'experienceLevel', 'availability', 'availabilityStatus', 'tags'
+  ];
+
+  for (const key of allowedKeys) {
     if (user[key] !== undefined) {
       fields.push(`${key} = ?`);
-      params.push(user[key]);
+      if (key === 'availability') {
+        params.push(JSON.stringify(user[key]));
+      } else {
+        params.push(user[key]);
+      }
     }
   }
+
   if (fields.length === 0) return null;
   params.push(userId);
+
   const sql = `UPDATE USERS SET ${fields.join(', ')} WHERE userId = ?`;
   const [result] = await pool.query(sql, params);
   return result;
 };
 
-// עדכון סיסמה בלבד
+// עדכון סיסמה (עכשיו בטבלת PASSWORDS)
 export const updatePassword = async (userId, newPassword) => {
   const hashedPassword = await bcrypt.hash(newPassword, 10);
-  const sql = 'UPDATE USERS SET password = ? WHERE userId = ?';
+  const sql = 'UPDATE PASSWORDS SET passwordHash = ? WHERE userId = ?';
   const [result] = await pool.query(sql, [hashedPassword, userId]);
   return result;
 };
 
 // מחיקת משתמש
 export const deleteUser = async (userId) => {
-  console.log('Deleting user with ID:', userId);
   const sql = 'DELETE FROM USERS WHERE userId = ?';
   const [result] = await pool.query(sql, [userId]);
   return result;
