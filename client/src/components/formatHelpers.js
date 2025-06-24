@@ -55,6 +55,12 @@ export const contactMethod = {
   system: "מערכת"
 };
 
+export const chavrutaStatus = {
+  pending_start: "⏳ ממתינה לתחילת לימוד",
+  active: "✅ פעילה",
+  ended: "🏁 הסתיימה"
+};
+
 export const experienceLevel = {
   beginner: "מתחילים",
   intermediate: "בינוני",
@@ -90,11 +96,6 @@ export const joinRequestStatus = {
   declined: "נדחה"
 };
 
-export const chavrutaStatus = {
-  active: "פעיל",
-  ended: "הסתיים",
-  paused: "בהפסקה"
-};
 
 export const preferredDuration = {
   "30_min": "30 דקות",
