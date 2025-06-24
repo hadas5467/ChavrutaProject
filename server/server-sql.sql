@@ -13,6 +13,7 @@ CREATE TABLE USERS (
     name VARCHAR(100) NOT NULL,
     phone VARCHAR(20),
     gmail VARCHAR(100) UNIQUE NOT NULL,
+    sex ENUM('male', 'female') NOT NULL,
     age ENUM('18-25', '25-35', '35-45', '45-60', '60+'), 
     sector ENUM('secular', 'traditional', 'religious', 'getting_stronger', 'baal_teshuva', 'haredi'), 
     profile VARCHAR(255),   
@@ -68,7 +69,7 @@ CREATE TABLE CHAVRUTA (
     user2 INT NOT NULL, 
     callId INT, 
     startedAt DATETIME DEFAULT CURRENT_TIMESTAMP, 
-    status ENUM('active', 'ended', 'paused') DEFAULT 'active', 
+    status ENUM('active', 'ended', 'pending_start') DEFAULT 'active', 
     notesUser1 TEXT, 
     notesUser2 TEXT, 
     FOREIGN KEY (user1) REFERENCES USERS(userId) ON DELETE CASCADE, 
@@ -80,16 +81,16 @@ CREATE TABLE CHAVRUTA (
 INSERT INTO USERS (
     role, name, phone, gmail, age, sector, profile, contactMethod, city, country, languages, bio, experienceLevel, availability, availabilityStatus, tags
 ) VALUES 
-('user', 'Yael Cohen', '0521234567', 'yael@example.com', '25-35', 'traditional', '/profiles/yael.jpg', 'whatsapp', 'Jerusalem', 'Israel', 'Hebrew,English', 'מחפשת חברותא ללימוד תנ\"ך', 'intermediate', 
+('user', 'Yael Cohen', '0521234567', 'yael@example.com','female', '25-35', 'traditional', '/profiles/yael.jpg', 'whatsapp', 'Jerusalem', 'Israel', 'Hebrew,English', 'מחפשת חברותא ללימוד תנ\"ך', 'intermediate', 
  '{"Sunday": ["09:00-11:00"], "Tuesday": ["19:00-21:00"]}', 'open_to_chavruta', 'תנ\"ך, נשים, הלכה'),
 
-('moderator', 'David Levi', '0507654321', 'davidl@example.com', '35-45', 'haredi', '/profiles/david.jpg', 'system', 'Bnei Brak', 'Israel', 'Hebrew', 'מלמד בכולל, פתוח להעברת שיעורים', 'expert',
+('moderator', 'David Levi', '0507654321', 'davidl@example.com','male', '35-45', 'haredi', '/profiles/david.jpg', 'system', 'Bnei Brak', 'Israel', 'Hebrew', 'מלמד בכולל, פתוח להעברת שיעורים', 'expert',
  '{"Monday": ["20:00-22:00"], "Thursday": ["20:00-21:30"]}', 'open_to_lessons', 'הלכה, גמרא'),
 
-('user', 'Sarah Ben Harush', NULL, 'sarahb@example.com', '18-25', 'baal_teshuva', NULL, 'email', 'Haifa', 'Israel', 'Hebrew,English,Spanish', 'מתחזקת ומחפשת שותפה ללמידה', 'beginner',
+('user', 'Sarah Ben Harush', NULL, 'sarahb@example.com','female', '18-25', 'baal_teshuva', NULL, 'email', 'Haifa', 'Israel', 'Hebrew,English,Spanish', 'מתחזקת ומחפשת שותפה ללמידה', 'beginner',
  '{"Friday": ["10:00-12:00"]}', 'available_now', 'תשובה, אמונה'),
 
-('admin', 'Avi Gold', '0530000000', 'avig@example.com', '45-60', 'religious', '/profiles/avi.jpg', 'sms', 'Tel Aviv', 'Israel', 'Hebrew,English,French', 'מנהל האתר, זמין לפניות מנהליות בלבד', 'advanced',
+('admin', 'Avi Gold', '0530000000', 'avig@example.com','male', '45-60', 'religious', '/profiles/avi.jpg', 'sms', 'Tel Aviv', 'Israel', 'Hebrew,English,French', 'מנהל האתר, זמין לפניות מנהליות בלבד', 'advanced',
  '{"Wednesday": ["18:00-20:00"]}', 'not_available', 'מנהל');
 
 -- הכנסת סיסמאות
@@ -114,7 +115,7 @@ INSERT INTO CHAVRUTA (user1, user2, callId, status, notesUser1, notesUser2)
 VALUES
 (1, 3, 1, 'active', 'שיתוף טוב, נמשיך בע\"ז', 'תענוג ללמוד איתה!'),
 (2, 1, 2, 'ended', 'סיימנו מחזור מסכת ברכות', 'למדתי המון'),
-(3, 2, 3, 'paused', 'בהפסקה עקב חופשה', 'נמשיך בע\"ז בספטמבר'),
+(3, 2, 3, 'pending_start', 'בהפסקה עקב חופשה', 'נמשיך בע\"ז בספטמבר'),
 (4, 3, 4, 'active', 'הדרכה ראשונית הסתיימה', 'היה מאוד עוזר');
 
 -- בדיקת טבלת חברותות
