@@ -14,7 +14,7 @@ async function fetchCallsWithUsers() {
   }));
 }
 
-const CallsPage = () => {
+const CallsList = () => {
   const currentUserId = JSON.parse(localStorage.getItem("currentUser"))?.userId;
 
   const renderItem = (callWithUser, refresh) => (
@@ -43,4 +43,4 @@ const CallsPage = () => {
   );
 };
 
-export default CallsPage;
+export default CallsList;

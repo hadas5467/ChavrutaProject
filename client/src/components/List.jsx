@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
- import '../css/List.css';
-import { getData } from './Actions';
+// import '../css/List.css';
+import { fetchData } from './apiService';
 
 const RenderedItem = React.memo(({ item, refreshItems, handleDelete, renderItem }) => {
   return (
@@ -51,7 +51,7 @@ const List = ({ endpoint, renderItem, filters, newItem }) => {
       : myTable;
 
     try {
-      const data = await getData(fullEndpoint);
+      const data = await fetchData(fullEndpoint);
       setItems(data);
     } catch (error) {
       console.error('Error fetching filtered items:', error);

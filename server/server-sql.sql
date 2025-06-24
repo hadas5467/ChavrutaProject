@@ -101,14 +101,7 @@ VALUES
 (4, '$2b$10$examplehash4');
 
 -- הכנסת שיחות
-INSERT INTO CALLS (userId, place, learningFormat, time, subject, ageRange, notes, preferredDuration, material)
-VALUES
-(1, 'Zoom', 'zoom', '2025-07-01 20:00:00', 'תנ\"ך לנשים', '25-35', 'שיעור פתוח לכל המעוניינות', '1_hour', 'ספר ישעיהו'),
-(2, 'כולל בני ברק', 'face_to_face', '2025-07-02 21:00:00', 'גמרא מסכת ברכות', '35-45', 'דרוש ידע בסיסי בגמרא', '90_min', 'ברכות דף ב'),
-(3, NULL, 'phone', '2025-07-03 10:30:00', 'לימוד אמונה לנשים', '18-25', 'שיחה אישית ולימוד קצר', '45_min', 'רמב\"ם יסודי התורה'),
-(4, NULL, 'any', '2025-07-04 19:00:00', 'הדרכה למצטרפים חדשים למערכת', '45-60', 'הדרכה טכנית + ליווי רוחני', 'flexible', 'מצגת onboarding');
 
--- בקשות הצטרפות
 INSERT INTO JOIN_REQUESTS (callId, userId, details, status)
 VALUES
 (1, 3, 'מאד רוצה להצטרף לתנ\"ך, נראית לי קבוצת למידה טובה', 'pending'),
