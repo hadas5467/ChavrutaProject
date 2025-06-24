@@ -7,10 +7,11 @@ import Home from './components/Home';
 
 // Login
 import Login from './components/Login/LogIn';
- import SignUp from './components/Login/SignUp';
+import SignUp from './components/Login/SignUp';
+import FullSignUp from './components/Login/FullSignUp';
 
 // Users
- import UserProfile from './components/Users/UserProfile';
+ //import UserProfile from './components/Users/UserProfile';
 
 // // Chavrutas
 // import ChavrutaCard from './components/Chavrutas/ChavrutaCard';
@@ -33,7 +34,8 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
-        <Route path="/UserProfile" element={<UserProfile />} />
+        <Route path="/fullSignUp" element={<FullSignUp />} />
+        {/* <Route path="/UserProfile" element={<UserProfile />} /> */}
 
         {/* <Route path="/home/users/:userId" element={<Home />}>
 

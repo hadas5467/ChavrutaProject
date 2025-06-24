@@ -142,6 +142,12 @@ const LoginPage = () => {
     try {
       const result = await addData("/api/users/logIn",{email, password});
       //await login(email, password);
+        if (!result || !result.match) {
+        throw new Error("שם משתמש או סיסמה שגויים");
+      }
+
+      localStorage.setItem("currentUser", JSON.stringify(response.user));
+      alert("התחברת בהצלחה!");
       navigate('/');
     } catch (err) {
       setError('שגיאה בהתחברות. אנא בדוק את הפרטים שלך.');

@@ -80,21 +80,18 @@ textarea.input {
   width: 1.25rem;
 }
 
-.toggle-password {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #9ca3af;
-  padding: 0;
-  line-height: 1;
+.language-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
 }
 
-.toggle-password:hover {
-  color: #4b5563;
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 1rem;
 }
 
 .signup-button {
