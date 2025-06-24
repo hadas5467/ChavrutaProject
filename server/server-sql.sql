@@ -44,7 +44,7 @@ CREATE TABLE CALLS (
     subject VARCHAR(100), 
     ageRange ENUM('18-25', '25-35', '35-45', '45-60', '60+'), 
     notes TEXT, 
-    preferredDuration ENUM('30_min', '45_min', '1_hour', '90_min', '2_hours', 'flexible') NULL,
+    preferredDuration ENUM('10-20_min', '30_min', '45_min', '1_hour', '1_hour+', 'flexible') NULL,
     material VARCHAR(255),  -- תיאור חומר הלימוד 
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP, 
     isActive BOOLEAN DEFAULT TRUE, 
