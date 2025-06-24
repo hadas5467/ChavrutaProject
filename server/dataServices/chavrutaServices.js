@@ -45,7 +45,7 @@ export const create = async (chavruta) => {
     chavruta.notesUser2 ?? null
   ];
   const [result] = await pool.query(sql, params);
-  return { chavrutaId: result.insertId, ...chavruta };
+  return { id: result.insertId, ...chavruta };
 };
 
 // עדכון חברותא קיימת

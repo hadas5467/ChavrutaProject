@@ -20,7 +20,7 @@ export const loginUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-   
+
     const { userName, gmail, userId } = req.query;
     let filter = {};
     if (userName) filter.userName = userName;

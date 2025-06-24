@@ -29,6 +29,10 @@ export const findByFilter = async (filter = {}) => {
     conditions.push('isActive = ?');
     params.push(filter.isActive);
   }
+  if (filter.callId !== undefined) {
+    conditions.push('callId = ?');
+    params.push(filter.callId);
+  }
   if (conditions.length > 0) {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
@@ -50,7 +54,7 @@ export const create = async (call) => {
     call.material
   ];
   const [result] = await pool.query(sql, params);
-  return { callId: result.insertId, ...call };
+  return { id: result.insertId, ...call };
 };
 
 export const update = async (callId, call) => {
