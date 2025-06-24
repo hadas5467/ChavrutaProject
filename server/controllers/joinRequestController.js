@@ -3,18 +3,19 @@ import * as joinRequestServices from "../dataServices/joinRequestSevices.js";
 // קבלת כל הבקשות (או לפי סינון)
 export const getJoinRequests = async (req, res) => {
   try {
-    const { userId, chavrutaId, status } = req.query;
+    const { userId, callId, status, joinRequestId } = req.query;
     let filter = {};
     if (userId) filter.userId = userId;
-    if (chavrutaId) filter.chavrutaId = chavrutaId;
+    if (callId) filter.callId = callId;
     if (status) filter.status = status;
+    if (joinRequestId) filter.joinRequestId = joinRequestId;
+
     const joinRequests = await joinRequestServices.findByFilter(filter);
-    if (!joinRequests || joinRequests.length === 0) {
-      return res.status(404).json({ message: "No join requests found" });
-    }
-    res.status(200).json(joinRequests);
+    // תמיד מחזירים 200 עם מערך (גם אם ריק)
+    res.status(200).json(joinRequests ?? []);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("getJoinRequests error:", error);
+    res.status(500).json({ message: "שגיאה בשרת" });
   }
 };
 
@@ -24,7 +25,8 @@ export const createJoinRequest = async (req, res) => {
     let newJoinRequest = await joinRequestServices.create(req.body);
     res.status(201).json(newJoinRequest);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("createJoinRequest error:", error);
+    res.status(500).json({ message: "שגיאה בשרת" });
   }
 };
 
@@ -33,12 +35,13 @@ export const updateJoinRequest = async (req, res) => {
   try {
     const id = req.params.id;
     let result = await joinRequestServices.update(id, req.body);
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Join request not found" });
+    if (!result || result.affectedRows === 0) {
+      return res.status(404).json({ message: "לא נמצא" });
     }
-    res.status(200).json(result);
+    res.status(200).json({ message: "עודכן בהצלחה" });
   } catch (error) {
-    res.status(500).json({ message: "שגיאה בעדכון הבקשה", error: error.message });
+    console.error("updateJoinRequest error:", error);
+    res.status(500).json({ message: "שגיאה בשרת" });
   }
 };
 
@@ -46,12 +49,13 @@ export const updateJoinRequest = async (req, res) => {
 export const deleteJoinRequest = async (req, res) => {
   try {
     const id = req.params.id;
-    let result = await joinRequestServices.delete(id);
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Join request not found" });
+    let result = await joinRequestServices.deleteJoinRequest(id);
+    if (!result || result.affectedRows === 0) {
+      return res.status(404).json({ message: "לא נמצא" });
     }
-    res.status(200).json({ message: "Join request deleted" });
+    res.status(200).json({ message: "נמחק בהצלחה" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("deleteJoinRequest error:", error);
+    res.status(500).json({ message: "שגיאה בשרת" });
   }
 };

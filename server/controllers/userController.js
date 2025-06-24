@@ -20,17 +20,22 @@ export const loginUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    const { userName, email } = req.query;
+   
+    const { userName, gmail, userId } = req.query;
     let filter = {};
     if (userName) filter.userName = userName;
-    if (email) filter.email = email;
-    const users = await userServices.findByFilter(filter);
-    if (!users || users.length === 0) {
-      return res.status(404).json({ message: "No users found" });
+    if (gmail) filter.gmail = gmail;
+    if (userId) filter.userId = userId;
+    const sex = req.user.sex;
+    if (!sex) return res.status(401).json({ message: "Unauthorized" });
+    if (req.user.role !== 'admin') {
+      filter.sex = req.user.sex;
     }
-    res.status(200).json(users);
+    const users = await userServices.findByFilter(filter);
+    res.status(200).json(users ?? []);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("getUsers error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 

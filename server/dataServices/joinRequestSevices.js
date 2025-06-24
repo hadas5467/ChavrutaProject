@@ -1,17 +1,25 @@
 import pool from './DB.js';
 
-// קבלת שיחות עם סינון
+// קבלת בקשות הצטרפות עם סינון
 export const findByFilter = async (filter = {}) => {
-  let sql = 'SELECT * FROM CALLS';
+  let sql = 'SELECT * FROM JOIN_REQUESTS';
   const params = [];
   const conditions = [];
+  if (filter.joinRequestId) {
+    conditions.push('joinRequestId = ?');
+    params.push(filter.joinRequestId);
+  }
+  if (filter.callId) {
+    conditions.push('callId = ?');
+    params.push(filter.callId);
+  }
   if (filter.userId) {
     conditions.push('userId = ?');
     params.push(filter.userId);
   }
-  if (filter.place) {
-    conditions.push('place = ?');
-    params.push(filter.place);
+  if (filter.status) {
+    conditions.push('status = ?');
+    params.push(filter.status);
   }
   if (conditions.length > 0) {
     sql += ' WHERE ' + conditions.join(' AND ');
@@ -20,35 +28,40 @@ export const findByFilter = async (filter = {}) => {
   return rows;
 };
 
-export const create = async (call) => {
-  const sql = `INSERT INTO CALLS (userId, place, learningFormat, time, subject, age, notes, material)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+// יצירת בקשת הצטרפות חדשה
+export const create = async (joinRequest) => {
+  const sql = `INSERT INTO JOIN_REQUESTS (callId, userId, details, status)
+    VALUES (?, ?, ?, ?)`;
   const params = [
-    call.userId, call.place, call.learningFormat, call.time,
-    call.subject, call.age, call.notes, call.material
+    joinRequest.callId,
+    joinRequest.userId,
+    joinRequest.details ?? null,
+    joinRequest.status ?? 'pending'
   ];
   const [result] = await pool.query(sql, params);
-  return { callId: result.insertId, ...call };
+  return { joinRequestId: result.insertId, ...joinRequest };
 };
 
-export const update = async (callId, call) => {
+// עדכון בקשת הצטרפות
+export const update = async (joinRequestId, joinRequest) => {
   const fields = [];
   const params = [];
-  for (const key of ['userId', 'place', 'learningFormat', 'time', 'subject', 'age', 'notes', 'material']) {
-    if (call[key] !== undefined) {
+  for (const key of ['callId', 'userId', 'details', 'status']) {
+    if (joinRequest[key] !== undefined) {
       fields.push(`${key} = ?`);
-      params.push(call[key]);
+      params.push(joinRequest[key]);
     }
   }
   if (fields.length === 0) return null;
-  params.push(callId);
-  const sql = `UPDATE CALLS SET ${fields.join(', ')} WHERE callId = ?`;
+  params.push(joinRequestId);
+  const sql = `UPDATE JOIN_REQUESTS SET ${fields.join(', ')} WHERE joinRequestId = ?`;
   const [result] = await pool.query(sql, params);
   return result;
 };
 
-export const deleteCall = async (callId) => {
-  const sql = 'DELETE FROM CALLS WHERE callId = ?';
-  const [result] = await pool.query(sql, [callId]);
+// מחיקת בקשת הצטרפות
+export const deleteJoinRequest = async (joinRequestId) => {
+  const sql = 'DELETE FROM JOIN_REQUESTS WHERE joinRequestId = ?';
+  const [result] = await pool.query(sql, [joinRequestId]);
   return result;
 };

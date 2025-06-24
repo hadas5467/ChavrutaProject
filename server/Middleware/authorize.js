@@ -56,4 +56,6 @@ function authorizeOwnerOrAdmin({ tableName, idField = 'id', ownerFields = ['user
   };
 }
 
+
+
 export { authorizeAdmin, authorizeOwner, authorizeOwnerOrAdmin };

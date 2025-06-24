@@ -13,6 +13,22 @@ export const findByFilter = async (filter = {}) => {
     conditions.push('place = ?');
     params.push(filter.place);
   }
+  if (filter.learningFormat) {
+    conditions.push('learningFormat = ?');
+    params.push(filter.learningFormat);
+  }
+  if (filter.subject) {
+    conditions.push('subject = ?');
+    params.push(filter.subject);
+  }
+  if (filter.ageRange) {
+    conditions.push('ageRange = ?');
+    params.push(filter.ageRange);
+  }
+  if (filter.isActive !== undefined) {
+    conditions.push('isActive = ?');
+    params.push(filter.isActive);
+  }
   if (conditions.length > 0) {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
@@ -21,11 +37,17 @@ export const findByFilter = async (filter = {}) => {
 };
 
 export const create = async (call) => {
-  const sql = `INSERT INTO CALLS (userId, place, learningFormat, time, subject, age, notes, material)
+  const sql = `INSERT INTO CALLS (userId, place, learningFormat, time, subject, ageRange, notes, material)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
   const params = [
-    call.userId, call.place, call.learningFormat, call.time,
-    call.subject, call.age, call.notes, call.material
+    call.userId,
+    call.place,
+    call.learningFormat,
+    call.time,
+    call.subject,
+    call.ageRange,
+    call.notes,
+    call.material
   ];
   const [result] = await pool.query(sql, params);
   return { callId: result.insertId, ...call };
@@ -34,7 +56,7 @@ export const create = async (call) => {
 export const update = async (callId, call) => {
   const fields = [];
   const params = [];
-  for (const key of ['userId', 'place', 'learningFormat', 'time', 'subject', 'age', 'notes', 'material']) {
+  for (const key of ['userId', 'place', 'learningFormat', 'time', 'subject', 'ageRange', 'notes', 'material', 'isActive']) {
     if (call[key] !== undefined) {
       fields.push(`${key} = ?`);
       params.push(call[key]);
