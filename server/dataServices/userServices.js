@@ -63,7 +63,7 @@ export const create = async (user) => {
 
   const sqlUser = `
     INSERT INTO USERS 
-      (role, name, phone, gmail, age, sex, sector, profile, contactMethod, city, country, languages, bio, experienceLevel, availability, availabilityStatus, tags)
+      (role, name, phone, gmail, sex, age, sector, profile, contactMethod, city, country, languages, bio, experienceLevel, availability, availabilityStatus, tags)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -72,14 +72,14 @@ export const create = async (user) => {
     user.name,
     user.phone || null,
     user.gmail,
-    user.age,
     user.sex,
+    user.age,
     user.sector,
     user.profile || null,
     user.contactMethod || 'system',
     user.city || null,
     user.country || null,
-    user.languages || null,
+     Array.isArray(user.languages) ? user.languages.join(',') : user.languages || null,
     user.bio || null,
     user.experienceLevel || 'beginner',
     JSON.stringify(user.availability || {}),

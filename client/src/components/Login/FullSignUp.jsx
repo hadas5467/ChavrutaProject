@@ -46,11 +46,11 @@ const FullSignUp = () => {
             const allData = { ...location.state, ...formData };
             const result=await addData('users/register', allData);
 
-            //if (result?.message === 'User registered successfully') {
+        if (result?.user) {
+            localStorage.setItem('currentUser', JSON.stringify(result.user));
+        }
                 navigate('/home');
-            // } else {
-            //     alert('הרישום נכשל. נסה שוב.');
-           // }
+           
         } catch (error) {
             alert('שגיאה בשליחה. נסה שוב.');
         }
