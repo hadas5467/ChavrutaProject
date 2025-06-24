@@ -63,22 +63,22 @@ export const login = async (gmail, password) => {
 // יצירת משתמש חדש (עם הצפנת סיסמה)
 export const create = async (user) => {
   const hashedPassword = await bcrypt.hash(user.password, 10);
-
+console.log("Creating user:", user);
   // 1. יצירת משתמש בטבלת USERS (ללא סיסמה)
   const sqlUser = `INSERT INTO USERS 
     (user, role, name, phone, gmail, age, sex, sector, profile, contactMethod)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const paramsUser = [
-    user.user,
+    user.user || "כלום זמני",
     user.role || 'user',
-    user.name,
-    user.phone,
-    user.gmail,
+    user.fullName,
+    user.phoneNumber,
+    user.email,
     user.age,
-    user.sex,
-    user.sector,
-    user.profile,
-    user.contactMethod
+    user.sex || 'זכר',
+    'חילוני/ת',
+    user.profile || 'default',
+   'SMS'
   ];
   const [result] = await pool.query(sqlUser, paramsUser);
 

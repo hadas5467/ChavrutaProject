@@ -37,13 +37,29 @@ export const languageMap = {
 };
 
 export const genderMap = {
-  male: "גברים",
-  female: "נשים",
+  זכר: 'בן',
+  נקבה: 'בת'
 };
 
 export const methodMap = {
   zoom: "זום",
   phone: "טלפון",
   in_person: "פנים אל פנים",
-  flexible: "גמיש",
+   flexible: "גמיש",
+};
+
+export const contactMethod = {
+  מייל: "מייל",
+  וואצאפ: "וואצאפ",
+  SMS: "SMS",
+};
+
+
+export const sectorMap = {
+  "חילוני/ת": "חילוני/ת",
+  "מסורתי/ת": "מסורתי/ת",
+  "דתי/ת": "דתי/ת",
+  "מתחזק/ת": "מתחזק/ת",
+  "בעל/ת תשובה": "בעל/ת תשובה",
+  "חרדי/ת": "חרדי/ת"
 };
