@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
+import ProtectedRoute from './components/Users/ProtectedRoute';
+
 // import List from './components/List';
 
 // Login
@@ -35,6 +37,19 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/fullSignUp" element={<FullSignUp />} />
+         {/* <Route path="/home" element={<Home />} /> */}
+         <Route path="/home" element={
+           <ProtectedRoute>
+             <Home />
+           </ProtectedRoute>
+         } />
+
+
+
+
+         {/* </Route> */}
+
+
         {/* <Route path="/UserProfile" element={<UserProfile />} /> */}
 
         {/* <Route path="/home/users/:userId" element={<Home />}>
