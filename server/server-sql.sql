@@ -1,8 +1,8 @@
--- DROP TABLE IF EXISTS CHAVRUTA;
--- DROP TABLE IF EXISTS JOIN_REQUESTS;
--- DROP TABLE IF EXISTS CALLS;
--- DROP TABLE IF EXISTS PASSWORDS;
--- DROP TABLE IF EXISTS USERS;
+DROP TABLE IF EXISTS CHAVRUTA;
+DROP TABLE IF EXISTS JOIN_REQUESTS;
+DROP TABLE IF EXISTS CALLS;
+DROP TABLE IF EXISTS PASSWORDS;
+DROP TABLE IF EXISTS USERS;
 
 CREATE DATABASE IF NOT EXISTS chavruta_db;
 USE chavruta_db;
@@ -79,44 +79,64 @@ CREATE TABLE CHAVRUTA (
 
 -- הכנסת משתמשים
 INSERT INTO USERS (
-    role, name, phone, gmail, age, sector, profile, contactMethod, city, country, languages, bio, experienceLevel, availability, availabilityStatus, tags
-) VALUES 
-('user', 'Yael Cohen', '0521234567', 'yael@example.com','female', '25-35', 'traditional', '/profiles/yael.jpg', 'whatsapp', 'Jerusalem', 'Israel', 'Hebrew,English', 'מחפשת חברותא ללימוד תנ\"ך', 'intermediate', 
- '{"Sunday": ["09:00-11:00"], "Tuesday": ["19:00-21:00"]}', 'open_to_chavruta', 'תנ\"ך, נשים, הלכה'),
+  role, name, phone, gmail, sex, age, sector, profile, contactMethod,
+  city, country, languages, bio, experienceLevel, availability,
+  availabilityStatus, tags
+) VALUES
+('user', 'Tamar Levy', '0521111111', 'tamar@example.com', 'female', '25-35', 'religious',
+ '/profiles/tamar.jpg', 'whatsapp', 'Jerusalem', 'Israel', 'Hebrew,English',
+ 'אוהבת ללמוד תנ\"ך לעומק', 'intermediate', '{"Sunday":["20:00-21:30"]}',
+ 'open_to_chavruta', 'תנ\"ך, פרשת שבוע'),
 
-('moderator', 'David Levi', '0507654321', 'davidl@example.com','male', '35-45', 'haredi', '/profiles/david.jpg', 'system', 'Bnei Brak', 'Israel', 'Hebrew', 'מלמד בכולל, פתוח להעברת שיעורים', 'expert',
- '{"Monday": ["20:00-22:00"], "Thursday": ["20:00-21:30"]}', 'open_to_lessons', 'הלכה, גמרא'),
+('moderator', 'Shlomi Cohen', '0502222222', 'shlomi@example.com', 'male', '35-45', 'haredi',
+ '/profiles/shlomi.jpg', 'system', 'Bnei Brak', 'Israel', 'Hebrew,Yiddish',
+ 'מעביר שיעורים בגמרא והלכה', 'expert', '{"Monday":["19:00-21:00"]}',
+ 'open_to_lessons', 'גמרא, הלכה'),
 
-('user', 'Sarah Ben Harush', NULL, 'sarahb@example.com','female', '18-25', 'baal_teshuva', NULL, 'email', 'Haifa', 'Israel', 'Hebrew,English,Spanish', 'מתחזקת ומחפשת שותפה ללמידה', 'beginner',
- '{"Friday": ["10:00-12:00"]}', 'available_now', 'תשובה, אמונה'),
+('user', 'Maya Azulai', '0533333333', 'maya@example.com', 'female', '18-25', 'baal_teshuva',
+ '/profiles/maya.jpg', 'email', 'Haifa', 'Israel', 'Hebrew,English',
+ 'מחפשת שותפה ללמידה באמונה', 'beginner', '{"Wednesday":["18:00-20:00"]}',
+ 'available_now', 'אמונה, מוסר'),
 
-('admin', 'Avi Gold', '0530000000', 'avig@example.com','male', '45-60', 'religious', '/profiles/avi.jpg', 'sms', 'Tel Aviv', 'Israel', 'Hebrew,English,French', 'מנהל האתר, זמין לפניות מנהליות בלבד', 'advanced',
- '{"Wednesday": ["18:00-20:00"]}', 'not_available', 'מנהל');
+('admin', 'David Gold', '0544444444', 'admin@example.com', 'male', '45-60', 'religious',
+ '/profiles/david.jpg', 'sms', 'Tel Aviv', 'Israel', 'Hebrew,English',
+ 'מנהל המערכת - לפניות טכניות', 'advanced', '{"Tuesday":["10:00-11:00"]}',
+ 'not_available', 'ניהול, טכני');
 
 -- הכנסת סיסמאות
-INSERT INTO PASSWORDS (userId, passwordHash)
-VALUES
-(1, '$2b$10$examplehash1'),
-(2, '$2b$10$examplehash2'),
-(3, '$2b$10$examplehash3'),
-(4, '$2b$10$examplehash4');
+INSERT INTO PASSWORDS (userId, passwordHash) VALUES
+(1, 'hashedPass1'),
+(2, 'hashedPass2'),
+(3, 'hashedPass3'),
+(4, 'hashedPass4');
+
 
 -- הכנסת שיחות
 
-INSERT INTO JOIN_REQUESTS (callId, userId, details, status)
-VALUES
-(1, 3, 'מאד רוצה להצטרף לתנ\"ך, נראית לי קבוצת למידה טובה', 'pending'),
-(2, 1, 'מעוניינת ללמוד גמרא עם רב מנוסה', 'approved'),
-(3, 2, 'רוצה לדבר עם הבת תשובה ולהדריך אותה', 'approved'),
-(4, 3, 'מעוניינת בהדרכה על המערכת', 'declined');
+INSERT INTO CALLS (
+  userId, place, learningFormat, time, subject, ageRange, notes,
+  preferredDuration, material
+) VALUES
+(1, 'Zoom', 'zoom', '2025-07-01 20:00:00', 'תנ\"ך למתחילים', '25-35', 'לימוד פתוח', '1_hour', 'ספר שופטים'),
+(2, 'כולל מרכזי', 'face_to_face', '2025-07-02 21:00:00', 'הלכה מתקדמת', '35-45', 'שיעור עמוק', '45_min', 'משנה ברורה'),
+(3, NULL, 'phone', '2025-07-03 10:00:00', 'אמונה לנוער', '18-25', 'חיזוק באמונה', '30_min', 'שערי תשובה'),
+(4, NULL, 'any', '2025-07-04 19:00:00', 'מבוא למערכת', '45-60', 'הסבר כללי', 'flexible', 'onboarding מצגת');
 
+
+INSERT INTO JOIN_REQUESTS (callId, userId, details, status) VALUES
+(1, 3, 'מעוניינת מאוד להצטרף', 'pending'),
+(2, 1, 'רוצה ללמוד הלכה', 'approved'),
+(3, 2, 'רוצה לחזק', 'approved'),
+(4, 3, 'מבקשת הסבר ראשוני', 'declined');
+ 
 -- חברותות קיימות
-INSERT INTO CHAVRUTA (user1, user2, callId, status, notesUser1, notesUser2)
-VALUES
-(1, 3, 1, 'active', 'שיתוף טוב, נמשיך בע\"ז', 'תענוג ללמוד איתה!'),
-(2, 1, 2, 'ended', 'סיימנו מחזור מסכת ברכות', 'למדתי המון'),
-(3, 2, 3, 'pending_start', 'בהפסקה עקב חופשה', 'נמשיך בע\"ז בספטמבר'),
-(4, 3, 4, 'active', 'הדרכה ראשונית הסתיימה', 'היה מאוד עוזר');
+INSERT INTO CHAVRUTA (
+  user1, user2, callId, status, notesUser1, notesUser2
+) VALUES
+(1, 3, 1, 'active', 'לומדות היטב', 'מאוד נהנית'),
+(2, 1, 2, 'ended', 'סיימנו לימוד', 'היה מעשיר'),
+(3, 2, 3, 'pending_start', '', ''),
+(4, 3, 4, 'active', 'הצגה טכנית הושלמה', 'היה ברור');
 
 -- בדיקת טבלת חברותות
 SELECT * FROM CHAVRUTA;
