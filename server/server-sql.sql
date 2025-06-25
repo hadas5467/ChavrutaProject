@@ -142,3 +142,11 @@ INSERT INTO CHAVRUTA (
 
 -- בדיקת טבלת חברותות
 SELECT * FROM users;
+
+INSERT INTO CALLS (
+  userId, targetUserId, place, learningFormat, time, subject, ageRange, notes,
+  preferredDuration, material
+) VALUES (
+  6, 3, 'Zoom', 'zoom', '2025-07-05 20:30:00', 'לימודי מחשבה ומוסר', '18-25',
+  'לימוד פתוח לנשים בנושא מוסר ומחשבה יהודית', '1_hour', 'מסילת ישרים'
+);

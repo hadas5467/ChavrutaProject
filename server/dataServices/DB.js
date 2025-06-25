@@ -14,6 +14,7 @@ const pool = mysql.createPool({
 pool.getConnection()
   .then(conn => {
     console.log('התחברת בהצלחה למסד הנתונים!');
+    console.log('EMAIL_USER:', process.env.EMAIL_USER);
     conn.release();
 
   })

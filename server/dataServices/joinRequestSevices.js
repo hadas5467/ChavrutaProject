@@ -22,6 +22,10 @@ export const findByFilter = async (filter = {}) => {
     conditions.push('status = ?');
     params.push(filter.status);
   }
+   if (filter.targetUserId) {
+    conditions.push('targetUserId = ?');
+    params.push(filter.targetUserId);
+  }
   if (conditions.length > 0) {
     sql += ' WHERE ' + conditions.join(' AND ');
   }

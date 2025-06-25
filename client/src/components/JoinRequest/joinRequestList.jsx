@@ -18,7 +18,7 @@ const JoinRequestList = () => {
     <div>
       <h2>📬 כל בקשות ההצטרפות</h2>
       <List
-        endpoint="joinRequests"
+       endpoint={`joinRequests/user`}
         renderItem={renderItem}
         filters={[
           { label: "שלי", value: "mine" },

@@ -1,7 +1,7 @@
 import * as joinRequestServices from "../dataServices/joinRequestSevices.js";
 import * as service from "../services/joinRequestService.js";
 // קבלת כל הבקשות (או לפי סינון)
-export const getJoinRequests = async (req, res) => {
+export const getAllJoinRequests = async (req, res) => {
   try {
     const { userId, callId, status, joinRequestId } = req.query;
     let filter = {};
@@ -18,6 +18,20 @@ export const getJoinRequests = async (req, res) => {
     res.status(500).json({ message: "שגיאה בשרת" });
   }
 };
+
+export const getJoinRequestsByUser = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "משתמש לא מחובר" });
+
+    const joinRequests = await joinRequestServices.findByFilter({ targetUserId: userId });
+    res.status(200).json(joinRequests ?? []);
+  } catch (error) {
+    console.error("getJoinRequestsByUser error:", error);
+    res.status(500).json({ message: "שגיאה בשרת" });
+  }
+};
+
 
 // יצירת בקשה חדשה
 export const createJoinRequest = async (req, res) => {
@@ -59,3 +73,5 @@ export const deleteJoinRequest = async (req, res) => {
     res.status(500).json({ message: "שגיאה בשרת" });
   }
 };
+
+//npm install nodemailer

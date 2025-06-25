@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import users from "./routes/userRoutes.js";
 import calls from "./routes/callRoutes.js"
 import chavrutas from "./routes/chavrutaRoutes.js";
@@ -11,13 +14,14 @@ const app = express();
 
 // Middlewares
 const corsOptions = {
-   origin: [
+  origin: [
     'http://localhost:5173',
     'http://localhost:5175',
     'http://localhost:5176'
-  ], 
+  ],
   credentials: true,               // מאפשר שליחת cookies
 };
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/uploads/males', express.static('uploads/males'));
