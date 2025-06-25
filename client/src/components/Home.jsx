@@ -14,6 +14,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CallList from './Call/CallList';
+import JoinRequestList from './JoinRequest/joinRequestList';
 import '../css/Home.css'; // 🔹 ודא שהקובץ נמצא בתיקיית css
 
 const Home = () => {
@@ -33,7 +34,14 @@ const Home = () => {
         </div>
       </header>
 
-      <CallList />
+      <div className="home-content">
+        <div className="home-section right-section">
+          <CallList />
+        </div>
+        <div className="home-section left-section">
+          <JoinRequestList />
+        </div>
+      </div>
     </div>
   );
 };

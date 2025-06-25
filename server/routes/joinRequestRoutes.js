@@ -19,6 +19,7 @@ const router = express.Router();
 
 // Get all users
 router.get('/',verifyToken,authorizeAdmin, getJoinRequests);
+router.get('/',verifyToken, getJoinRequests);
 //router.get('/:id', getjoinRequesById);
 router.post('/',verifyToken, createJoinRequest);
 router.put('/:id',verifyToken, authorizeJoinRequestOwnerOrAdmin, updateJoinRequest);

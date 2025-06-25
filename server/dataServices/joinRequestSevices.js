@@ -33,11 +33,12 @@ export const findByFilter = async (filter = {}) => {
 
 // יצירת בקשת הצטרפות חדשה
 export const create = async (joinRequest) => {
-  const sql = `INSERT INTO JOIN_REQUESTS (callId, userId, details, status)
-    VALUES (?, ?, ?, ?)`;
+  const sql = `INSERT INTO JOIN_REQUESTS (callId, userId, targetUserId, details, status)
+    VALUES (?, ?, ?, ?, ?)`;
   const params = [
     joinRequest.callId,
     joinRequest.userId,
+    joinRequest.targetUserId,
     joinRequest.details ?? null,
     joinRequest.status ?? 'pending'
   ];
