@@ -62,6 +62,31 @@ function CallCard({ call, user, setCalls, currentUserId }) {
       .join(" | ");
   };
 
+  const joinRequest = async () => {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) {
+    alert("יש להתחבר למערכת כדי לשלוח בקשה.");
+    return;
+  }
+
+  const requestData = {
+    callId: call.callId,
+    userId: currentUser.id,
+    targetUserId: call.userId,
+    details: `בקשה להצטרפות לקריאה בנושא "${call.subject}"`,
+  };
+
+  try {
+    await apiService.addData("joinRequests", requestData);
+    alert(
+      `✅ בקשתך נשלחה בהצלחה!\n\n📚 נושא הקריאה: ${call.subject}\n📍 מיקום: ${call.place || "גמיש"}\n🕒 זמן: ${new Date(call.time).toLocaleString("he-IL")}`
+    );
+  } catch (error) {
+    alert("❌ שגיאה בשליחת בקשה: " + error.message);
+  }
+};
+
+
   return (
     <div className="call-card">
       <h3>{isEditing ? (
@@ -99,7 +124,7 @@ function CallCard({ call, user, setCalls, currentUserId }) {
       )}
       {!isOwner && (
   <div className="call-buttons">
-    <button className="join-btn" onClick={() => alert(`הצטרפת לקריאה בנושא "${call.subject}"`)}>
+    <button className="join-btn" onClick={joinRequest}>
       להצטרפות
     </button>
   </div>

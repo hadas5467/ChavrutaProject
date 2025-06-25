@@ -39,6 +39,7 @@ CREATE TABLE PASSWORDS (
 CREATE TABLE CALLS ( 
     callId INT AUTO_INCREMENT PRIMARY KEY, 
     userId INT NOT NULL, 
+    targetUserId INT NOT NULL,
     place VARCHAR(100),  -- מיקום פיזי (אם רלוונטי) 
     learningFormat ENUM('zoom', 'phone', 'face_to_face', 'any'), 
     time DATETIME, 
@@ -56,6 +57,7 @@ CREATE TABLE JOIN_REQUESTS (
     joinRequestId INT AUTO_INCREMENT PRIMARY KEY, 
     callId INT NOT NULL, 
     userId INT NOT NULL, 
+	targetUserId INT NOT NULL,
     details TEXT, 
     status ENUM('pending', 'approved', 'declined') DEFAULT 'pending', 
     requestedAt DATETIME DEFAULT CURRENT_TIMESTAMP, 
@@ -114,20 +116,20 @@ INSERT INTO PASSWORDS (userId, passwordHash) VALUES
 -- הכנסת שיחות
 
 INSERT INTO CALLS (
-  userId, place, learningFormat, time, subject, ageRange, notes,
+  userId, targetUserId,  place, learningFormat, time, subject, ageRange, notes,
   preferredDuration, material
 ) VALUES
-(1, 'Zoom', 'zoom', '2025-07-01 20:00:00', 'תנ\"ך למתחילים', '25-35', 'לימוד פתוח', '1_hour', 'ספר שופטים'),
-(2, 'כולל מרכזי', 'face_to_face', '2025-07-02 21:00:00', 'הלכה מתקדמת', '35-45', 'שיעור עמוק', '45_min', 'משנה ברורה'),
-(3, NULL, 'phone', '2025-07-03 10:00:00', 'אמונה לנוער', '18-25', 'חיזוק באמונה', '30_min', 'שערי תשובה'),
-(4, NULL, 'any', '2025-07-04 19:00:00', 'מבוא למערכת', '45-60', 'הסבר כללי', 'flexible', 'onboarding מצגת');
+(1, 2, 'Zoom', 'zoom', '2025-07-01 20:00:00', 'תנ\"ך למתחילים', '25-35', 'לימוד פתוח', '1_hour', 'ספר שופטים'),
+(2,3, 'כולל מרכזי', 'face_to_face', '2025-07-02 21:00:00', 'הלכה מתקדמת', '35-45', 'שיעור עמוק', '45_min', 'משנה ברורה'),
+(3, 4, NULL, 'phone', '2025-07-03 10:00:00', 'אמונה לנוער', '18-25', 'חיזוק באמונה', '30_min', 'שערי תשובה'),
+(4, 7,NULL, 'any', '2025-07-04 19:00:00', 'מבוא למערכת', '45-60', 'הסבר כללי', 'flexible', 'onboarding מצגת');
 
 
-INSERT INTO JOIN_REQUESTS (callId, userId, details, status) VALUES
-(1, 3, 'מעוניינת מאוד להצטרף', 'pending'),
-(2, 1, 'רוצה ללמוד הלכה', 'approved'),
-(3, 2, 'רוצה לחזק', 'approved'),
-(4, 3, 'מבקשת הסבר ראשוני', 'declined');
+INSERT INTO JOIN_REQUESTS (callId, userId, targetUserId, details, status) VALUES
+(1, 3, 2, 'מעוניינת מאוד להצטרף', 'pending'),
+(2, 1, 7, 'רוצה ללמוד הלכה', 'approved'),
+(3, 2, 1,'רוצה לחזק', 'approved'),
+(4, 3, 6, 'מבקשת הסבר ראשוני', 'declined');
  
 -- חברותות קיימות
 INSERT INTO CHAVRUTA (
@@ -139,4 +141,4 @@ INSERT INTO CHAVRUTA (
 (4, 3, 4, 'active', 'הצגה טכנית הושלמה', 'היה ברור');
 
 -- בדיקת טבלת חברותות
-SELECT * FROM CHAVRUTA;
+SELECT * FROM users;
