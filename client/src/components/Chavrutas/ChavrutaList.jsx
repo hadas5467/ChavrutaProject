@@ -1,5 +1,5 @@
 import React from 'react';
-import List from './List';
+import List from '../List';
 import ChavrutaCard from './ChavrutaCard';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ const ChavrutaList = ({ usersMap }) => {
       currentUserId={JSON.parse(localStorage.getItem('currentUser'))?.id}
       editable={true}
       onUpdateNote={async (id, field, value) => {
-        await fetch(`/api/chavruta/${id}`, {
+        await fetch(`/api/chavrutas/${id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ [field]: value })
@@ -43,7 +43,7 @@ const ChavrutaList = ({ usersMap }) => {
 
   return (
     <List
-      endpoint="chavruta"
+      endpoint="chavrutas"
       renderItem={renderChavruta}
       newItem={() => navigate('new')}
       filters={filters}

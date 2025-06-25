@@ -20,7 +20,7 @@ import FullSignUp from './components/Login/FullSignUp';
 // import ChavrutaComments from './components/Chavrutas/ChavrutaCommetns';
 // import ChavrutaForm from './components/Chavrutas/ChavrutaFrom';
 // import ChavrutaHistory from './components/Chavrutas/ChavrutaHistory';
-// import ChavrutaList from './components/Chavrutas/ChavrutaList';
+import ChavrutaList from './components/Chavrutas/ChavrutaList';
 
 // // Lessons
 // import LessonCard from './components/Lessons/LessonCard';
@@ -41,9 +41,10 @@ function App() {
          <Route path="/home" element={
            <ProtectedRoute>
              <Home />
+             {/* <ChavrutaList /> */}
            </ProtectedRoute>
          } />
-
+        <Route path="chavrutaList" element={<ChavrutaList />} />
 
 
 

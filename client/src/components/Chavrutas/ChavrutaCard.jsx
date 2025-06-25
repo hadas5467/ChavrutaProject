@@ -1,5 +1,5 @@
-import { chavrutaStatus } from './formatHelpers';
-import '../../css/ChavrutaCard.css';
+import { chavrutaStatus } from '../formatHelpers';
+import "../../css/ChavrutaCard.css";
 const ChavrutaCard = ({ chavruta, users, currentUserId, editable = false, onUpdateNote }) => {
   const user1 = users[chavruta.user1];
   const user2 = users[chavruta.user2];

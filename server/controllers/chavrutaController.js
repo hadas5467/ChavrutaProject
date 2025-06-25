@@ -1,7 +1,7 @@
 import * as chavrutaServices from "../dataServices/chavrutaServices.js";
 
 // קבלת כל החברותות (או לפי סינון)
-export const getChavrutas = async (req, res) => {
+export const getAllChavrutas = async (req, res) => {
   try {
     const { chavrutaId, user1, user2, callId, status } = req.query;
     let filter = {};
@@ -19,6 +19,26 @@ export const getChavrutas = async (req, res) => {
     res.status(500).json({ message: "שגיאה בשרת" });
   }
 };
+
+export const getChavrutasByUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const asUser1 = await chavrutaServices.findByFilter({ user1: userId });
+
+    const asUser2 = await chavrutaServices.findByFilter({ user2: userId });
+
+    const combined = [...asUser1, ...asUser2];
+    const unique = Array.from(new Map(combined.map(ch => [ch.chavrutaId, ch])).values());
+
+    res.status(200).json(unique);
+  } catch (error) {
+    console.error("getChavrutasByUser error:", error);
+    res.status(500).json({ message: "שגיאה בשרת" });
+  }
+};
+
+
 
 // יצירת חברותא חדשה
 export const createChavruta = async (req, res) => {

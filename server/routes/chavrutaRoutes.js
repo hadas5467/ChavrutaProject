@@ -1,5 +1,5 @@
 import express from 'express';
-import { updateChavruta, getChavrutas, createChavruta, deleteChavruta } from '../controllers/ChavrutaController.js';
+import { updateChavruta, getAllChavrutas, createChavruta, deleteChavruta, getChavrutasByUser } from '../controllers/ChavrutaController.js';
 import {verifyToken} from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
 const router = express.Router();
@@ -21,8 +21,9 @@ const authorizeChavrutaOwnerOrAdmin = authorizeOwnerOrAdmin({
 router.put('/chavruta/:id', verifyToken, authorizeChavrutaOwner, updateChavruta);
 router.delete('/chavruta/:id', verifyToken, authorizeChavrutaOwnerOrAdmin, deleteChavruta);
 
-// Get all users
-router.get('/', verifyToken, authorizeChavrutaOwnerOrAdmin, getChavrutas);
+// Get all 
+router.get('/', verifyToken,authorizeAdmin, getAllChavrutas);
+router.get('/user/:id', verifyToken, getChavrutasByUser);
 //router.get('/:id', getCavrutaById);
 router.post('/', verifyToken, createChavruta);
 router.put('/:id', verifyToken, authorizeOwnerOrAdmin, updateChavruta);

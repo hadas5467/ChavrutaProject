@@ -97,6 +97,14 @@ function CallCard({ call, user, setCalls, currentUserId }) {
           <button onClick={() => handleDeleteCall(call.id)}>מחיקה</button>
         </div>
       )}
+      {!isOwner && (
+  <div className="call-buttons">
+    <button className="join-btn" onClick={() => alert(`הצטרפת לקריאה בנושא "${call.subject}"`)}>
+      להצטרפות
+    </button>
+  </div>
+)}
+
     </div>
   );
 }

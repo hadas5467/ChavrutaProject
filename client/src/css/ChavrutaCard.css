@@ -1,0 +1,63 @@
+/* Chavruta.css - עיצוב כרטיסי חברותא ורשימות */
+.chavruta-card {
+  composes: card from './theme.css';
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  background: var(--color-surface);
+}
+
+.chavruta-title {
+  font-size: 1.3rem;
+  color: var(--color-primary);
+  margin-bottom: 0.3em;
+}
+
+.chavruta-info {
+  color: var(--color-muted);
+  font-size: 1rem;
+  margin-bottom: 0.5em;
+}
+
+.chavruta-actions {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+
+.chavruta-btn {
+  composes: btn from './theme.css';
+  font-size: 1rem;
+}
+
+.chavruta-list-container {
+  composes: container from './theme.css';
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  background: var(--color-bg);
+}
+
+/* נגישות לכפתורים */
+.chavruta-btn:focus {
+  outline: 2px solid var(--color-accent);
+  background: var(--color-secondary);
+  color: var(--color-surface);
+}
+
+.chavruta-btn:active {
+  background: var(--color-accent);
+  color: var(--color-primary);
+}
+
+@media (max-width: 600px) {
+  .chavruta-card {
+    padding: 0.7em;
+  }
+  .chavruta-title {
+    font-size: 1.1rem;
+  }
+  .chavruta-list-container {
+    padding: 0.5em 0.1em;
+  }
+} 
