@@ -2,7 +2,8 @@ import React from "react";
 import List from "../List.jsx";
 import CallCard from "./CallCard";
 import * as apiService from "../apiService.js"
-
+   import { useNavigate } from "react-router-dom";
+   
 // מיפוי של call + המשתמש שיצר אותו
 async function fetchCallsWithUsers() {
   // const calls = await apiService.fetchData("calls");
@@ -24,7 +25,8 @@ async function fetchCallsWithUsers() {
 
 const CallsList = () => {
   const currentUserId = JSON.parse(localStorage.getItem("currentUser"))?.id;
-
+   const navigate = useNavigate();
+   
   const renderItem = (callWithUser, refresh) => (
     <CallCard
       call={callWithUser}

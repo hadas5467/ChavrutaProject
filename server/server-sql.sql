@@ -39,7 +39,7 @@ CREATE TABLE PASSWORDS (
 CREATE TABLE CALLS ( 
     callId INT AUTO_INCREMENT PRIMARY KEY, 
     userId INT NOT NULL, 
-    targetUserId INT NOT NULL,
+    targetUserId INT,
     place VARCHAR(100),  -- מיקום פיזי (אם רלוונטי) 
     learningFormat ENUM('zoom', 'phone', 'face_to_face', 'any'), 
     time DATETIME, 

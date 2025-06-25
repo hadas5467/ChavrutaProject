@@ -34,7 +34,8 @@ const CallForm = ({ onSuccess }) => {
 
     const newCall = {
       ...formData,
-      userId: user.id
+      userId: user.id,
+      targetUserId: null
     };
 
     try {
@@ -61,7 +62,7 @@ const CallForm = ({ onSuccess }) => {
       <h3>📢 יצירת קריאה חדשה</h3>
       <input name="subject" placeholder="נושא" value={formData.subject} onChange={handleChange} required />
       <input name="material" placeholder="חומר לימוד" value={formData.material} onChange={handleChange} />
-      <input name="place" placeholder="מיקום (אופציונלי)" value={formData.place} onChange={handleChange} />
+      <input name="place" placeholder="אופציונלי- כתובת מדויקת" value={formData.place} onChange={handleChange} />
       <input type="datetime-local" name="time" value={formData.time} onChange={handleChange} required />
 
       <label>פורמט לימוד:</label>
