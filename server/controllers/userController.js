@@ -58,8 +58,20 @@ export const getUsers = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
        console.log("Register API hit", req.body);
-    let newUser = await userServices.create(req.body);
-   const token = generateToken(newUser); // 👈 כאן נוצרת ה-JWT
+ 
+    // טיפול בקובץ שהועלה
+    let profilePath = null;
+    if (req.file) {
+      profilePath = req.file.filename; 
+    }
+    
+    const userData = {
+      ...req.body,
+      profile: profilePath
+    };
+
+    let newUser = await userServices.create(userData);
+    const token = generateToken(newUser); // 
 
     res
       .cookie('token', token, {
@@ -85,7 +97,19 @@ export const createUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const id = req.params.id;
-    let result = await userServices.update(id, req.body);
+     // טיפול בקובץ שהועלה
+    let profilePath = null;
+    if (req.file) {
+      profilePath = req.file.filename; // שם הקובץ שנשמר
+    }
+    
+    // הוספת נתיב הקובץ לנתוני העדכון
+    const updateData = {
+      ...req.body,
+      ...(profilePath && { profile: profilePath })
+    };
+    
+    let result = await userServices.update(id, updateData);
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "User not found" });
     }
