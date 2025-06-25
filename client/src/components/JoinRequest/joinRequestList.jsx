@@ -1,7 +1,7 @@
 import React from "react";
 import List from "../List.jsx";
 import JoinRequestCard from './joinRequestCard.jsx';
-import * as apiService from "../apiService";
+import * as apiService from "../apiService.js";
 
 const JoinRequestList = () => {
   const currentUserId = JSON.parse(localStorage.getItem("currentUser"))?.id;

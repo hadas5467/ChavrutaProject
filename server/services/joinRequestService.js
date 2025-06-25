@@ -1,10 +1,10 @@
-import { getUserById } from '../dataServices/userServices.js';
+import { getById } from '../dataServices/userServices.js';
 import { sendEmail } from '../utils/notifications.js';
 import { create } from '..//dataServices/joinRequestSevices.js';
 
 export const handleJoinRequest = async (joinData) => {
   const { callId, id, targetUserId, details } = joinData;
-  const user = await getUserById(targetUserId);
+  const user = await getById(targetUserId);
   if (!user) throw new Error('Target user not found');
 
   const request = await create(joinData);
