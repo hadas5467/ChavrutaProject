@@ -1,5 +1,5 @@
 import pool from './DB.js';
-
+import { handleCallCreation } from '../services/callService.js';
 export const getCallWithUser = async (callId, userSex) => {
   const sql = `
     SELECT c.*, u.userId as user_userId, u.name as user_name, u.gmail as user_gmail, u.profile as user_profile, u.sex as user_sex

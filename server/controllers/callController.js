@@ -1,5 +1,5 @@
 import * as callServices from "../dataServices/callServices.js";
-
+import { handleCallCreation } from '../services/callService.js';
 // קבלת כל השיחות (או לפי סינון)
 export const getCalls = async (req, res) => {
   try {
@@ -22,14 +22,17 @@ export const getCalls = async (req, res) => {
   }
 };
 
-// יצירת שיחה חדשה
 export const createCall = async (req, res) => {
   try {
-    let newCall = await callServices.create(req.body);
-    res.status(201).json(newCall);
+    const callData = req.body;
+    const senderUser = req.user; // נניח שהמידע על המשתמש מגיע מה-token
+
+    const createdCall = await handleCallCreation(callData, senderUser);
+
+    res.status(201).json({ success: true, call: createdCall });
   } catch (error) {
-    console.error("createCall error:", error);
-    res.status(500).json({ message: "שגיאה בשרת" });
+    console.error("שגיאה ביצירת קריאה:", error.message);
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 
