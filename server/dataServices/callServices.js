@@ -1,6 +1,13 @@
 import pool from './DB.js';
 
-// קבלת שיחות עם סינון
+export const getById = async (callId) => {
+  const sql = 'SELECT * FROM CALLS WHERE callId = ?';
+  const [rows] = await pool.query(sql, [callId]);
+  if (rows.length === 0) return null;
+  const row = rows[0];
+  return { ...row, id: row.callId };
+};
+
 export const findByFilter = async (filter = {}) => {
   let sql = 'SELECT * FROM CALLS';
   const params = [];
@@ -37,7 +44,10 @@ export const findByFilter = async (filter = {}) => {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
   const [rows] = await pool.query(sql, params);
-  return rows;
+   return rows.map(row => ({
+    ...row,
+    id: row.callId
+  }));
 };
 
 export const create = async (call) => {
@@ -54,7 +64,7 @@ export const create = async (call) => {
     call.material
   ];
   const [result] = await pool.query(sql, params);
-  return { id: result.insertId, ...call };
+  return {...call, id: result.insertId };
 };
 
 export const update = async (callId, call) => {
@@ -70,7 +80,7 @@ export const update = async (callId, call) => {
   params.push(callId);
   const sql = `UPDATE CALLS SET ${fields.join(', ')} WHERE callId = ?`;
   const [result] = await pool.query(sql, params);
-  return result;
+   return { id: callId, ...call };
 };
 
 export const deleteCall = async (callId) => {

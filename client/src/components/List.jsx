@@ -112,7 +112,7 @@ import { fetchData } from './apiService';
 
 const RenderedItem = React.memo(({ item, refreshItems, handleDelete, renderItem }) => {
   return (
-    <li key={item.id}>
+    <li >
       {renderItem(item, refreshItems)}
     </li>
   );
@@ -199,6 +199,7 @@ const List = ({ endpoint, renderItem, filters, newItem }) => {
       </div>
       <ul>
         {Array.isArray(items) && items.map((item) => (
+          console.log('Rendering item:', item), // Debugging line
           <RenderedItem
             key={item.id}
             item={item}
