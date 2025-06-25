@@ -20,7 +20,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads/males', express.static('uploads/males'));
+app.use('/uploads/females', express.static('uploads/females'));
 
 app.use(cookieParser());
 
