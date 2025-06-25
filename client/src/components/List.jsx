@@ -160,6 +160,7 @@ const List = ({ endpoint, renderItem, filters, newItem }) => {
 
     try {
       const data = await fetchData(fullEndpoint);
+      console.log('Fetched items:', data); // Debugging line
       setItems(data);
     } catch (error) {
       console.error('Error fetching filtered items:', error);

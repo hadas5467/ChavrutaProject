@@ -92,7 +92,7 @@ export const create = async (user) => {
   const sqlPass = `INSERT INTO PASSWORDS (userId, passwordHash) VALUES (?, ?)`;
   await pool.query(sqlPass, [result.insertId, hashedPassword]);
 
-  return { id: result.insertId, ...user };
+  return { id: result.insertId,name: user.name, role: user.role, sex: user.sex ,profile: user.profile };
 };
 
 // עדכון משתמש

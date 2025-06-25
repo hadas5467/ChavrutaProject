@@ -18,6 +18,7 @@ export async function fetchData(apiPath) {
         if (!response.ok) {
             throw new Error(`שגיאה: ${response.status}`);
         }
+        console.log("Response from server:", response);
         return await response.json();
     }
     catch (error) {

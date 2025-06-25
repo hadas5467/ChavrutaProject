@@ -15,7 +15,12 @@ import {
 function CallCard({ call, user, setCalls, currentUserId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [newSubject, setNewSubject] = useState(call.subject);
-  const isOwner = user.userId === currentUserId;
+
+  // const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  // if (!currentUser) {
+  //   return;
+  // }
+  const isOwner = user.id === currentUserId;
 
   // מחיקה
   async function handleDeleteCall(callId) {

@@ -5,22 +5,30 @@ import * as apiService from "../apiService.js"
 
 // מיפוי של call + המשתמש שיצר אותו
 async function fetchCallsWithUsers() {
-  const calls = await apiService.fetchData("calls");
-  const users = await apiService.fetchData("users");
+  // const calls = await apiService.fetchData("calls");
+  // const users = await apiService.fetchData("users");
 
-  return calls.map((call) => ({
+return calls.map((call) => {
+  const matchedUser = users.find((u) => u.id === call.userId) || {};
+  return {
     ...call,
-    user: users.find((u) => u.userId === call.userId) || {},
-  }));
+    id: call.id,  
+    user: {
+      ...matchedUser,
+      id: matchedUser.id,
+    }
+  };
+});
+
 }
 
 const CallsList = () => {
-  const currentUserId = JSON.parse(localStorage.getItem("currentUser"))?.userId;
+  const currentUserId = JSON.parse(localStorage.getItem("currentUser"))?.id;
 
   const renderItem = (callWithUser, refresh) => (
     <CallCard
       call={callWithUser}
-      user={callWithUser.user}
+     // user={callWithUser.user}
       currentUserId={currentUserId}
       setCalls={refresh}
     />
@@ -37,7 +45,7 @@ const CallsList = () => {
           { label: "ID עולה", value: "id" }
         ]}
         newItem={() => alert("כאן אפשר להוסיף יצירת קריאה חדשה")}
-        fetchCustom={fetchCallsWithUsers}
+        //fetchCustom={fetchCallsWithUsers}
       />
     </div>
   );
