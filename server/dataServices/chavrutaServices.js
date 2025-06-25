@@ -1,5 +1,29 @@
 import pool from './DB.js';
 
+
+export const getCallWithUser = async (callId, userSex) => {
+  const sql = `
+    SELECT c.*, u.userId as user_userId, u.name as user_name, u.gmail as user_gmail, u.profile as user_profile, u.sex as user_sex
+    FROM CALLS c
+    JOIN USERS u ON c.userId = u.userId
+    WHERE c.callId = ? AND u.sex = ?
+  `;
+  const [rows] = await pool.query(sql, [callId, userSex]);
+  if (rows.length === 0) return null;
+  const row = rows[0];
+  return {
+    ...row,
+    id: row.callId,
+    user: {
+      userId: row.user_userId,
+      name: row.user_name,
+      gmail: row.user_gmail,
+      profile: row.user_profile,
+      sex: row.user_sex
+      // הוסף כאן שדות נוספים שתרצה מהמשתמש
+    }
+  };
+};
 // קבלת חברותות עם סינון
 export const findByFilter = async (filter = {}) => {
   let sql = 'SELECT * FROM CHAVRUTA';
@@ -29,7 +53,10 @@ export const findByFilter = async (filter = {}) => {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
   const [rows] = await pool.query(sql, params);
-  return rows;
+ return rows.map(row => ({
+    ...row,
+    id: row.chavrutaId
+  }));
 };
 
 // יצירת חברותא חדשה
@@ -62,8 +89,8 @@ export const update = async (chavrutaId, chavruta) => {
   params.push(chavrutaId);
   const sql = `UPDATE CHAVRUTA SET ${fields.join(', ')} WHERE chavrutaId = ?`;
   const [result] = await pool.query(sql, params);
-  return result;
-};
+  return { id: result.insertId, ...result };
+}; 
 
 // מחיקת חברותא
 export const deleteChavruta = async (chavrutaId) => {

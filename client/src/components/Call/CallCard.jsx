@@ -20,7 +20,7 @@ function CallCard({ call, user, setCalls, currentUserId }) {
   // if (!currentUser) {
   //   return;
   // }
-  const isOwner = user.id === currentUserId;
+   const isOwner = call.userId === currentUserId;
 
   // מחיקה
   async function handleDeleteCall(callId) {
@@ -43,10 +43,10 @@ function CallCard({ call, user, setCalls, currentUserId }) {
 
   async function handleUpdateCall(call, updateData) {
     try {
-      await apiService.UpdateData(`calls/${call.callId}`, updateData);
+      await apiService.UpdateData(`calls/${call.id}`, updateData);
       setCalls((prev) =>
         prev.map((c) =>
-          c.callId === call.callId ? { ...c, ...updateData } : c
+          c.id === call.id ? { ...c, ...updateData } : c
         )
       );
     } catch (error) {
@@ -73,7 +73,7 @@ function CallCard({ call, user, setCalls, currentUserId }) {
         call.subject
       )}</h3>
 
-      <p><strong>יוצר:</strong> {user.name} ({sector[user.sector]})</p>
+      {/* <p><strong>יוצר:</strong> {user.name} ({sector[user.sector]})</p> */}
       <p><strong>מיקום:</strong> {call.place || "גמיש"}</p>
       <p><strong>פורמט:</strong> {learningFormat[call.learningFormat]}</p>
       <p><strong>גילאים:</strong> {ageRange[call.ageRange]}</p>
@@ -82,19 +82,19 @@ function CallCard({ call, user, setCalls, currentUserId }) {
       <p><strong>הערות:</strong> {call.notes}</p>
       <p><strong>זמן:</strong> {new Date(call.time).toLocaleString("he-IL")}</p>
 
-      <p><strong>עיר:</strong> {user.city}</p>
-      <p><strong>שפות:</strong> {formatLanguages(user.languages)}</p>
-      <p><strong>ניסיון:</strong> {experienceLevel[user.experienceLevel]}</p>
-      <p><strong>זמינות:</strong> {availabilityStatus[user.availabilityStatus]}</p>
+      {/* <p><strong>עיר:</strong> {user.city}</p> */}
+      {/* <p><strong>שפות:</strong> {formatLanguages(user.languages)}</p> */}
+      {/* <p><strong>ניסיון:</strong> {experienceLevel[user.experienceLevel]}</p> */}
+      {/* <p><strong>זמינות:</strong> {availabilityStatus[user.availabilityStatus]}</p>
       <p><strong>קשר:</strong> {contactMethod[user.contactMethod]}</p>
-      <p><strong>תיאור:</strong> {user.bio}</p>
+      <p><strong>תיאור:</strong> {user.bio}</p> */}
 
       {isOwner && (
         <div className="call-buttons">
           <button onClick={handleUpdateClick}>
             {isEditing ? "שמור" : "עדכון"}
           </button>
-          <button onClick={() => handleDeleteCall(call.callId)}>מחיקה</button>
+          <button onClick={() => handleDeleteCall(call.id)}>מחיקה</button>
         </div>
       )}
     </div>

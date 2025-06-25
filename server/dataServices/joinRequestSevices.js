@@ -25,7 +25,10 @@ export const findByFilter = async (filter = {}) => {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
   const [rows] = await pool.query(sql, params);
-  return rows;
+ return rows.map(row => ({
+    ...row,
+    id: row.joinRequestId
+  }));
 };
 
 // יצירת בקשת הצטרפות חדשה
@@ -56,7 +59,7 @@ export const update = async (joinRequestId, joinRequest) => {
   params.push(joinRequestId);
   const sql = `UPDATE JOIN_REQUESTS SET ${fields.join(', ')} WHERE joinRequestId = ?`;
   const [result] = await pool.query(sql, params);
-  return result;
+  return { id: joinRequestId, ...joinRequest };
 };
 
 // מחיקת בקשת הצטרפות
