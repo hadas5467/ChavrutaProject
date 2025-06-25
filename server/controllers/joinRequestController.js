@@ -1,5 +1,5 @@
 import * as joinRequestServices from "../dataServices/joinRequestSevices.js";
-
+import * as service from "../services/joinRequestService.js";
 // קבלת כל הבקשות (או לפי סינון)
 export const getJoinRequests = async (req, res) => {
   try {
@@ -22,7 +22,7 @@ export const getJoinRequests = async (req, res) => {
 // יצירת בקשה חדשה
 export const createJoinRequest = async (req, res) => {
   try {
-    let newJoinRequest = await joinRequestServices.create(req.body);
+    let newJoinRequest = await service.handleJoinRequest(req.body);
     res.status(201).json(newJoinRequest);
   } catch (error) {
     console.error("createJoinRequest error:", error);

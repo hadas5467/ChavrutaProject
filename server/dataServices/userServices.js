@@ -1,6 +1,17 @@
 import pool from './DB.js';
 import bcrypt from 'bcrypt';
 
+export const getById = async (userId) => {
+  const sql = `
+    SELECT userId, role, name, phone, gmail, age, sex, sector, profile, contactMethod, city, country, languages, bio, experienceLevel, availability, availabilityStatus, tags
+    FROM USERS
+    WHERE userId = ?
+    LIMIT 1
+  `;
+  const [rows] = await pool.query(sql, [userId]);
+  return rows[0] || null;
+};
+
 // קבלת משתמשים עם סינון
 export const findByFilter = async (filter = {}) => {
   let sql = `
