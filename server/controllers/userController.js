@@ -10,10 +10,21 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ match: false, message: 'אינך רשום למערכת' });
     }
 
-    res.status(200).json({ match: true, user });
+    // res.status(200).json({ match: true, user });
+    const token = generateToken(user); // 👈 כאן נוצרת ה-JWT
+
+    res
+      .cookie('token', token, {
+        httpOnly: true,
+        secure: false,  // true בפרודקשן עם HTTPS
+        sameSite: 'strict',
+        maxAge: 3600000
+      })
+     .status(200)
+      .json({ match: true, user  });
   } catch (error) {
     console.error("שגיאה בהתחברות:", error.message);
-    res.status(500).json({ match: false, error: error.message });
+    res.status(500).json({ match: false, error: "שגיאה בשרת" });
   }
 };
 
@@ -32,6 +43,8 @@ export const getUsers = async (req, res) => {
       filter.sex = req.user.sex;
     }
     const users = await userServices.findByFilter(filter);
+
+    
     res.status(200).json(users ?? []);
   } catch (error) {
     console.error("getUsers error:", error);

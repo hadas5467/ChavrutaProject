@@ -3,7 +3,7 @@ const secretKey = process.env.SECRETKEY ?? "SECRETKEY"
 
 const generateToken = (user) => {
     const payload = {
-        id: user.userId,
+        id: user.id,
         sex: user.sex,
         name: user.name,
         role: user.role
@@ -12,9 +12,13 @@ const generateToken = (user) => {
 };
 
 function verifyToken(req, res, next) {
+    console.log("verifyToken called");
 //  const token = req.header('Authorization')?.split(' ')[1];   
  const token =req.cookies.token;
- if (!token) return res.status(401).json({ error: 'Access denied' });
+ if (!token) {
+    console.log("No token provided");
+    return res.status(401).json({ error: "בעיה בשרת" });
+}
     try {
         const decoded = jwt.verify(token, secretKey);
         req.user = {

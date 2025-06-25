@@ -60,7 +60,7 @@ export const login = async (gmail, password) => {
     name: rows2[0].name,
     sex: rows2[0].sex,
     role: rows2[0].role
-  }; return rows2[0] || null;
+  }; 
 };
 
 // יצירת משתמש חדש
