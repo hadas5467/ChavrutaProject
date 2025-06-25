@@ -7,6 +7,8 @@ const ChavrutaList = ({ usersMap }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const userId = JSON.parse(localStorage.getItem('currentUser'))?.id;
+
   // שליפת סטטוס מה-query (אם קיים)
   const searchParams = new URLSearchParams(location.search);
   const type = searchParams.get('type'); // יכול להיות 'active', 'ended', 'pending_start'...
@@ -43,7 +45,7 @@ const ChavrutaList = ({ usersMap }) => {
 
   return (
     <List
-      endpoint="chavrutas"
+      endpoint={`chavrutas/user/${userId}`}
       renderItem={renderChavruta}
       newItem={() => navigate('new')}
       filters={filters}
