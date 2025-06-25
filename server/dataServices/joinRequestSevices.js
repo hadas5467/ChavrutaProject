@@ -1,5 +1,6 @@
 import pool from './DB.js';
 
+
 // קבלת בקשות הצטרפות עם סינון
 export const findByFilter = async (filter = {}) => {
   let sql = 'SELECT * FROM JOIN_REQUESTS';
