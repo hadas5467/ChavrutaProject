@@ -1,4 +1,5 @@
 import * as chavrutaServices from "../dataServices/chavrutaServices.js";
+import { handleChavrutaCreation } from '../services/chavrutaService.js';
 
 // קבלת כל החברותות (או לפי סינון)
 export const getAllChavrutas = async (req, res) => {
@@ -43,7 +44,7 @@ export const getChavrutasByUser = async (req, res) => {
 // יצירת חברותא חדשה
 export const createChavruta = async (req, res) => {
   try {
-    let newChavruta = await chavrutaServices.create(req.body);
+    let newChavruta = await chandleChavrutaCreation(req.body);
     res.status(201).json(newChavruta);
   } catch (error) {
     console.error("createChavruta error:", error);

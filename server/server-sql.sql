@@ -1,8 +1,10 @@
 DROP TABLE IF EXISTS CHAVRUTA;
 DROP TABLE IF EXISTS JOIN_REQUESTS;
+DROP TABLE IF EXISTS CallRecipients;
 DROP TABLE IF EXISTS CALLS;
 DROP TABLE IF EXISTS PASSWORDS;
 DROP TABLE IF EXISTS USERS;
+
 
 CREATE DATABASE IF NOT EXISTS chavruta_db;
 USE chavruta_db;
@@ -38,8 +40,8 @@ CREATE TABLE PASSWORDS (
 
 CREATE TABLE CALLS ( 
     callId INT AUTO_INCREMENT PRIMARY KEY, 
+    targetUserId INT,
     userId INT NOT NULL, 
-    targetUserId INT NOT NULL,
     place VARCHAR(100),  -- מיקום פיזי (אם רלוונטי) 
     learningFormat ENUM('zoom', 'phone', 'face_to_face', 'any'), 
     time DATETIME, 
@@ -57,7 +59,6 @@ CREATE TABLE JOIN_REQUESTS (
     joinRequestId INT AUTO_INCREMENT PRIMARY KEY, 
     callId INT NOT NULL, 
     userId INT NOT NULL, 
-	targetUserId INT NOT NULL,
     details TEXT, 
     status ENUM('pending', 'approved', 'declined') DEFAULT 'pending', 
     requestedAt DATETIME DEFAULT CURRENT_TIMESTAMP, 
@@ -78,6 +79,18 @@ CREATE TABLE CHAVRUTA (
     FOREIGN KEY (user2) REFERENCES USERS(userId) ON DELETE CASCADE, 
     FOREIGN KEY (callId) REFERENCES CALLS(callId) ON DELETE SET NULL 
 ); 
+
+CREATE TABLE CallRecipients (
+    callId INT NOT NULL,
+    userId INT NOT NULL,
+    targetUserId INT NOT NULL,
+
+    PRIMARY KEY (callId, targetUserId),
+
+    FOREIGN KEY (callId) REFERENCES Calls(callId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES Users(userId),
+    FOREIGN KEY (targetUserId) REFERENCES Users(userId)
+);
 
 -- הכנסת משתמשים
 INSERT INTO USERS (
@@ -116,20 +129,20 @@ INSERT INTO PASSWORDS (userId, passwordHash) VALUES
 -- הכנסת שיחות
 
 INSERT INTO CALLS (
-  userId, targetUserId,  place, learningFormat, time, subject, ageRange, notes,
+  userId, place, learningFormat, time, subject, ageRange, notes,
   preferredDuration, material
 ) VALUES
-(1, 2, 'Zoom', 'zoom', '2025-07-01 20:00:00', 'תנ\"ך למתחילים', '25-35', 'לימוד פתוח', '1_hour', 'ספר שופטים'),
-(2, 3, 'כולל מרכזי', 'face_to_face', '2025-07-02 21:00:00', 'הלכה מתקדמת', '35-45', 'שיעור עמוק', '45_min', 'משנה ברורה'),
-(3, 4, NULL, 'phone', '2025-07-03 10:00:00', 'אמונה לנוער', '18-25', 'חיזוק באמונה', '30_min', 'שערי תשובה'),
-(4, 7,NULL, 'any', '2025-07-04 19:00:00', 'מבוא למערכת', '45-60', 'הסבר כללי', 'flexible', 'onboarding מצגת');
+(1, 'Zoom', 'zoom', '2025-07-01 20:00:00', 'תנ\"ך למתחילים', '25-35', 'לימוד פתוח', '1_hour', 'ספר שופטים'),
+(2, 'כולל מרכזי', 'face_to_face', '2025-07-02 21:00:00', 'הלכה מתקדמת', '35-45', 'שיעור עמוק', '45_min', 'משנה ברורה'),
+(3, NULL, 'phone', '2025-07-03 10:00:00', 'אמונה לנוער', '18-25', 'חיזוק באמונה', '30_min', 'שערי תשובה'),
+(4, NULL, 'any', '2025-07-04 19:00:00', 'מבוא למערכת', '45-60', 'הסבר כללי', 'flexible', 'onboarding מצגת');
 
 
-INSERT INTO JOIN_REQUESTS (callId, userId, targetUserId, details, status) VALUES
-(1, 3, 2, 'מעוניינת מאוד להצטרף', 'pending'),
-(2, 1, 7, 'רוצה ללמוד הלכה', 'approved'),
-(3, 2, 1,'רוצה לחזק', 'approved'),
-(4, 3, 6, 'מבקשת הסבר ראשוני', 'declined');
+INSERT INTO JOIN_REQUESTS (callId, userId, details, status) VALUES
+(1, 3, 'מעוניינת מאוד להצטרף', 'pending'),
+(2, 1, 'רוצה ללמוד הלכה', 'approved'),
+(3, 2, 'רוצה לחזק', 'approved'),
+(4, 3, 'מבקשת הסבר ראשוני', 'declined');
  
 -- חברותות קיימות
 INSERT INTO CHAVRUTA (
@@ -140,13 +153,14 @@ INSERT INTO CHAVRUTA (
 (3, 2, 3, 'pending_start', '', ''),
 (4, 3, 4, 'active', 'הצגה טכנית הושלמה', 'היה ברור');
 
--- בדיקת טבלת חברותות
-SELECT * FROM users;
-
 INSERT INTO CALLS (
-  userId, targetUserId, place, learningFormat, time, subject, ageRange, notes,
+  userId, place, learningFormat, time, subject, ageRange, notes,
   preferredDuration, material
 ) VALUES (
-  6, 3, 'Zoom', 'zoom', '2025-07-05 20:30:00', 'לימודי מחשבה ומוסר', '18-25',
+10, 'רמות ב', 'zoom', '2025-07-05 20:30:00', 'לימודי מחשבה ומוסר', '18-25',
   'לימוד פתוח לנשים בנושא מוסר ומחשבה יהודית', '1_hour', 'מסילת ישרים'
 );
+
+
+-- בדיקת טבלת חברותות
+SELECT * FROM users;
