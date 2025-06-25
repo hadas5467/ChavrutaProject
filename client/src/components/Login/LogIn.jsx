@@ -148,7 +148,7 @@ const LoginPage = () => {
 
       localStorage.setItem("currentUser", JSON.stringify(result.user));
       alert("התחברת בהצלחה!");
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       setError('שגיאה בהתחברות. אנא בדוק את הפרטים שלך.');
     } finally {
