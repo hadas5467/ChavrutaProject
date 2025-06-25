@@ -3,9 +3,9 @@ import { generateToken } from "../Middleware/authenticate.js";
 
 export const loginUser = async (req, res) => {
 
-  const { userName, password } = req.query;
+  const { gmail, password } = req.body;
   try {
-    const user = await userServices.findByUserNameAndPassword(userName, password);
+    const user = await userServices.login(gmail, password);
     if (!user) {
       return res.status(401).json({ match: false, message: 'אינך רשום למערכת' });
     }

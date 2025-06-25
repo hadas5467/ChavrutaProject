@@ -53,8 +53,14 @@ export const login = async (gmail, password) => {
   if (!isMatch) return null;
 
   const sql2 = `SELECT * FROM USERS WHERE userId = ? LIMIT 1`;
-  const [rows2] = await pool.query(sql2, [userAuth.id]);
-  return rows2[0] || null;
+  const [rows2] = await pool.query(sql2, [userAuth.userId]);
+ if (!rows2[0]) return null;
+  return {
+    id: rows2[0].userId,
+    name: rows2[0].name,
+    sex: rows2[0].sex,
+    role: rows2[0].role
+  }; return rows2[0] || null;
 };
 
 // יצירת משתמש חדש

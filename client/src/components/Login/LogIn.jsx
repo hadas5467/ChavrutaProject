@@ -125,7 +125,7 @@ import { LogIn, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import '../../css/LogIn.css'
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
+  const [gmail, setGmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -140,13 +140,13 @@ const LoginPage = () => {
     setError('');
 
     try {
-      const result = await addData("/api/users/logIn",{email, password});
+      const result = await addData("users/logIn",{gmail, password});
       //await login(email, password);
         if (!result || !result.match) {
         throw new Error("שם משתמש או סיסמה שגויים");
       }
 
-      localStorage.setItem("currentUser", JSON.stringify(response.user));
+      localStorage.setItem("currentUser", JSON.stringify(result.user));
       alert("התחברת בהצלחה!");
       navigate('/');
     } catch (err) {
@@ -180,8 +180,8 @@ const LoginPage = () => {
               <input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={gmail}
+                onChange={(e) => setGmail(e.target.value)}
                 required
                 placeholder="הזן את כתובת המייל שלך"
               />
