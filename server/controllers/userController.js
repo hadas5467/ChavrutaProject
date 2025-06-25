@@ -55,7 +55,7 @@ export const createUser = async (req, res) => {
         sameSite: 'strict',
         maxAge: 3600000
       })
-      .json({ message: 'User registered successfully' });  // מחזירים את המשתמש שנוצר
+      .json({ message: 'User registered successfully', user: newUser });  // מחזירים את המשתמש שנוצר
   }
   catch (error) {
     console.error('There was an error:', error.message);
