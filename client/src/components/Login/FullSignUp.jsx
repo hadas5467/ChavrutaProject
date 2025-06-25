@@ -59,7 +59,7 @@ const FullSignUp = () => {
     return (
         <div className="signup-wrapper">
             <form className="signup-form" onSubmit={handleSubmit}>
-                <h2>השלמת פרופיל</h2>
+                <h2>השלמת הפרופיל</h2>
 
                 <InputField label="טלפון" name="phone" icon={<Phone />} value={formData.phone} onChange={handleChange} />
                 <SelectField label="גיל" name="age" value={formData.age} onChange={handleChange} options={age} />

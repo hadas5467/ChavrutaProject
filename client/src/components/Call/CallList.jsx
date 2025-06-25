@@ -8,17 +8,17 @@ async function fetchCallsWithUsers() {
   // const calls = await apiService.fetchData("calls");
   // const users = await apiService.fetchData("users");
 
-return calls.map((call) => {
-  const matchedUser = users.find((u) => u.id === call.userId) || {};
-  return {
-    ...call,
-    id: call.id,  
-    user: {
-      ...matchedUser,
-      id: matchedUser.id,
-    }
-  };
-});
+  return calls.map((call) => {
+    const matchedUser = users.find((u) => u.id === call.userId) || {};
+    return {
+      ...call,
+      id: call.id,
+      user: {
+        ...matchedUser,
+        id: matchedUser.id,
+      }
+    };
+  });
 
 }
 
@@ -28,7 +28,7 @@ const CallsList = () => {
   const renderItem = (callWithUser, refresh) => (
     <CallCard
       call={callWithUser}
-     // user={callWithUser.user}
+      // user={callWithUser.user}
       currentUserId={currentUserId}
       setCalls={refresh}
     />
@@ -44,8 +44,8 @@ const CallsList = () => {
           { label: "שלי", value: "mine" },
           { label: "ID עולה", value: "id" }
         ]}
-        newItem={() => alert("כאן אפשר להוסיף יצירת קריאה חדשה")}
-        //fetchCustom={fetchCallsWithUsers}
+        newItem={() => navigate('/CallFrom')}    
+             //fetchCustom={fetchCallsWithUsers}
       />
     </div>
   );
