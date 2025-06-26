@@ -1,8 +1,9 @@
 import '../../css/UserProfile.css';
 import React, { useState, useEffect } from 'react';
 import { User, Mail, Phone, Calendar, Edit, Save, X, Globe, MapPin, FileImage } from 'lucide-react';
-import { contactMethod, sector, age, languageMap, availabilityStatus } from '../formatHelpers';
+import { contactMethod, sector, age, languageMap, availabilityStatus, ageRange } from '../formatHelpers';
 import { fetchData, UpdateData } from '../apiService';
+import { UserProfileSchema } from '../../Schema/UserProfile'; // הוסיפי למעלה
 
 const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -26,6 +27,7 @@ const ProfilePage = () => {
         const loadUserData = async () => {
             const userId = JSON.parse(localStorage.getItem('currentUser'))?.id;
             if (!userId) return;
+
 
             try {
                 const user = await fetchData(`users/${userId}`);
@@ -53,11 +55,34 @@ const ProfilePage = () => {
 
         loadUserData();
     }, []);
-
     const handleSave = async () => {
         try {
             const userId = JSON.parse(localStorage.getItem('currentUser'))?.id;
             if (!userId) return;
+
+            // המרה לשמות השדות של הסכמה
+            const dataForValidation = {
+                name: formData.fullName,
+                gmail: formData.email,
+                phone: formData.phoneNumber,
+                age: formData.age,
+                sector: formData.sector,
+                contactMethod: formData.preferredContact,
+                city: formData.city,
+                country: 'ישראל',
+                languages: Array.isArray(formData.languages) ? formData.languages : [formData.languages],
+                bio: formData.bio,
+                experienceLevel: '', // אם יש לך שדה כזה
+                availabilityStatus: formData.availability,
+                tags: [] // אם יש לך תגיות
+            };
+
+            const result = UserProfileSchema.safeParse(dataForValidation);
+            if (!result.success) {
+                const message = result.error.errors[0]?.message || 'יש למלא את כל הפרטים הנדרשים';
+                alert(message);
+                return;
+            }
 
             await UpdateData(`users/${userId}`, {
                 name: formData.fullName,
@@ -70,7 +95,7 @@ const ProfilePage = () => {
                 city: formData.city,
                 bio: formData.bio,
                 profile: formData.profile,
-                availability: JSON.parse(formData.availability || '{}')
+                availability: formData.availability
             });
 
             setIsEditing(false);
@@ -78,6 +103,7 @@ const ProfilePage = () => {
             console.error('שגיאה בעדכון המשתמש:', err);
         }
     };
+
 
     const handleCancel = () => {
         if (originalData) {
@@ -133,7 +159,8 @@ const ProfilePage = () => {
                         { label: 'שם מלא', key: 'fullName', icon: <User />, type: 'text' },
                         { label: 'כתובת מייל', key: 'email', icon: <Mail />, type: 'email', editable: false },
                         { label: 'מספר טלפון', key: 'phoneNumber', icon: <Phone />, type: 'tel' },
-                        { label: 'גיל', key: 'age', icon: <Calendar />, type: 'text', editable: true, options: age },
+                        // { label: 'גיל', key: 'age', icon: <Calendar />, type: 'text', editable: true, options: age },
+                    
                         { label: 'שפות', key: 'languages', icon: <Globe />, type: 'select', editable: true, options: languageOptions },
                         { label: 'עיר', key: 'city', icon: <MapPin />, type: 'text' },
                         { label: 'תמונת פרופיל (URL)', key: 'profile', icon: <FileImage />, type: 'text' },
@@ -170,7 +197,25 @@ const ProfilePage = () => {
                             )}
                         </div>
                     ))}
-
+    <div>
+                            <label className="field-label">גיל</label>
+                            {isEditing ? (
+                                <select
+                                    value={formData.age}
+                                    onChange={e => setFormData({ ...formData, age: e.target.value })}
+                                    className="input"
+                                >
+                                    <option value="">בחר גיל</option>
+                                    {Object.entries(ageRange).map(([value, label]) => (
+                                        <option key={value} value={value}>{label}</option>
+                                    ))}
+                                </select>
+                            ) : (
+                                <div className="input-display">
+                                    <span>{ageRange[formData.age] || formData.age}</span>
+                                </div>
+                            )}
+                        </div> 
                     {/* ביוגרפיה */}
                     <div>
                         <label className="field-label">ביוגרפיה</label>

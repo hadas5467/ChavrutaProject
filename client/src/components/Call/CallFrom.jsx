@@ -1,9 +1,13 @@
 // components/Call/CallForm.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as apiService from "../apiService.js";
+import { callSchema } from '../../Schema/CallSchema.js';
 import {
-  learningFormat, preferredDuration,ageRange} from '../formatHelpers';
+  learningFormat, preferredDuration, ageRange
+} from '../formatHelpers';
 import '../../css/CallCard.css'
+
 const CallForm = ({ onSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -17,6 +21,14 @@ const CallForm = ({ onSuccess }) => {
     time: ''
   });
 
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    const localDate = new Date(now.getTime() - offset * 60 * 1000);
+    return localDate.toISOString().slice(0, 16); // פורמט: "YYYY-MM-DDTHH:MM"
+  };
+
+
   const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
@@ -29,6 +41,22 @@ const CallForm = ({ onSuccess }) => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
     if (!user) return alert("יש להתחבר כדי לפרסם קריאה");
 
+    const now = new Date();
+    const selectedTime = new Date(formData.time);
+
+    if (selectedTime <= now) {
+      alert("לא ניתן לבחור זמן מהעבר. אנא בחרי זמן עתידי.");
+      return;
+    }
+
+    const validationResult = callSchema.safeParse(formData);
+    if (!validationResult.success) {
+      const message = validationResult.error.errors[0]?.message || 'יש למלא את כל הפרטים הנדרשים';
+      alert(message);
+      return;
+    }
+
+
     const newCall = {
       ...formData,
       userId: user.id,
@@ -36,7 +64,7 @@ const CallForm = ({ onSuccess }) => {
     };
 
     try {
-      const result = await addData('calls', newCall);
+      const result = await apiService.addData('calls', newCall);
       if (!result || !result.call.id) {
         throw new Error("ההוספה נכשלה - לא התקבלה תשובה תקינה");
       }
@@ -65,7 +93,16 @@ const CallForm = ({ onSuccess }) => {
       <input name="subject" placeholder="נושא" value={formData.subject} onChange={handleChange} required />
       <input name="material" placeholder="חומר לימוד" value={formData.material} onChange={handleChange} />
       <input name="place" placeholder="אופציונלי- כתובת מדויקת" value={formData.place} onChange={handleChange} />
-      <input type="datetime-local" name="time" value={formData.time} onChange={handleChange} required />
+      {/* <input type="datetime-local" name="time" value={formData.time} onChange={handleChange} required /> */}
+
+      <input
+        type="datetime-local"
+        name="time"
+        value={formData.time}
+        onChange={handleChange}
+        required
+        min={getCurrentDateTime()}
+      />
 
       <label>פורמט לימוד:</label>
       <select name="learningFormat" value={formData.learningFormat} onChange={handleChange}>
