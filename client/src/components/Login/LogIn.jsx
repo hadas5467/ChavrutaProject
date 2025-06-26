@@ -117,10 +117,10 @@
 
 
 // //npm install react-router-dom lucide-react
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { addData } from '../apiService.js';
-
+//import React, { useEffect } from 'react';
 import { LogIn, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import '../../css/LogIn.css'
 
@@ -130,6 +130,11 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // מחיקת המשתמש מה-localStorage
+    localStorage.removeItem('currentUser');
+  }, []);
 
  // const { login } = useAuth();
   const navigate = useNavigate();

@@ -17,7 +17,8 @@ export const loginUser = async (req, res) => {
       .cookie('token', token, {
         httpOnly: true,
         secure: false,  // true בפרודקשן עם HTTPS
-        sameSite: 'strict',
+        //sameSite: 'strict',
+        sameSite: 'lax',
         maxAge: 3600000
       })
      .status(200)
