@@ -20,6 +20,7 @@ const authorizeUserOwnerOrAdmin = authorizeOwnerOrAdmin({
 const router = express.Router();
 
 router.get('/', verifyToken, getUsers);
+router.get('/:id', verifyToken, authorizeUserOwnerOrAdmin, getUsers);
 router.post('/logIn', loginUser);
 router.post('/register', upload.single("profile"), createUser);
 router.put('/:id', verifyToken, authorizeUserOwnerOrAdmin, upload.single("profile"), updateUser);

@@ -146,12 +146,18 @@
 
 
 // SignUpBasic.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+//import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import '../../css/Signup.css';
 
 const SignUp = () => {
+
+    useEffect(() => {
+    localStorage.removeItem('currentUser');
+  }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     gmail: '',

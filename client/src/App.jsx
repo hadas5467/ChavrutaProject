@@ -13,7 +13,7 @@ import SignUp from './components/Login/SignUp';
 import FullSignUp from './components/Login/FullSignUp';
 
 // Users
- //import UserProfile from './components/Users/UserProfile';
+ import UserProfile from './components/Users/UserProfile';
 
 // // Chavrutas
 // import ChavrutaCard from './components/Chavrutas/ChavrutaCard';
@@ -47,7 +47,7 @@ function App() {
          } />
         <Route path="chavrutaList" element={<ChavrutaList />} />
         <Route path="/CallFrom" element={<CallFrom />} />
-       
+        <Route path="/UserProfile" element={<UserProfile />} />
 
 
          {/* </Route> */}
