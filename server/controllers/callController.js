@@ -13,7 +13,7 @@ export const getCalls = async (req, res) => {
       filter.userId = currentUserId;
     } else if (userId) {
       // אם הוא מנהל וביקש מזהה ספציפי, סנן לפיו
-      filter.userId = userId;
+      if(userId)filter.userId = userId;
     }
     if (userId) filter.userId = userId;
     if (place) filter.place = place;
