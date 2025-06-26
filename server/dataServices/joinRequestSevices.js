@@ -63,6 +63,7 @@ export const update = async (joinRequestId, joinRequest) => {
   }
   if (fields.length === 0) return null;
   params.push(joinRequestId);
+  console.log('Updating join request:', joinRequestId, joinRequest, fields, params);
   const sql = `UPDATE JOIN_REQUESTS SET ${fields.join(', ')} WHERE joinRequestId = ?`;
   const [result] = await pool.query(sql, params);
   return { id: joinRequestId, ...joinRequest };
@@ -72,5 +73,21 @@ export const update = async (joinRequestId, joinRequest) => {
 export const deleteJoinRequest = async (joinRequestId) => {
   const sql = 'DELETE FROM JOIN_REQUESTS WHERE joinRequestId = ?';
   const [result] = await pool.query(sql, [joinRequestId]);
+  return result;
+};
+
+export const updateByCallAndUser = async ({ callId, userId }, updateFields) => {
+  const fields = [];
+  const params = [];
+  for (const key of ['callId', 'userId', 'details', 'status']) {
+    if (updateFields[key] !== undefined) {
+      fields.push(`${key} = ?`);
+      params.push(updateFields[key]);
+    }
+  }
+  if (fields.length === 0) return null;
+  params.push(callId, userId);
+  const sql = `UPDATE JOIN_REQUESTS SET ${fields.join(', ')} WHERE callId = ? AND userId = ?`;
+  const [result] = await pool.query(sql, params);
   return result;
 };

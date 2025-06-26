@@ -12,7 +12,6 @@ const generateToken = (user) => {
 };
 
 function verifyToken(req, res, next) {
-    console.log("verifyToken called");
 //  const token = req.header('Authorization')?.split(' ')[1];   
  const token =req.cookies.token;
  if (!token) {

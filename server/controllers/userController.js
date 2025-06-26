@@ -97,6 +97,7 @@ export const createUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const id = req.params.id;
+     
      // טיפול בקובץ שהועלה
     let profilePath = null;
     if (req.file) {
@@ -108,7 +109,7 @@ export const updateUser = async (req, res) => {
       ...req.body,
       ...(profilePath && { profile: profilePath })
     };
-    
+
     let result = await userServices.update(id, updateData);
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "User not found" });
