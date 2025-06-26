@@ -1,27 +1,45 @@
 import pool from './DB.js';
 import { handleCallCreation } from '../services/callService.js';
 export const getCallWithUser = async (callId, userSex) => {
-  const sql = `
-    SELECT c.*, u.userId as user_userId, u.name as user_name, u.gmail as user_gmail, u.profile as user_profile, u.sex as user_sex
-    FROM CALLS c
-    JOIN USERS u ON c.userId = u.userId
-    WHERE c.callId = ? AND u.sex = ?
+ const sql = `
+    SELECT 
+      c.*,
+      u.userId               AS senderId,
+      u.name                 AS senderName,
+      u.profile              AS senderProfile,
+      u.sex                  AS senderSex,
+      u.age                  AS senderAge,
+      u.sector               AS senderSector,
+      u.experienceLevel      AS senderExperienceLevel,
+      u.city                 AS senderCity,
+      u.country              AS senderCountry,
+      u.bio                  AS senderBio,
+      u.tags                 AS senderTags
+    FROM CALL_RECIPIENTS cr
+    INNER JOIN CALLS c ON cr.callId       = c.callId
+    INNER JOIN USERS u ON c.userId        = u.userId
+    WHERE cr.targetUserId = ?
+      AND c.isActive          = TRUE
+    ORDER BY c.createdAt DESC;
   `;
-  const [rows] = await pool.query(sql, [callId, userSex]);
-  if (rows.length === 0) return null;
-  const row = rows[0];
-  return {
-    ...row,
+  const [rows] = await pool.query(sql, [recipientId]);
+  return rows.map(row => ({
     id: row.callId,
-    user: {
-      userId: row.user_userId,
-      name: row.user_name,
-      gmail: row.user_gmail,
-      profile: row.user_profile,
-      sex: row.user_sex
-      // הוסף כאן שדות נוספים שתרצה מהמשתמש
+    ...row,
+    sender: {
+      userId:            row.senderId,
+      name:              row.senderName,
+      profile:           row.senderProfile,
+      sex:               row.senderSex,
+      age:               row.senderAge,
+      sector:            row.senderSector,
+      experienceLevel:   row.senderExperienceLevel,
+      city:              row.senderCity,
+      country:           row.senderCountry,
+      bio:               row.senderBio,
+      tags:              row.senderTags
     }
-  };
+  }));
 };
 
 export const getById = async (callId) => {
@@ -31,46 +49,79 @@ export const getById = async (callId) => {
   const row = rows[0];
   return { ...row, id: row.callId };
 };
-
 export const findByFilter = async (filter = {}) => {
-  let sql = 'SELECT * FROM CALLS';
-  const params = [];
-  const conditions = [];
+  let sql = `
+    SELECT 
+      c.*,
+      u.userId               AS senderId,
+      u.name                 AS senderName,
+      u.profile              AS senderProfile,
+      u.sex                  AS senderSex,
+      u.age                  AS senderAge,
+      u.sector               AS senderSector,
+      u.experienceLevel      AS senderExperienceLevel,
+      u.city                 AS senderCity,
+      u.country              AS senderCountry,
+      u.bio                  AS senderBio,
+      u.tags                 AS senderTags
+    FROM CALL_RECIPIENTS cr
+    INNER JOIN CALLS c ON cr.callId = c.callId
+    INNER JOIN USERS u ON c.userId = u.userId
+    WHERE cr.targetUserId = ?
+      AND c.isActive = 1
+  `;
+  
+  const params = [filter.targetUserId, filter. sex]; // הוספת targetUserId כפרמטר ראשון
+  
+  // הוספת פילטרים נוספים
   if (filter.userId) {
-    conditions.push('userId = ?');
+    sql += ' AND c.userId = ?';
     params.push(filter.userId);
   }
   if (filter.place) {
-    conditions.push('place = ?');
+    sql += ' AND c.place = ?';
     params.push(filter.place);
   }
   if (filter.learningFormat) {
-    conditions.push('learningFormat = ?');
+    sql += ' AND c.learningFormat = ?';
     params.push(filter.learningFormat);
   }
   if (filter.subject) {
-    conditions.push('subject = ?');
+    sql += ' AND c.subject = ?';
     params.push(filter.subject);
   }
   if (filter.ageRange) {
-    conditions.push('ageRange = ?');
+    sql += ' AND c.ageRange = ?';
     params.push(filter.ageRange);
   }
   if (filter.isActive !== undefined) {
-    conditions.push('isActive = ?');
+    sql += ' AND c.isActive = ?';
     params.push(filter.isActive);
   }
   if (filter.callId !== undefined) {
-    conditions.push('callId = ?');
+    sql += ' AND c.callId = ?';
     params.push(filter.callId);
   }
-  if (conditions.length > 0) {
-    sql += ' WHERE ' + conditions.join(' AND ');
-  }
+  
+  sql += ' ORDER BY c.createdAt DESC';
+  
   const [rows] = await pool.query(sql, params);
-   return rows.map(row => ({
+  return rows.map(row => ({
+    id: row.callId,
     ...row,
-    id: row.callId
+    sender: {
+      userId:            row.senderId,
+      name:              row.senderName,
+      profile:           row.senderProfile,
+      sex:               row.senderSex,
+      age:               row.senderAge,
+      sector:            row.senderSector,
+      experienceLevel:   row.senderExperienceLevel,
+      city:              row.senderCity,
+      country:           row.senderCountry,
+      bio:               row.senderBio,
+      tags:              row.senderTags
+    }
   }));
 };
 
