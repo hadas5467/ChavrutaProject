@@ -27,10 +27,10 @@ router.put('/:id', verifyToken, authorizeUserOwnerOrAdmin, upload.single("profil
 //להפוך בהמשך לחסימת משתמש
 router.delete('/:id', verifyToken, authorizeAdmin, deleteUser);
 router.get('/profile/:filename', verifyToken, checkImageAccess, (req, res) => {
-  const filename = req.params.filename;
-  const userSex = req.user.sex;
-  // קביעת הנתיב לפי המין של המשתמש
-  const imagePath = path.join('uploads', userSex === 'male' ? 'males' : 'females', filename); 
+const filename = req.params.filename;
+  const userSex = req.user.sex; // המין של המשתמש שמבקש
+  const folder = userSex === 'male' ? 'males' : 'females';
+  const imagePath = path.join('uploads', folder, filename);
   res.sendFile(path.join(process.cwd(), imagePath));
 });
 
