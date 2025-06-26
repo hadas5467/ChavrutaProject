@@ -40,6 +40,9 @@ const CallForm = ({ onSuccess }) => {
 
     try {
       const result = await addData('calls', newCall);
+      if (!result || !result.id) {
+        throw new Error("ההוספה נכשלה - לא התקבלה תשובה תקינה");
+      }
       alert("✅ קריאה נוספה");
       setFormData({
         subject: '',
@@ -53,7 +56,8 @@ const CallForm = ({ onSuccess }) => {
       });
       if (onSuccess) onSuccess(result);
     } catch (err) {
-      alert("❌ שגיאה בהוספת קריאה");
+      //alert("❌ שגיאה בהוספת קריאה");
+      console.log(err);
     }
   };
 
