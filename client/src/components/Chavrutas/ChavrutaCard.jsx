@@ -1,8 +1,9 @@
 import { chavrutaStatus } from '../formatHelpers';
 import "../../css/ChavrutaCard.css";
+import React, { useState } from 'react';
 const ChavrutaCard = ({ chavruta, users, currentUserId, editable = false, onUpdateNote }) => {
-  const user1 = users[chavruta.user1];
-  const user2 = users[chavruta.user2];
+  const user1 =chavruta.user1 ? chavruta.user1: null;
+  const user2 = chavruta.user2 ? chavruta.user2 : null;
 
   const [noteUser1, setNoteUser1] = useState(chavruta.notesUser1 || '');
   const [noteUser2, setNoteUser2] = useState(chavruta.notesUser2 || '');

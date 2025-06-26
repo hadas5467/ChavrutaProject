@@ -26,7 +26,6 @@ function verifyToken(req, res, next) {
             name: decoded.name,
             role: decoded.role
         };
-        console.log("decoded.role:", decoded.role);
         next();
     } catch (error) {
         res.status(401).json({ error: 'Invalid token' });

@@ -24,15 +24,14 @@ export const getAllChavrutas = async (req, res) => {
 export const getChavrutasByUser = async (req, res) => {
   try {
     const userId = req.params.id;
+    // קבל סינונים נוספים מה-query
+    const { callId, status } = req.query;
+    let filter = { userId };
+    if (callId) filter.callId = callId;
+    if (status) filter.status = status;
 
-    const asUser1 = await chavrutaServices.findByFilter({ user1: userId });
-
-    const asUser2 = await chavrutaServices.findByFilter({ user2: userId });
-
-    const combined = [...asUser1, ...asUser2];
-    const unique = Array.from(new Map(combined.map(ch => [ch.chavrutaId, ch])).values());
-
-    res.status(200).json(unique);
+    const chavrutas = await chavrutaServices.findByFilter(filter);
+    res.status(200).json(chavrutas ?? []);
   } catch (error) {
     console.error("getChavrutasByUser error:", error);
     res.status(500).json({ message: "שגיאה בשרת" });
