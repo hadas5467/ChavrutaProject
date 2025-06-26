@@ -21,7 +21,7 @@ import FullSignUp from './components/Login/FullSignUp';
 // import ChavrutaForm from './components/Chavrutas/ChavrutaFrom';
 // import ChavrutaHistory from './components/Chavrutas/ChavrutaHistory';
 import ChavrutaList from './components/Chavrutas/ChavrutaList';
-
+import CallFrom from './components/Call/CallFrom';
 
 // // Lessons
 // import LessonCard from './components/Lessons/LessonCard';
@@ -46,7 +46,8 @@ function App() {
            </ProtectedRoute>
          } />
         <Route path="chavrutaList" element={<ChavrutaList />} />
-
+        <Route path="/CallFrom" element={<CallFrom />} />
+       
 
 
          {/* </Route> */}
