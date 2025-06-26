@@ -1,4 +1,4 @@
-// //npm install react-hook-form zod @hookform/resolvers
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
