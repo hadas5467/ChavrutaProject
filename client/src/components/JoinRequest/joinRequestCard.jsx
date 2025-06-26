@@ -4,9 +4,16 @@ import { joinRequestStatus } from "../formatHelpers";
 import * as apiService from "../apiService";
 
 function JoinRequestCard({ request, setRequests, currentUserId }) {
-  const isOwner = request.userId === currentUserId;
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const isOwner = request.targetUserId === currentUserId;
+  const isAdmin = currentUser?.role === "admin"; 
+
 
   const handleDelete = async () => {
+   if (!(isOwner || isAdmin)) {
+      alert("רק בעל הבקשה או מנהל יכולים למחוק בקשה זו.");
+      return;
+    }
     if (!apiService.confirmAction("האם אתה בטוח שברצונך לדחות את הבקשה?")) return;
     try {
       await apiService.deleteData(`joinRequests/${request.id}`);
@@ -26,17 +33,17 @@ function JoinRequestCard({ request, setRequests, currentUserId }) {
       notesUser1: "",
       notesUser2: ""
     });
-     try {
-          console.log("מנסה למחוק בקשה עם id:", request.id);
-      await apiService.deleteData(`joinRequests/${request.id}`);
-      setRequests((prev) => prev.filter((r) => r.id !== request.id));
-    } catch (error) {
-          console.error("שגיאה במחיקת הבקשה:", error);
-      alert("שגיאה במחיקת הבקשה: " + error.message);
+     if (!(isOwner || isAdmin)) {
+      alert("רק בעל הבקשה או מנהל יכולים למחוק בקשה זו.");
+      return;
     }
-    // אפשר לעדכן סטטוס הבקשה ל"מאושר" (אם יש צורך)
-    // await apiService.patchData(`joinRequests/${request.id}`, { status: "approved" });
-
+  try {
+    await apiService.deleteData(`joinRequests/${request.id}`);
+    setRequests((prev) => prev.filter((r) => r.id !== request.id));
+  } catch (error) {
+    alert("שגיאה במחיקת הבקשה: " + error.message);
+  }
+    
     alert("חברותא נוצרה בהצלחה!");
     setRequests((prev) => prev.filter((r) => r.id !== request.id));
   } catch (error) {
