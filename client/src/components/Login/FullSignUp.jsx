@@ -68,7 +68,6 @@ const FullSignUp = () => {
 
   try {
     const form = new FormData();
-    // הוסף את כל השדות
     Object.entries(formData).forEach(([key, value]) => {
       if (key === 'tags') {
         form.append('tags', value.join(','));
@@ -77,12 +76,12 @@ const FullSignUp = () => {
       } else if (key === 'availability') {
         form.append('availability', JSON.stringify(value));
       } else if (key === 'profile' && value && typeof value !== 'string') {
-        form.append('profile', value); // זה הקובץ עצמו
+        form.append('profile', value);
       } else if (key !== 'profile') {
         form.append(key, value);
       }
     });
-    const result = await addData('users/register', form, true); // שים לב לשינוי כאן!
+    const result = await addData('users/register', form, true);
     if (result?.user) localStorage.setItem('currentUser', JSON.stringify(result.user));
     navigate('/home');
   } catch (error) {
