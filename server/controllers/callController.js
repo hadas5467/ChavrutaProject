@@ -3,11 +3,9 @@ import { handleCallCreation } from '../services/callService.js';
 // קבלת כל השיחות (או לפי סינון)
 export const getCalls = async (req, res) => {
   try {
-    // const { userId, place, learningFormat, subject, ageRange, isActive, callId } = req.query;
-    // let filter = {};
-    const { userId, place, learningFormat, subject, ageRange, isActive, callId } = req.query;
-    const { id: currentUserId, role } = req.user; // פירוק מזהה ותפקיד המשתמש מהטוקן
-
+    const sex = req.user.sex;
+    const id = req.user.id;
+    const { userId, place, learningFormat, subject, ageRange, isActive, callId  } = req.query;
     let filter = {};
 
     // אם המשתמש הוא לא מנהל, החל תמיד סינון לפי המזהה שלו
@@ -24,7 +22,14 @@ export const getCalls = async (req, res) => {
     if (ageRange) filter.ageRange = ageRange;
     if (isActive !== undefined) filter.isActive = isActive;
     if (callId) filter.callId = callId;
+  if (!sex) return res.status(401).json({ message: "Unauthorized" });
+    if (req.user.role !== 'admin') {
+      filter.sex=sex;
+      filter.targetUserId = id; // הוספת מזהה המשתמש כדי להחזיר רק שיחות רלוונטיות
+    }
+    else{
 
+    }
     const calls = await callServices.findByFilter(filter);
     // תמיד מחזירים 200 עם מערך (גם אם ריק)
     res.status(200).json(calls ?? []);
