@@ -186,7 +186,22 @@ const ProfilePage = () => {
                             </div>
                         )}
                     </div>
-
+                    <div>
+                        <label className="field-label">תמונת פרופיל</label>
+                        {formData.profile && (
+                            <div className="profile-image-wrapper">
+                                <img
+                                    src={`http://localhost:4000/api/users/profile/${formData.profile}`}
+                                    alt="תמונת פרופיל"
+                                    style={{ maxWidth: 120, borderRadius: '50%' }}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = '/default-profile.png';
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </div>
                     {/* סקטור */}
                     <div>
                         <label className="field-label">סקטור</label>
