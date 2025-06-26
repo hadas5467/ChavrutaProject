@@ -16,6 +16,26 @@ function JoinRequestCard({ request, setRequests, currentUserId }) {
     }
   };
 
+  const handleApprove = async () => {
+  try {
+    // שלח בקשה ליצירת חברותא חדשה
+    await apiService.addData("chavrutas", {
+      user1: request.userId,         // בעל הקריאה
+      user2: request.targetUserId,   // מי שביקש להצטרף
+      callId: request.callId,
+      notesUser1: "",
+      notesUser2: ""
+    });
+
+    // אפשר לעדכן סטטוס הבקשה ל"מאושר" (אם יש צורך)
+    // await apiService.patchData(`joinRequests/${request.id}`, { status: "approved" });
+
+    alert("חברותא נוצרה בהצלחה!");
+    setRequests((prev) => prev.filter((r) => r.id !== request.id));
+  } catch (error) {
+    alert("שגיאה ביצירת החברותא: " + error.message);
+  }
+};
   return (
     <div className="call-card">
       <h3>📩 בקשה להצטרפות לקריאה #{request.callId}</h3>
@@ -23,11 +43,12 @@ function JoinRequestCard({ request, setRequests, currentUserId }) {
       <p><strong>סטטוס:</strong> {joinRequestStatus[request.status]}</p>
       <p><strong>פרטים:</strong> {request.details}</p>
       <p><strong>תאריך:</strong> {new Date(request.requestedAt).toLocaleString("he-IL")}</p>
-      {isOwner && (
+     
         <div className="call-buttons">
-          <button onClick={handleDelete}>מחיקה</button>
+          <button onClick={handleDelete}>מצטער, כבר לא רלוונטי</button>
+           <button onClick={handleApprove}>מצוין! 👍</button>
         </div>
-      )}
+      
     </div>
   );
 }

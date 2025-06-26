@@ -2,7 +2,7 @@ import { getById } from '../dataServices/userServices.js';
 import { sendEmail } from '../utils/notifications.js';
 import { create as createChavruta } from '../dataServices/chavrutaServices.js';
 import { update as updateCall } from '../dataServices/callServices.js';
-import { update as updateJoinRequest } from '../dataServices/joinRequestSevices.js';
+import { updateByCallAndUser as updateJoinRequest } from '../dataServices/joinRequestSevices.js';
 
 export const handleChavrutaCreation = async (chavrutaData) => {
   const { user1, user2, callId, notesUser1 = '', notesUser2 = '' } = chavrutaData;
@@ -24,7 +24,7 @@ export const handleChavrutaCreation = async (chavrutaData) => {
   }
 
   // עדכון סטטוס הבקשה ל-approved
-  await updateJoinRequest({ callId, targetUserId: user2 }, { status: "approved" });
+  await updateJoinRequest({ callId, userId: user2 }, { status: "approved" });
 
   // יצירת חברותא חדשה
   await createChavruta({
