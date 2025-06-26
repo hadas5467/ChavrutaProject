@@ -49,7 +49,6 @@ const ChavrutaCard = ({ chavruta, users, currentUserId, editable = false, onUpda
     {chavruta.notesUser2 && <p><strong>הערה מ-{user2.name}:</strong> {chavruta.notesUser2}</p>}
   </>
 )}
-
       <p className="date">📅 התחיל ב: {new Date(chavruta.startedAt).toLocaleDateString('he-IL')}</p>
     </div>
   );

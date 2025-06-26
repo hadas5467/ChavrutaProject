@@ -110,6 +110,7 @@ export const createUser = async (req, res) => {
 
 }
 
+
 // עדכון משתמש קיים
 export const updateUser = async (req, res) => {
   try {
