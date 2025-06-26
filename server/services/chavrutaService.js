@@ -22,6 +22,7 @@ export const handleChavrutaCreation = async (chavrutaData) => {
   if (call.learningFormat === 'zoom') {
     meetingLink = `https://meet.jit.si/chavruta_${call.callId}_${user1}_${user2}`;
     await updateCall(callId, { place: meetingLink });
+    
   }
 
   // עדכון סטטוס הבקשה ל-approved
