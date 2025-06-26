@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Phone, Calendar, Mail, User, Globe, MapPin, Book, MessageSquare, Image as ImageIcon } from 'lucide-react';
 import { addData } from '../apiService';
+import { fullSignUpSchema } from '../../Schema/FullSignUp'; // הוסיפי למעלה
 import { age, sector, contactMethod, experienceLevel, availabilityStatus, topicMap } from '../formatHelpers';
 import '../../css/SignupFull.css';
 
@@ -63,8 +64,57 @@ const FullSignUp = () => {
     }));
   };
 
+  const handleNextStep = () => {
+  let stepSchema;
+
+  if (step === 0) {
+    stepSchema = fullSignUpSchema.pick({
+      phone: true,
+      age: true,
+      sector: true,
+      contactMethod: true,
+      city: true,
+      country: true,
+      languages: true,
+      bio: true,
+      experienceLevel: true,
+    });
+  }
+
+  if (step === 1) {
+    stepSchema = fullSignUpSchema.pick({
+      availabilityStatus: true,
+    });
+  }
+
+  if (step === 2) {
+    stepSchema = fullSignUpSchema.pick({
+      tags: true,
+    });
+  }
+
+  if (stepSchema) {
+    const result = stepSchema.safeParse(formData);
+    if (!result.success) {
+      const message = result.error.errors[0]?.message || 'יש למלא את כל הפרטים הנדרשים';
+      alert(message);
+      return;
+    }
+  }
+
+  setStep(prev => prev + 1);
+};
   const handleSubmit = async (e) => {
   e.preventDefault();
+const validationResult = fullSignUpSchema.safeParse(formData);
+if (!validationResult.success) {
+  const message = validationResult.error.errors[0]?.message || 'שגיאה בפרטים';
+  alert(message);
+  return;
+}
+
+
+
 
   try {
     const form = new FormData();
@@ -199,7 +249,8 @@ const FullSignUp = () => {
 
       <div className="signup-actions">
         {step > 0 && <button type="button" onClick={() => setStep(prev => prev - 1)}>הקודם</button>}
-        {step < steps.length - 1 && <button type="button" onClick={() => setStep(prev => prev + 1)}>הבא</button>}
+        {/* {step < steps.length - 1 && <button type="button" onClick={() => setStep(prev => prev + 1)}>הבא</button>} */}
+      {step < steps.length - 1 && <button type="button" onClick={handleNextStep}>הבא</button>}
         {step === steps.length - 1 && <button type="submit">סיום</button>}
       </div>
     </form>

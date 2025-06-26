@@ -15,6 +15,8 @@ const authorizeJoinRequestOwnerOrAdmin = authorizeOwnerOrAdmin({
   ownerFields: ['userId'],
   paramName: 'id'
 });
+console.log("authorizeJoinRequestOwnerOrAdmin", authorizeJoinRequestOwnerOrAdmin);
+
 const router = express.Router();
 
 // Get all users
@@ -24,6 +26,6 @@ router.get('/user',verifyToken, getJoinRequestsByUser);
 //router.get('/:id', getjoinRequesById);
 router.post('/',verifyToken, createJoinRequest);
 router.put('/:id',verifyToken, authorizeJoinRequestOwnerOrAdmin, updateJoinRequest);
-router.delete('/:id',verifyToken, authorizeOwnerOrAdmin, deleteJoinRequest);
+router.delete('/:id',verifyToken, deleteJoinRequest);
 
 export default router;

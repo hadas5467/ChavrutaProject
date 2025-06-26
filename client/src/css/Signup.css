@@ -144,3 +144,8 @@ textarea.input {
     padding: 0.65rem;
   }
 }
+.error-text {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}

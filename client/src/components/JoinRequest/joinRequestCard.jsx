@@ -26,7 +26,14 @@ function JoinRequestCard({ request, setRequests, currentUserId }) {
       notesUser1: "",
       notesUser2: ""
     });
-
+     try {
+          console.log("מנסה למחוק בקשה עם id:", request.id);
+      await apiService.deleteData(`joinRequests/${request.id}`);
+      setRequests((prev) => prev.filter((r) => r.id !== request.id));
+    } catch (error) {
+          console.error("שגיאה במחיקת הבקשה:", error);
+      alert("שגיאה במחיקת הבקשה: " + error.message);
+    }
     // אפשר לעדכן סטטוס הבקשה ל"מאושר" (אם יש צורך)
     // await apiService.patchData(`joinRequests/${request.id}`, { status: "approved" });
 
