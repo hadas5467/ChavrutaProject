@@ -1,4 +1,5 @@
-import { getById } from '../dataServices/userServices.js';
+import { getById as getUserById } from '../dataServices/userServices.js';
+import { getById as getCallById } from '../dataServices/callServices.js';
 import { sendEmail } from '../utils/notifications.js';
 import { create as createChavruta } from '../dataServices/chavrutaServices.js';
 import { update as updateCall } from '../dataServices/callServices.js';
@@ -8,12 +9,12 @@ export const handleChavrutaCreation = async (chavrutaData) => {
   const { user1, user2, callId, notesUser1 = '', notesUser2 = '' } = chavrutaData;
 
   // שליפת הקריאה
-  const call = await getById(callId); // אם יש לך getById ב-callServices
+  const call = await getCallById(callId); // אם יש לך getById ב-callServices
   if (!call) throw new Error('Call not found');
 
   // שליפת המשתמשים
-  const userObj1 = await getById(user1);
-  const userObj2 = await getById(user2);
+  const userObj1 = await getUserById(user1);
+  const userObj2 = await getUserById(user2);
   if (!userObj1 || !userObj2) throw new Error('User not found');
 
   // יצירת קישור Jitsi אם צריך
@@ -36,19 +37,63 @@ export const handleChavrutaCreation = async (chavrutaData) => {
   });
 
   // שליחת מייל אם צריך
-  if (userObj2.contactMethod === 'email') {
-    const subject = 'הוזמנת לחברותא!';
-    const message = `
-      שלום ${userObj2.name},
-      בקשתך להצטרף לחברותא אושרה!
-      ${call.learningFormat === 'zoom' ? `קישור לשיחה: ${meetingLink}` : `כתובת: ${call.place}`}
-    `;
-    try {
-      await sendEmail(userObj2.gmail, subject, message);
-    } catch (error) {
-      console.error('שגיאה בשליחת מייל:', error.message, error);
-    }
+const subject = 'הוזמנת לחברותא!';
+const message = `
+  שלום {name},
+  בקשתך להצטרף לחברותא אושרה!
+  ${call.learningFormat === 'zoom' ? `קישור לשיחה: ${meetingLink}` : `כתובת: ${call.place}`}
+`;
+
+const otherUser = (recipientId) =>
+  recipientId === userObj1.userId ? userObj2 : userObj1;
+
+const buildMailBody = (recipient, other, call, meetingLink) => `
+שלום ${recipient.name},
+
+בקשתך להצטרף לחברותא אושרה!
+
+🧑‍🤝‍🧑 בן/בת הזוג שלך ללימוד: ${other.name}
+${other.profile ? `📷 פרופיל: ${other.profile}` : ''}
+${other.age ? `🎂 גיל: ${other.age}` : ''}
+${other.gmail ? `✉️ מייל: ${other.gmail}` : ''}
+
+📚 נושא: ${call.subject}
+📖 חומר לימוד: ${call.material}
+🕒 זמן: ${new Date(call.time).toLocaleString('he-IL')}
+⏳ משך מועדף: ${call.preferredDuration}
+👥 טווח גילאים: ${call.ageRange}
+${call.notes ? `💬 הערות: ${call.notes}` : ''}
+
+${call.learningFormat === 'zoom'
+  ? `🔗 קישור לשיחה: ${meetingLink}`
+  : `📍 כתובת: ${call.place || '---'}`}
+
+בהצלחה ולימוד פורה!
+צוות חברותא
+`;
+
+if (userObj1.contactMethod === 'email') {
+  try {
+    await sendEmail(
+      userObj1.gmail,
+      subject,
+      buildMailBody(userObj1, userObj2, call, meetingLink)
+    );
+  } catch (error) {
+    console.error('שגיאה בשליחת מייל-user1:', error.message, error);
   }
+}
+if (userObj2.contactMethod === 'email') {
+  try {
+    await sendEmail(
+      userObj2.gmail,
+      subject,
+      buildMailBody(userObj2, userObj1, call, meetingLink)
+    );
+  } catch (error) {
+    console.error('שגיאה בשליחת מייל ל-user2:', error.message, error);
+  }
+}
 
   const result = {
     success: true,
