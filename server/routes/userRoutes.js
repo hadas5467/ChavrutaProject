@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUsers, loginUser, createUser, updateUser, deleteUser } from '../controllers/userController.js';
+import { getUsers,getById, loginUser, createUser, updateUser, deleteUser } from '../controllers/userController.js';
 import { verifyToken } from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
 import upload  from '../Middleware/multer.js';
@@ -20,7 +20,7 @@ const authorizeUserOwnerOrAdmin = authorizeOwnerOrAdmin({
 const router = express.Router();
 
 router.get('/', verifyToken, getUsers);
-router.get('/:id', verifyToken, authorizeUserOwnerOrAdmin, getUsers);
+router.get('/:id', verifyToken, authorizeUserOwnerOrAdmin, getById);
 router.post('/logIn', loginUser);
 router.post('/register', upload.single("profile"), createUser);
 router.put('/:id', verifyToken, authorizeUserOwnerOrAdmin, upload.single("profile"), updateUser);
