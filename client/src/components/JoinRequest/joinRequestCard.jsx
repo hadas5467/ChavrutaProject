@@ -7,7 +7,7 @@ function JoinRequestCard({ request, setRequests, currentUserId }) {
   const isOwner = request.userId === currentUserId;
 
   const handleDelete = async () => {
-    if (!apiService.confirmAction("האם אתה בטוח שברצונך למחוק את הבקשה?")) return;
+    if (!apiService.confirmAction("האם אתה בטוח שברצונך לדחות את הבקשה?")) return;
     try {
       await apiService.deleteData(`joinRequests/${request.id}`);
       setRequests((prev) => prev.filter((r) => r.id !== request.id));

@@ -30,7 +30,7 @@ router.get('/profile/:filename', verifyToken, checkImageAccess, (req, res) => {
   const filename = req.params.filename;
   const userSex = req.user.sex;
   // קביעת הנתיב לפי המין של המשתמש
-  const imagePath = path.join('uploads', userSex === 'male' ? 'males' : 'females', filename); 
+ const imagePath = path.join('uploads', user.profile); // user.profile כולל את התיקייה
   res.sendFile(path.join(process.cwd(), imagePath));
 });
 

@@ -27,14 +27,22 @@ export async function fetchData(apiPath) {
 }
 
 // הוספת נתונים לשרת
-export async function addData(apiPath, dataToAdd) {
+export async function addData(apiPath, dataToAdd, isFormData = false) {
     try {
-        const response = await fetch(`${BASE_URL}/${apiPath}`, {
+        const options = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dataToAdd),
             credentials: 'include',
-        });
+        };
+
+        if (isFormData) {
+            options.body = dataToAdd; // FormData
+            // לא להגדיר headers, הדפדפן יגדיר Content-Type מתאים
+        } else {
+            options.headers = { "Content-Type": "application/json" };
+            options.body = JSON.stringify(dataToAdd);
+        }
+
+        const response = await fetch(`${BASE_URL}/${apiPath}`, options);
 
         if (!response.ok) {
             throw new Error(`שגיאה: ${response.status}`);

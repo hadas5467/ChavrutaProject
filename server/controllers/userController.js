@@ -70,7 +70,7 @@ export const createUser = async (req, res) => {
       ...req.body,
       profile: profilePath
     };
-
+console.log("User data before creation:", userData);
     let newUser = await userServices.create(userData);
     const token = generateToken(newUser); // 
 
@@ -100,16 +100,14 @@ export const updateUser = async (req, res) => {
     const id = req.params.id;
      
      // טיפול בקובץ שהועלה
-    let profilePath = null;
-    if (req.file) {
-      profilePath = req.file.filename; // שם הקובץ שנשמר
-    }
-    
-    // הוספת נתיב הקובץ לנתוני העדכון
-    const updateData = {
-      ...req.body,
-      ...(profilePath && { profile: profilePath })
-    };
+   let profilePath = null;
+if (req.file) {
+  profilePath = req.relativeProfilePath; // הנתיב היחסי כולל תיקייה
+}
+const userData = {
+  ...req.body,
+  profile: profilePath
+};
 
     let result = await userServices.update(id, updateData);
     if (result.affectedRows === 0) {
