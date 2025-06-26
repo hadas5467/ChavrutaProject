@@ -74,7 +74,7 @@ export async function deleteData(apiPath, dataToSend = null) {
 export async function UpdateData(apiPath, dataToUpdate) {
     try {
       const response = await fetch(`${BASE_URL}/${apiPath}`, {
-        method: "PATCH",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataToUpdate),
         credentials: 'include',
