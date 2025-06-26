@@ -11,6 +11,7 @@ export const getAllJoinRequests = async (req, res) => {
     if (joinRequestId) filter.joinRequestId = joinRequestId;
 
     const joinRequests = await joinRequestServices.findByFilter(filter);
+    
     // תמיד מחזירים 200 עם מערך (גם אם ריק)
     res.status(200).json(joinRequests ?? []);
   } catch (error) {
