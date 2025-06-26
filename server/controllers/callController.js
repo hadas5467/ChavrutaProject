@@ -4,17 +4,24 @@ import { handleCallCreation } from '../services/callService.js';
 export const getCalls = async (req, res) => {
   try {
     const sex = req.user.sex;
-    const id = req.user.id;
-    const { userId, place, learningFormat, subject, ageRange, isActive, callId  } = req.query;
+    const currentUserId = req.user.id;
+    const role = req.user.role; // תיקון: role במקום id
+    const { userId, place, learningFormat, subject, ageRange, isActive, callId } = req.query;
     let filter = {};
 
-    // אם המשתמש הוא לא מנהל, החל תמיד סינון לפי המזהה שלו
+    if (!sex || !currentUserId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // אם המשתמש הוא לא מנהל, הצג רק קריאות שנשלחו אליו
     if (role !== 'admin') {
-      filter.userId = currentUserId;
+      filter.targetUserId = currentUserId; // תיקון: currentUserId במקום id
     } else if (userId) {
       // אם הוא מנהל וביקש מזהה ספציפי, סנן לפיו
-      if(userId)filter.userId = userId;
+      filter.targetUserId = userId;
     }
+
+    // פילטרים נוספים
     if (userId) filter.userId = userId;
     if (place) filter.place = place;
     if (learningFormat) filter.learningFormat = learningFormat;
@@ -22,23 +29,14 @@ export const getCalls = async (req, res) => {
     if (ageRange) filter.ageRange = ageRange;
     if (isActive !== undefined) filter.isActive = isActive;
     if (callId) filter.callId = callId;
-  if (!sex) return res.status(401).json({ message: "Unauthorized" });
-    if (req.user.role !== 'admin') {
-      filter.sex=sex;
-      filter.targetUserId = id; // הוספת מזהה המשתמש כדי להחזיר רק שיחות רלוונטיות
-    }
-    else{
 
-    }
     const calls = await callServices.findByFilter(filter);
-    // תמיד מחזירים 200 עם מערך (גם אם ריק)
     res.status(200).json(calls ?? []);
   } catch (error) {
     console.error("getCalls error:", error);
     res.status(500).json({ message: "שגיאה בשרת" });
   }
 };
-
 export const createCall = async (req, res) => {
   try {
     const callData = req.body;
