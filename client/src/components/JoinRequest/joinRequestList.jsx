@@ -1,38 +1,3 @@
-// import React from "react";
-// import List from "../List.jsx";
-// import JoinRequestCard from './joinRequestCard.jsx';
-// import * as apiService from "../apiService.js";
-
-// const JoinRequestList = () => {
-//   const currentUserId = JSON.parse(localStorage.getItem("currentUser"))?.id;
-
-//   const renderItem = (request, refresh) => (
-//     <JoinRequestCard
-//       request={request}
-//       setRequests={refresh}
-//       currentUserId={currentUserId}
-//     />
-//   );
-
-//   return (
-//     <div>
-//       <h2>📬 כל בקשות ההצטרפות</h2>
-//       <List
-//        endpoint={`joinRequests/user`}
-//         renderItem={renderItem}
-//         filters={[
-//           { label: "שלי", value: "mine" },
-//           { label: "ID עולה", value: "id" }
-//         ]}
-//         newItem={() => alert("טופס חדש להצטרפות")}
-//       />
-//     </div>
-//   );
-// };
-
-// export default JoinRequestList;
-
-
 import React, { useState } from "react";
 import List from "../List.jsx";
 import JoinRequestCard from './joinRequestCard.jsx';
@@ -43,14 +8,27 @@ const JoinRequestList = () => {
   const currentUserId = currentUser?.id;
   const isAdmin = currentUser?.role === "admin";
 
+  // ברירת מחדל: אדמין רואה רק את שלו
   const [onlyMine, setOnlyMine] = useState(true);
   const [sortKey, setSortKey] = useState(isAdmin ? "mine" : "");
 
-  const handleToggle = () => {
-    const nextSort = sortKey === "mine" ? "" : "mine";
-    setSortKey(nextSort);
-    setOnlyMine(nextSort === "mine");
-  };
+  // הוספת state ל-endpoint
+  const [endpoint, setEndpoint] = useState(isAdmin ? "joinRequests/user" : "joinRequests/user");
+
+  // const handleToggle = () => {
+  //   if (onlyMine) {
+  //     setEndpoint("joinRequests/"); // כל הבקשות
+  //   } else {
+  //     setEndpoint("joinRequests/user"); // רק שלי
+  //   }
+  //   setOnlyMine(!onlyMine);
+  // };
+const handleToggle = () => {
+  const nextOnlyMine = !onlyMine;
+  setOnlyMine(nextOnlyMine);
+  setEndpoint(nextOnlyMine ? "joinRequests/user" : "joinRequests/");
+  setSortKey(nextOnlyMine ? "mine" : "");
+};
 
   const renderItem = (request, refresh) => (
     <JoinRequestCard
@@ -65,11 +43,11 @@ const JoinRequestList = () => {
       <h2>📬 {isAdmin ? "הבקשות שלך (מנהל)" : "כל בקשות ההצטרפות"}</h2>
       {isAdmin && (
         <button onClick={handleToggle}>
-          {onlyMine ? "הצג את כל הבקשות" : "הצג רק את הבקשות שלי"}
+          {onlyMine ?  "הצג את כל הבקשות"   : "הצג רק את הבקשות שלי"}
         </button>
       )}
       <List
-        endpoint={`joinRequests/user`}
+        endpoint={endpoint}
         renderItem={renderItem}
         filters={[
           { label: "שלי", value: "mine" },

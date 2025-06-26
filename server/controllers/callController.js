@@ -3,8 +3,20 @@ import { handleCallCreation } from '../services/callService.js';
 // קבלת כל השיחות (או לפי סינון)
 export const getCalls = async (req, res) => {
   try {
+    // const { userId, place, learningFormat, subject, ageRange, isActive, callId } = req.query;
+    // let filter = {};
     const { userId, place, learningFormat, subject, ageRange, isActive, callId } = req.query;
+    const { id: currentUserId, role } = req.user; // פירוק מזהה ותפקיד המשתמש מהטוקן
+
     let filter = {};
+
+    // אם המשתמש הוא לא מנהל, החל תמיד סינון לפי המזהה שלו
+    if (role !== 'admin') {
+      filter.userId = currentUserId;
+    } else if (userId) {
+      // אם הוא מנהל וביקש מזהה ספציפי, סנן לפיו
+      filter.userId = userId;
+    }
     if (userId) filter.userId = userId;
     if (place) filter.place = place;
     if (learningFormat) filter.learningFormat = learningFormat;
