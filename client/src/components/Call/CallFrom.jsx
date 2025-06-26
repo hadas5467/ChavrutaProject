@@ -7,8 +7,9 @@ import {
   ageRange
 } from '../formatHelpers';
 import '../../css/CallCard.css';
-
+import { useNavigate } from 'react-router-dom';
 const CallForm = ({ onSuccess }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     subject: '',
     material: '',
@@ -40,10 +41,11 @@ const CallForm = ({ onSuccess }) => {
 
     try {
       const result = await addData('calls', newCall);
-      if (!result || !result.id) {
+      if (!result || !result.call.id) {
         throw new Error("ההוספה נכשלה - לא התקבלה תשובה תקינה");
       }
       alert("✅ קריאה נוספה");
+      navigate('/home');
       setFormData({
         subject: '',
         material: '',

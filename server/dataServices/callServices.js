@@ -74,25 +74,8 @@ export const findByFilter = async (filter = {}) => {
   }));
 };
 
-// export const create = async (call) => {
-//   const sql = `INSERT INTO CALLS (userId,targetUserId, place, learningFormat, time, subject, ageRange, notes,preferredDuration, material)
-//     VALUES (?,?,?, ?, ?, ?, ?, ?, ?, ?)`;
-//   const params = [
-//     call.userId,
-//     call.targetUserId || null,
-//     call.place,
-//     call.learningFormat,
-//     call.time,
-//     call.subject,
-//     call.ageRange,
-//     call.notes,
-//     call.preferredDuration,
-//     call.material,
-//     call.isActive !== undefined ? call.isActive : true
-//   ];
-//   const [result] = await pool.query(sql, params);
-//   return {...call, id: result.insertId };
-// };
+
+
 export const create = async (call) => {
   const sql = `INSERT INTO CALLS (userId, targetUserId, place, learningFormat, time, subject, ageRange, notes, preferredDuration, material, isActive)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
