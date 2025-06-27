@@ -84,6 +84,7 @@ const CallsList = () => {
     setSortKey(nextSort);
     setOnlyMine(nextSort === 'mine');
   };
+  
 
   return (
     <div>
