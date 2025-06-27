@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import List from "../List.jsx";
 import JoinRequestCard from './joinRequestCard.jsx';
 import * as apiService from "../apiService.js";
@@ -11,6 +11,7 @@ const JoinRequestList = () => {
   // ברירת מחדל: אדמין רואה רק את שלו
   const [onlyMine, setOnlyMine] = useState(true);
   const [sortKey, setSortKey] = useState(isAdmin ? "mine" : "");
+  const [requests, setRequests] = useState([]);
 
   // הוספת state ל-endpoint
   const [endpoint, setEndpoint] = useState(isAdmin ? "joinRequests/user" : "joinRequests/user");
@@ -23,6 +24,22 @@ const JoinRequestList = () => {
   //   }
   //   setOnlyMine(!onlyMine);
   // };
+
+// פונקציית רענון
+  const fetchRequests = async () => {
+    try {
+      const data = await apiService.getData(endpoint);
+      setRequests(data);
+    } catch {
+      setRequests([]);
+    }
+  };
+
+    useEffect(() => {
+    fetchRequests();
+    // eslint-disable-next-line
+  }, [endpoint]);
+
 const handleToggle = () => {
   const nextOnlyMine = !onlyMine;
   setOnlyMine(nextOnlyMine);
@@ -34,6 +51,7 @@ const handleToggle = () => {
     <JoinRequestCard
       request={request}
       setRequests={refresh}
+        refreshRequests={fetchRequests}
       currentUserId={currentUserId}
     />
   );

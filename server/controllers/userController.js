@@ -99,6 +99,14 @@ export const createUser = async (req, res) => {
       profile: profilePath
     };
 
+ // בדיקה אם קיים כבר משתמש עם אותו מייל
+    const existingUser = await userServices.findByFilter({ gmail: userData.gmail });
+    if (existingUser && existingUser.length > 0) {
+      return res.status(400).json({
+        message: "האימייל כבר רשום במערכת. אנא נסה אימייל אחר או התחבר."
+      });
+    }
+
     let newUser = await userServices.create(userData);
     const token = generateToken(newUser); // 
 
@@ -114,9 +122,9 @@ export const createUser = async (req, res) => {
   catch (error) {
     console.error('There was an error:', error.message);
 
-    if (error.code === 'ER_DUP_ENTRY') {
-      return res.status(400).json({ message: 'האימייל הזה כבר קיים במערכת!' });
-    }
+   if (error.code === 'ER_DUP_ENTRY') {
+  return res.status(400).json({ message: "האימייל כבר רשום במערכת. אנא נסה אימייל אחר או התחבר." });
+}
     res.status(500).json(error.message);
   }
 

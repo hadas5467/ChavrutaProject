@@ -43,12 +43,16 @@ export async function addData(apiPath, dataToAdd, isFormData = false) {
         }
 
         const response = await fetch(`${BASE_URL}/${apiPath}`, options);
-
+        const responseBody = await response.json();
         if (!response.ok) {
-            throw new Error(`שגיאה: ${response.status}`);
+           throw {
+                status: response.status,
+                message: responseBody.message || `שגיאה: ${response.status}`,
+                response: responseBody
+            };
         }
 
-        return await response.json();
+        return responseBody;
     } catch (error) {
         alert(`שגיאה בהוספה: ${error.message}`);
     }
