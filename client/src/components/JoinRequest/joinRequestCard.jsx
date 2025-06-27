@@ -102,7 +102,7 @@ const handleApprove = async () => {
       <p><strong>פרטים:</strong> {request.details}</p>
       <p><strong>תאריך:</strong> {new Date(request.requestedAt).toLocaleString("he-IL")}</p>
 
-      {!isAdmin && !disabled && (
+      {!isAdmin  && (
         <div className="call-buttons">
           <button onClick={handleDelete}>מצטער, כבר לא רלוונטי</button>
           <button onClick={handleApprove}>מצוין! 👍</button>
