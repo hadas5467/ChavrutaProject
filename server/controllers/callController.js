@@ -21,8 +21,8 @@ export const getCalls = async (req, res) => {
       filter.targetUserId = userId;
     }
 
-    // פילטרים נוספים
-    if (userId) filter.userId = userId;
+ 
+  
     if (place) filter.place = place;
     if (learningFormat) filter.learningFormat = learningFormat;
     if (subject) filter.subject = subject;

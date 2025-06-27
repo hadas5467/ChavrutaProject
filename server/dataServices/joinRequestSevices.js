@@ -1,5 +1,19 @@
 import pool from './DB.js';
+export const getCallCreatorByJoinRequestId = async (joinRequestId) => {
+  const [rows] = await pool.query(`
+    SELECT 
+      c.userId AS creatorId,
+      u.name AS creatorName,
+      u.gmail AS creatorEmail,
+      c.callId
+    FROM JOIN_REQUESTS jr
+    JOIN CALLS c ON jr.callId = c.callId
+    JOIN USERS u ON c.userId = u.userId
+    WHERE jr.joinRequestId = ?
+  `, [joinRequestId]);
 
+  return rows[0]; // מחזיר אובייקט עם creatorId, creatorName וכו'
+};
 
 // קבלת בקשות הצטרפות עם סינון
 export const findByFilter = async (filter = {}) => {

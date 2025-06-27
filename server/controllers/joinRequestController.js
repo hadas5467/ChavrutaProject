@@ -64,7 +64,8 @@ export const updateJoinRequest = async (req, res) => {
 export const deleteJoinRequest = async (req, res) => {
   try {
     const id = req.params.id;
-    let result = await joinRequestServices.deleteJoinRequest(id);
+     await service.handleJoinRequestDelete(id);
+    let result = await joinRequestServices.deleteJoinRequest(id);// נניח שיש פונקציה שמטפלת במחיקת בקשה
     if (!result || result.affectedRows === 0) {
       return res.status(404).json({ message: "לא נמצא" });
     }
