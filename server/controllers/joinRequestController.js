@@ -37,6 +37,10 @@ export const getJoinRequestsByUser = async (req, res) => {
 // יצירת בקשה חדשה
 export const createJoinRequest = async (req, res) => {
   try {
+    const { targetUserId, userId } = req.body;
+    if (targetUserId === userId) {
+      return res.status(400).json({ message: "לא ניתן להצטרף לחברותא עם עצמך" });
+    }
     let newJoinRequest = await service.handleJoinRequest(req.body);
     res.status(201).json(newJoinRequest);
   } catch (error) {
