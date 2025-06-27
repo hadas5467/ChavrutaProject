@@ -1,7 +1,7 @@
 import { getById as getUserById } from '../dataServices/userServices.js';
 import { getById as getCallById } from '../dataServices/callServices.js';
 import { sendEmail } from '../utils/notifications.js';
-import { create as createChavruta } from '../dataServices/chavrutaServices.js';
+import { create as createChavruta, getChavrutaById } from '../dataServices/chavrutaServices.js';
 import { update as updateCall } from '../dataServices/callServices.js';
 import { updateByCallAndUser as updateJoinRequest } from '../dataServices/joinRequestSevices.js';
 

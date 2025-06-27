@@ -2,12 +2,13 @@ import express from 'express';
 import {  getAllJoinRequests,getJoinRequestsByUser, createJoinRequest, updateJoinRequest, deleteJoinRequest } from '../controllers/joinRequestController.js';
 import { verifyToken } from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
-const authorizeJoinRequestOwner = authorizeOwner({
-  tableName: 'JOIN_REQUESTS',
-  idField: 'joinRequestId',
-  ownerFields: ['userId'],
-  paramName: 'id'
-});
+//רעיון יפיפה של בדיקות הרשאה שהתלבטנו על נכונותו
+// const authorizeJoinRequestOwner = authorizeOwner({
+//   tableName: 'JOIN_REQUESTS',
+//   idField: 'joinRequestId',
+//   ownerFields: ['userId'],
+//   paramName: 'id'
+// });
 
 const authorizeJoinRequestOwnerOrAdmin = authorizeOwnerOrAdmin({
   tableName: 'JOIN_REQUESTS',

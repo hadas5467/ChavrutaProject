@@ -2,8 +2,7 @@
 
 import { findByFilter } from '../dataServices/userServices.js';
 import { sendEmail } from '../utils/notifications.js';
-import { create as createCall } from '../dataServices/callServices.js';
-import pool from '../dataServices/DB.js';
+import { create as createCall,createCallRecipients,getIsCallRecipients } from '../dataServices/callServices.js';
 
 export const handleCallCreation = async (callData, senderUser) => {
   // הוספת מזהה המשתמש ומינו לנתוני הקריאה
@@ -28,16 +27,9 @@ export const handleCallCreation = async (callData, senderUser) => {
     if (user.userId === senderUser.id) continue;
 
     // בדיקה אם כבר קיים
-    const [existing] = await pool.query(
-      'SELECT 1 FROM CALL_RECIPIENTS WHERE callId = ? AND targetUserId = ?',
-      [createdCall.id, user.userId]
-    );
-
+    const [existing] = await getIsCallRecipients(createdCall.id, user.userId);
     if (existing.length === 0) {
-      await pool.query(
-        'INSERT INTO CALL_RECIPIENTS (callId, userId, targetUserId) VALUES (?, ?, ?)',
-        [createdCall.id, senderUser.id, user.userId]
-      );
+     createCallRecipients(createdCall.id, senderUser.id, user.userId);
     } else {
       console.log(`🔁 כבר קיים recipient עבור userId=${user.userId} ו־callId=${createdCall.id}`);
     }

@@ -51,6 +51,11 @@ export const getById = async (callId) => {
   return { ...row, id: row.callId };
 };
 
+export const getIsCallRecipients = async (callId, userId) => {
+   const sql =  'SELECT 1 FROM CALL_RECIPIENTS WHERE callId = ? AND targetUserId = ?';
+  const result = await pool.query(sql,   [callId, userId]);
+  return result;
+};
 export const findByFilter = async (filter = {}) => {
   let sql = `
     SELECT 
@@ -154,6 +159,16 @@ export const create = async (call) => {
   ];
   const [result] = await pool.query(sql, params);
   return { ...call, id: result.insertId };
+};
+
+
+
+export const createCallRecipients = async (callId, userId,targetUserId) => {
+  const sql = `INSERT INTO CALL_RECIPIENTS (callId, userId, targetUserId) VALUES (?, ?, ?)
+  `;
+ const params= [callId, userId, targetUserId];
+  const [result] = await pool.query(sql, params);
+  return result;
 };
 
 export const update = async (callId, call) => {
