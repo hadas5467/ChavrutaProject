@@ -33,19 +33,31 @@ function JoinRequestCard({ request, setRequests, currentUserId }) {
       notesUser1: "",
       notesUser2: ""
     });
-     if (!(isOwner || isAdmin)) {
-      alert("רק בעל הבקשה או מנהל יכולים למחוק בקשה זו.");
-      return;
-    }
-  try {
-    await apiService.deleteData(`joinRequests/${request.id}`);
-    setRequests((prev) => prev.filter((r) => r.id !== request.id));
-  } catch (error) {
-    alert("שגיאה במחיקת הבקשה: " + error.message);
-  }
-    
+  //    if (!(isOwner || isAdmin)) {
+  //     alert("רק בעל הבקשה או מנהל יכולים למחוק בקשה זו.");
+  //     return;
+  //   }
+  // try {
+  //   await apiService.deleteData(`joinRequests/${request.id}`);
+  //   setRequests((prev) => prev.filter((r) => r.id !== request.id));
+  // } catch (error) {
+  //   alert("שגיאה במחיקת הבקשה: " + error.message);
+  // }
+     setRequests((prev) => {
+      prev.forEach(async (r) => {
+        if (r.callId === request.callId) {
+          try {
+            await apiService.deleteData(`joinRequests/${r.id}`);
+          } catch (error) {
+            // אפשר להציג שגיאה או להתעלם
+          }
+        }
+      });
+      // מחזיר רק בקשות שלא שייכות ל-callId הזה
+      return prev.filter((r) => r.callId !== request.callId);
+    });
     alert("חברותא נוצרה בהצלחה!");
-    setRequests((prev) => prev.filter((r) => r.id !== request.id));
+    setRequests((prev) => prev.filter((r) => r.callId !== request.callId));
   } catch (error) {
     alert("שגיאה ביצירת החברותא: " + error.message);
   }

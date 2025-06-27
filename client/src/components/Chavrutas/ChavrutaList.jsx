@@ -66,7 +66,7 @@ const ChavrutaList = ({ usersMap }) => {
           {onlyMine ? 'הצג את כל החברותות' : 'הצג רק את החברותות שלי'}
         </button>
       )}
-      <List
+      <List className="chavruta-list"
         endpoint={endpoint}
         renderItem={renderChavruta}
         newItem={() => navigate('new')}

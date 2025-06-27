@@ -90,3 +90,16 @@
     padding: 0.5em 0.1em;
   }
 }
+/* לדוג' ב-client/css/ChavrutaList.css או בקובץ הראשי */
+.chavruta-list, .requests-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* ריווח בין כרטיסים */
+  justify-content: flex-start; /* או center אם תרצה */
+}
+
+.chavruta-card, .call-card {
+  min-width: 300px;
+  max-width: 350px;
+  flex: 1 1 300px;
+}
