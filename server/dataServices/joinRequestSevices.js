@@ -1,19 +1,23 @@
 import pool from './DB.js';
 export const getCallCreatorByJoinRequestId = async (joinRequestId) => {
   const [rows] = await pool.query(`
-    SELECT 
-      c.userId AS creatorId,
-      u.name AS creatorName,
-      u.gmail AS creatorEmail,
-      c.callId
-    FROM JOIN_REQUESTS jr
-    JOIN CALLS c ON jr.callId = c.callId
-    JOIN USERS u ON c.userId = u.userId
-    WHERE jr.joinRequestId = ?
+SELECT 
+  jr.userId AS creatorId,
+  u.name AS creatorName,
+  u.gmail AS creatorEmail,
+  u.contactMethod,
+  jr.details,
+  c.callId
+FROM JOIN_REQUESTS jr
+JOIN CALLS c ON jr.callId = c.callId
+JOIN USERS u ON jr.userId = u.userId
+WHERE jr.joinRequestId = ?
+
   `, [joinRequestId]);
 
-  return rows[0]; // מחזיר אובייקט עם creatorId, creatorName וכו'
+  return rows[0];
 };
+
 
 // קבלת בקשות הצטרפות עם סינון
 export const findByFilter = async (filter = {}) => {

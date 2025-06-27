@@ -35,15 +35,22 @@ export const handleJoinRequestDelete = async (id) => {
     throw new Error('Target user not found');
   }
 
+console.log('User found:', user);
 
+  
+  
+
+  console.log('Join request deleted successfully:', id);
+
+  // שליחת מייל למשתמש אם הוא בחר באפשרות זו
 if (user.contactMethod === 'email') {
     const subject = '❗ עדכון על בקשת החברותא שלך';
-const message = `שלום ${user.name},
+const message = `שלום ${user.creatorName},
 
-לצערנו, בקשתך להצטרף לשיחה (קריאה מספר ${callId}) לא אושרה.
+לצערנו, בקשתך להצטרף לשיחה (קריאה מספר ${user.callId}) לא אושרה.
 
 📋 פרטי הקריאה:
-"${details}"
+"${user.details}"
 
 תוכל לבדוק קריאות נוספות המתאימות לך במערכת, או ליצור קריאה חדשה משלך.
 
@@ -51,7 +58,7 @@ const message = `שלום ${user.name},
 צוות חברותא.
 `;
     try {
-      await sendEmail(user.gmail, subject, message);
+      await sendEmail(user.creatorEmail, subject, message);
     } catch (error) {
       console.error('שגיאה בשליחת מייל:', error.message, error);
       // אפשר גם להוסיף לוגיקה לדיווח או שמירה במסד נתונים אם תרצי
