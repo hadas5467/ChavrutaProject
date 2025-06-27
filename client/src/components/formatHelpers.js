@@ -50,9 +50,9 @@ export const sector = {
 
 export const contactMethod = {
   email: "מייל",
-  whatsapp: "וואטסאפ",
-  sms: "SMS",
-  system: "מערכת"
+  // whatsapp: "וואטסאפ",
+  // sms: "SMS",
+  // system: "מערכת"
 };
 
 export const chavrutaStatus = {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../../css/CallCard.css";
 import * as apiService from "../apiService.js";
+import { callSchema } from "../../Schema/CallSchema.js"; // שנה לנתיב שלך
 import {
   learningFormat,
   preferredDuration,
@@ -151,16 +152,23 @@ import {
 // export default CallCard;
 
 
-function CallCard({ call, user, setCalls, currentUserId }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [newSubject, setNewSubject] = useState(call.subject);
+// 
 
+// import React from "react";
+// import "../../css/CallCard.css";
+// import * as apiService from "../apiService.js";
+// import {
+//   learningFormat,
+//   preferredDuration,
+//   ageRange,
+// } from "../formatHelpers.js";
+
+function CallCard({ call, user, setCalls, currentUserId }) {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const isOwner = call.userId === currentUserId;
-  const isAdmin = currentUser?.role === "admin"; // הגדרת isAdmin כאן
+  const isAdmin = currentUser?.role === "admin";
 
-  // מחיקה
-  async function handleDeleteCall(callId) {
+  const handleDeleteCall = async (callId) => {
     if (!apiService.confirmAction("האם אתה בטוח שברצונך למחוק את הקריאה?")) return;
     try {
       await apiService.deleteData(`calls/${callId}`);
@@ -168,28 +176,7 @@ function CallCard({ call, user, setCalls, currentUserId }) {
     } catch (error) {
       alert(`שגיאה במחיקת הקריאה: ${error.message}`);
     }
-  }
-
-  // עדכון
-  const handleUpdateClick = () => {
-    if (isEditing) {
-      handleUpdateCall(call, { subject: newSubject });
-    }
-    setIsEditing((prev) => !prev);
   };
-
-  async function handleUpdateCall(call, updateData) {
-    try {
-      await apiService.UpdateData(`calls/${call.id}`, updateData);
-      setCalls((prev) =>
-        prev.map((c) =>
-          c.id === call.id ? { ...c, ...updateData } : c
-        )
-      );
-    } catch (error) {
-      alert(`שגיאה בעדכון הקריאה: ${error.message}`);
-    }
-  }
 
   const joinRequest = async () => {
     if (!currentUser) {
@@ -216,15 +203,7 @@ function CallCard({ call, user, setCalls, currentUserId }) {
 
   return (
     <div className="call-card">
-      <h3>{isEditing ? (
-        <input
-          value={newSubject}
-          onChange={(e) => setNewSubject(e.target.value)}
-        />
-      ) : (
-        call.subject
-      )}</h3>
-
+      <h3>{call.subject}</h3>
       <p><strong>מיקום:</strong> {call.place || "גמיש"}</p>
       <p><strong>פורמט:</strong> {learningFormat[call.learningFormat]}</p>
       <p><strong>גילאים:</strong> {ageRange[call.ageRange]}</p>
@@ -233,23 +212,12 @@ function CallCard({ call, user, setCalls, currentUserId }) {
       <p><strong>הערות:</strong> {call.notes}</p>
       <p><strong>זמן:</strong> {new Date(call.time).toLocaleString("he-IL")}</p>
 
-      {/* כפתור עדכון יוצג רק אם המשתמש הוא בעל הקריאה */}
-      {isOwner && (
-        <div className="call-buttons">
-          <button onClick={handleUpdateClick}>
-            {isEditing ? "שמור" : "עדכון"}
-          </button>
-        </div>
-      )}
-
-      {/* כפתור מחיקה יוצג אם המשתמש הוא בעל הקריאה או מנהל */}
       {(isOwner || isAdmin) && (
         <div className="call-buttons">
           <button onClick={() => handleDeleteCall(call.id)}>מחיקה</button>
         </div>
       )}
 
-      {/* כפתור הצטרפות יוצג אם המשתמש לא בעל הקריאה */}
       {!isOwner && (
         <div className="call-buttons">
           <button className="join-btn" onClick={joinRequest}>

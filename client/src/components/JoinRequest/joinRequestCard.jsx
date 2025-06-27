@@ -26,11 +26,10 @@ function JoinRequestCard({ request, setRequests,refreshRequests, currentUserId }
       alert("שגיאה במחיקת הבקשה: " + error.message);
     }
   };
-const handleApprove = async () => {
+  const handleApprove = async () => {
   if (disabled) return;
   setDisabled(true);
   try {
-    // יצירת חברותא חדשה
     await apiService.addData("chavrutas", {
       user1: request.userId,
       user2: request.targetUserId,
@@ -39,19 +38,68 @@ const handleApprove = async () => {
       notesUser2: ""
     });
 
-    // מחיקת כל הבקשות עם אותו callId
-    const allRequests = await apiService.fetchData("joinRequests/");
-    const sameCallRequests = allRequests.filter(r => r.callId === request.callId);
+const sameCallRequests = await apiService.fetchData(`joinRequests/byCall/${request.callId}`);
+    if (!Array.isArray(sameCallRequests)) throw new Error("קבלת בקשות נכשלה");
+
     for (const r of sameCallRequests) {
       await apiService.deleteData(`joinRequests/${r.id}`);
     }
 
-    refreshRequests(); // רענון הרשימה
+    refreshRequests();
+    setRequests((prev) => prev.filter((r) => r.callId !== request.callId));
     alert("חברותא נוצרה בהצלחה!");
   } catch (error) {
     alert("שגיאה ביצירת החברותא: " + error.message);
+    setDisabled(false);
   }
 };
+
+// const handleApprove = async () => {
+//   if (disabled) return;
+//   setDisabled(true);
+//   try {
+//     // יצירת חברותא חדשה
+//     await apiService.addData("chavrutas", {
+//       user1: request.userId,
+//       user2: request.targetUserId,
+//       callId: request.callId,
+//       notesUser1: "",
+//       notesUser2: ""
+//     });
+
+//     // מחיקת כל הבקשות עם אותו callId
+//     // const allRequests = await apiService.fetchData("joinRequests/");
+//     // const sameCallRequests = allRequests.filter(r => r.callId === request.callId);
+//     // for (const r of sameCallRequests) {
+//     //   await apiService.deleteData(`joinRequests/${r.id}`);
+//     // }
+//   let allRequests;
+//     try {
+//       allRequests = await apiService.fetchData("joinRequests/");
+//     } catch (err) {
+//       alert("שגיאה בשליפת הבקשות: " + err.message);
+//       setDisabled(false);
+//       return;
+//     }
+
+//     const requestsArray = Array.isArray(allRequests) ? allRequests : [];
+//     const sameCallRequests = requestsArray.filter(r => r.callId === request.callId);
+//     for (const r of sameCallRequests) {
+//       await apiService.deleteData(`joinRequests/${r.id}`);
+//     }
+
+//     refreshRequests();
+//     setRequests((prev) => prev.filter((r) => r.callId !== request.callId));
+//     refreshRequests();
+//     alert("חברותא נוצרה בהצלחה!");
+//     // refreshRequests(); // רענון הרשימה
+//     // setRequests((prev) => prev.filter((r) => r.callId !== request.callId));
+//     // refreshRequests();
+//     // alert("חברותא נוצרה בהצלחה!");
+//   } catch (error) {
+//     alert("שגיאה ביצירת החברותא: " + error.message);
+//   }
+// };
   // const handleApprove = async () => {
   //   if (disabled) return;
   //   setDisabled(true);
@@ -102,7 +150,7 @@ const handleApprove = async () => {
       <p><strong>פרטים:</strong> {request.details}</p>
       <p><strong>תאריך:</strong> {new Date(request.requestedAt).toLocaleString("he-IL")}</p>
 
-      {!isAdmin  && (
+      {(isOwner || (isAdmin && isOwner)) && (
         <div className="call-buttons">
           <button onClick={handleDelete}>מצטער, כבר לא רלוונטי</button>
           <button onClick={handleApprove}>מצוין! 👍</button>

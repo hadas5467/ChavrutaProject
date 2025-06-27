@@ -281,7 +281,9 @@ const List = ({ endpoint, renderItem, filters, newItem, sort: sortProp }) => {
   return (
     <div>
       <div>
-        <button onClick={handleClick}>NEW</button>
+       {newItem && (
+          <button onClick={handleClick}>NEW</button>
+        )}
         <input
           type="text"
           placeholder="חפש..."

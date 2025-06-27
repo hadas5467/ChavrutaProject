@@ -72,7 +72,7 @@ const handleToggle = () => {
           { label: "ID עולה", value: "id" }
         ]}
         sort={sortKey}
-        newItem={() => alert("טופס חדש להצטרפות")}
+       // newItem={() => alert("טופס חדש להצטרפות")}
       />
     </div>
   );

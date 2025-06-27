@@ -16,6 +16,7 @@ export async function fetchData(apiPath) {
             credentials: 'include',
         });
         if (!response.ok) {
+              const errorText = await response.text();
             throw new Error(`שגיאה: ${response.status}`);
         }
         console.log("Response from server:", response);
@@ -43,7 +44,13 @@ export async function addData(apiPath, dataToAdd, isFormData = false) {
         }
 
         const response = await fetch(`${BASE_URL}/${apiPath}`, options);
-        const responseBody = await response.json();
+       // const responseBody = await response.json();
+
+       let responseBody = null;
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            responseBody = await response.json();
+        }
         if (!response.ok) {
            throw {
                 status: response.status,

@@ -33,6 +33,19 @@ export const getJoinRequestsByUser = async (req, res) => {
   }
 };
 
+export const getJoinRequestsByCall = async (req, res) => {
+  try {
+    const { callId } = req.params;
+    if (!callId) return res.status(400).json({ message: "callId חסר" });
+
+    const joinRequests = await joinRequestServices.findByFilter({ callId });
+    res.status(200).json(joinRequests ?? []);
+  } catch (error) {
+    console.error("getJoinRequestsByCall error:", error);
+    res.status(500).json({ message: "שגיאה בשרת" });
+  }
+};
+
 
 // יצירת בקשה חדשה
 export const createJoinRequest = async (req, res) => {
