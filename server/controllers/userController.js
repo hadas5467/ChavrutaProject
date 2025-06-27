@@ -32,27 +32,39 @@ export const loginUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-
     const { userName, gmail, userId } = req.query;
     let filter = {};
+    
     if (userName) filter.userName = userName;
     if (gmail) filter.gmail = gmail;
-    if (userId) filter.userId = userId;
+    
+    
     const sex = req.user.sex;
-    if (!sex) return res.status(401).json({ message: "Unauthorized" });
-    if (req.user.role !== 'admin') {
-      filter.sex = req.user.sex;
+    const role = req.user.role;
+    const currentUserId = req.user.id;
+    
+    // בדיקה בסיסית
+    if (!sex || !currentUserId) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    
+    // אם לא מנהל - רק משתמשים מאותו מין (לא כולל את עצמו)
+    if (role !== 'admin') {
+      filter.sex = sex;
+      filter.excludeUserId = currentUserId; // להוסיף ל־userServices.findByFilter
+    }
+    else
+   {
+    if (userId) filter.excludeUserId = userId;
+   }
+    
     const users = await userServices.findByFilter(filter);
-
-
     res.status(200).json(users ?? []);
   } catch (error) {
     console.error("getUsers error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 export const getById = async (req, res) => {
   try {
 

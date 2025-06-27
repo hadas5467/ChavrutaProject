@@ -248,25 +248,16 @@ const List = ({ endpoint, renderItem, filters, newItem, sort: sortProp }) => {
     let queryParams = [];
 
     if (search) {
-      queryParams.push(`search=${encodeURIComponent(search)}`);
+      queryParams.push(`userName=${encodeURIComponent(search)}`); // או gmail
     }
     if (idFilter) {
-      queryParams.push(`id=${idFilter}`);
+      queryParams.push(`userId=${idFilter}`);
     }
     if (sort === 'mine') {
       const currentUserId = JSON.parse(localStorage.getItem('currentUser'))?.id;
       if (currentUserId) {
         queryParams.push(`userId=${currentUserId}`);
       }
-    } else if (sort === 'completed') {
-      queryParams.push('completed=true');
-    } else if (sort === 'unCompleted') {
-      queryParams.push('completed=false');
-    }
-    if (sort === 'id') {
-      queryParams.push('_sort=id&_order=asc');
-    } else if (sort === 'alphabetical') {
-      queryParams.push('_sort=title&_order=asc');
     }
 
     const fullEndpoint = queryParams.length > 0
@@ -313,16 +304,19 @@ const List = ({ endpoint, renderItem, filters, newItem, sort: sortProp }) => {
         </select>
       </div>
       <ul>
-        {Array.isArray(items) && items.map((item) => (
-          console.log('Rendering item:', item), // Debugging line
-          <RenderedItem
-            key={item.id}
-            item={item}
-            refreshItems={fetchFilteredData}
-            handleDelete={fetchFilteredData}
-            renderItem={renderItem}
-          />
-        ))}
+        {Array.isArray(items) && items.map((item) => {
+          console.log('Rendering item:', item);
+          return (
+            <RenderedItem
+              key={item.id}
+              item={item}
+              refreshItems={fetchFilteredData}
+              handleDelete={fetchFilteredData}
+              renderItem={renderItem}
+            />
+          );
+        })}
+
       </ul>
     </div>
   );

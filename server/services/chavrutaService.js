@@ -21,7 +21,7 @@ export const handleChavrutaCreation = async (chavrutaData) => {
   let meetingLink = call.place;
   if (call.learningFormat === 'zoom') {
     meetingLink = `https://meet.jit.si/chavruta_${call.callId}_${user1}_${user2}`;
-    await updateCall(callId, { place: meetingLink });
+    await updateCall(callId, { place: meetingLink, isActive: 0, targetUserId: user2 });
     
   }
 

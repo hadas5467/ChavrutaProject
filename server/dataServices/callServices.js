@@ -1,7 +1,8 @@
 import pool from './DB.js';
 import { handleCallCreation } from '../services/callService.js';
+
 export const getCallWithUser = async (callId, userSex) => {
- const sql = `
+  const sql = `
     SELECT 
       c.*,
       u.userId               AS senderId,
@@ -16,13 +17,13 @@ export const getCallWithUser = async (callId, userSex) => {
       u.bio                  AS senderBio,
       u.tags                 AS senderTags
     FROM CALL_RECIPIENTS cr
-    INNER JOIN CALLS c ON cr.callId       = c.callId
-    INNER JOIN USERS u ON c.userId        = u.userId
+    INNER JOIN CALLS c ON cr.callId = c.callId
+    INNER JOIN USERS u ON c.userId = u.userId
     WHERE cr.targetUserId = ?
-      AND c.isActive          = TRUE
-    ORDER BY c.createdAt DESC;
+      AND c.isActive = TRUE
+    ORDER BY c.createdAt DESC
   `;
-  const [rows] = await pool.query(sql, [recipientId]);
+  const [rows] = await pool.query(sql, [callId]); // תיקון: callId במקום recipientId
   return rows.map(row => ({
     id: row.callId,
     ...row,
@@ -49,6 +50,7 @@ export const getById = async (callId) => {
   const row = rows[0];
   return { ...row, id: row.callId };
 };
+
 export const findByFilter = async (filter = {}) => {
   let sql = `
     SELECT 
@@ -67,12 +69,19 @@ export const findByFilter = async (filter = {}) => {
     FROM CALL_RECIPIENTS cr
     INNER JOIN CALLS c ON cr.callId = c.callId
     INNER JOIN USERS u ON c.userId = u.userId
-    WHERE cr.targetUserId = ?
-      AND c.isActive = 1
+    WHERE c.isActive = 1
   `;
   
-  const params = [filter.targetUserId, filter. sex]; // הוספת targetUserId כפרמטר ראשון
+  const params = [];
   
+  if (filter.sex) {
+    sql += ' AND u.sex = ?';
+    params.push(filter.sex);
+  }
+  if (filter.targetUserId) {
+    sql += ' AND cr.targetUserId = ?'; // תיקון: cr.targetUserId במקום c.targetUserId
+    params.push(filter.targetUserId);
+  }
   // הוספת פילטרים נוספים
   if (filter.userId) {
     sql += ' AND c.userId = ?';
@@ -125,11 +134,11 @@ export const findByFilter = async (filter = {}) => {
   }));
 };
 
-
-
 export const create = async (call) => {
-  const sql = `INSERT INTO CALLS (userId, targetUserId, place, learningFormat, time, subject, ageRange, notes, preferredDuration, material, isActive)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const sql = `
+    INSERT INTO CALLS (userId, targetUserId, place, learningFormat, time, subject, ageRange, notes, preferredDuration, material, isActive)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
   const params = [
     call.userId,
     call.targetUserId || null,
@@ -147,24 +156,21 @@ export const create = async (call) => {
   return { ...call, id: result.insertId };
 };
 
-
 export const update = async (callId, call) => {
   const fields = [];
   const params = [];
-for (const key of ['userId', 'targetUserId', 'place', 'learningFormat', 'time', 'subject', 'ageRange', 'notes', 'preferredDuration', 'material', 'isActive']) {    if (call[key] !== undefined) {
-      fields.push(`${key} = ?`);
+  
+  for (const key of ['userId', 'targetUserId', 'place', 'learningFormat', 'time', 'subject', 'ageRange', 'notes', 'preferredDuration', 'material', 'isActive']) {
+    if (call[key] !== undefined) {
+      fields.push(`${key} = ?`); // תיקון: backticks
       params.push(call[key]);
     }
   }
+  
   if (fields.length === 0) return null;
   params.push(callId);
-  const sql = `UPDATE CALLS SET ${fields.join(', ')} WHERE callId = ?`;
+  
+  const sql = `UPDATE CALLS SET ${fields.join(', ')} WHERE callId = ?`; // תיקון: backticks
   const [result] = await pool.query(sql, params);
-   return { id: callId, ...call };
-};
-
-export const deleteCall = async (callId) => {
-  const sql = 'DELETE FROM CALLS WHERE callId = ?';
-  const [result] = await pool.query(sql, [callId]);
-  return result;
+  return { id: callId, ...call };
 };
