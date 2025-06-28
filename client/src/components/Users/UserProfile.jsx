@@ -163,7 +163,7 @@ const ProfilePage = () => {
                     
                         { label: 'שפות', key: 'languages', icon: <Globe />, type: 'select', editable: true, options: languageOptions },
                         { label: 'עיר', key: 'city', icon: <MapPin />, type: 'text' },
-                        { label: 'תמונת פרופיל (URL)', key: 'profile', icon: <FileImage />, type: 'text' },
+                      //  { label: 'תמונת פרופיל (URL)', key: 'profile', icon: <FileImage />, type: 'text' },
                         { label: 'זמינות', key: 'availability', icon: <Calendar />, type: 'select', editable: true, options: availabilityOptions }
                     ].map(({ label, key, icon, type, editable = true, options }) => (
                         <div key={key}>

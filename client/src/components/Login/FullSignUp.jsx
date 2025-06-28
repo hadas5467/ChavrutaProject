@@ -132,15 +132,6 @@ const FullSignUp = () => {
                 }
             });
             const result = await addData('users/register', form, true);
-            //     if (err.code === 'ER_DUP_ENTRY') {
-            //             return res.status(409).json({ error: "האימייל כבר רשום במערכת. אנא נסה אימייל אחר או התחבר." });
-            //         }
-            //     if (result?.user) localStorage.setItem('currentUser', JSON.stringify(result.user));
-            //     navigate('/home');
-            //   } catch (error) {
-            //     alert('שגיאה בשליחה. נסה שוב.');
-            //   }
-            // };
             if (result?.user) {
                 localStorage.setItem('currentUser', JSON.stringify(result.user));
                 navigate('/home');

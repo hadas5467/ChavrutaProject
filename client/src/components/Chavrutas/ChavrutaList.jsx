@@ -71,7 +71,7 @@ const ChavrutaList = ({ usersMap }) => {
         renderItem={renderChavruta}
        // newItem={() => navigate('new')}
         filters={filters}
-        sort={listSortKey} // זה משתנה חדש שמוודא שבמצב 'הכל' לא נשלח userId
+        sort={listSortKey} 
         defaultSort={initialSort}
       />
     </div>

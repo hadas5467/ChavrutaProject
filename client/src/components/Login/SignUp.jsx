@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { signUpSchema } from '../../Schema/signUpSchema';
 import '../../css/Signup.css';
@@ -136,6 +135,14 @@ const PasswordField = ({ value, onChange, showPassword, setShowPassword }) => (
         {showPassword ? <EyeOff /> : <Eye />}
       </button>
     </div>
+     <div className="signup-text">
+          <p>
+            יש לך חשבון?{' '}
+            <Link to="/login" className="signup-link">
+              התחבר כאן
+            </Link>
+          </p>
+        </div>
   </div>
 );
 

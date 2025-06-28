@@ -101,7 +101,7 @@ export const preferredDuration = {
   "30_min": "30 דקות",
   "45_min": "45 דקות",
   "1_hour": "שעה",
-  "90_min": "שעה וחצי",
+  // "90_min": "שעה וחצי",
   "2_hours": "שעתיים",
   flexible: "גמיש"
 };

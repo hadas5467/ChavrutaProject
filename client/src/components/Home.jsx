@@ -25,17 +25,17 @@ const Home = () => {
       <header className="home-header">
         <h1 className="home-title">📖 ברוך הבא למערכת החברותות</h1>
         <div className="home-buttons">
-           <button className="log-out-btn" onClick={() =>{
+          <button className="log-out-btn" onClick={() => {
             localStorage.removeItem('currentUser');
-           navigate('/login')
-           } }>
+            navigate('/login')
+          }}>
             יציאה
           </button>
           <button className="profile-btn" onClick={() => navigate('/UserProfile')}>
             פרופיל אישי
           </button>
           <button className="chavruta-history-btn" onClick={() => navigate('/ChavrutaList')}>
-            היסטוריית חברותות
+            ניהול חברותות
           </button>
         </div>
       </header>

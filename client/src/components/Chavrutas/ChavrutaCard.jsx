@@ -50,7 +50,7 @@ const ChavrutaCard = ({ chavruta, users, currentUserId, editable = false, onUpda
       )}
 
       {/* נתונים מהחברותא */}
-      <p className="date">📅 התחיל ב: {new Date(chavruta.startedAt).toLocaleDateString('he-IL')}</p>
+      <p className="date">📅 נקבע ב: {new Date(chavruta.startedAt).toLocaleDateString('he-IL')}</p>
       {/* כאן תוכל להוסיף עוד שדות מהחברותא, לדוג' הערות, סטטוס וכו' */}
 
       {/* הערות */}
@@ -62,45 +62,6 @@ const ChavrutaCard = ({ chavruta, users, currentUserId, editable = false, onUpda
       )}
     </div>
   );
-// ...existing code...
-//   return (
-//     <div className={`chavruta-card ${chavruta.status}`}>
-//       <h3>👥 {user1?.name} & {user2?.name}</h3>
-//       <p><strong>סטטוס:</strong> {chavrutaStatus[chavruta.status]}</p>
-
-//       {/* הערה ממשתמש 1 */}
-//       {currentUserId === user1?.userId && editable &&(
-//         <div>
-//           <label>הערה מ-{user1.name}:</label>
-//           <textarea
-//             value={noteUser1}
-//             onChange={(e) => setNoteUser1(e.target.value)}
-//             onBlur={() => handleSave('notesUser1', noteUser1)}
-//           />
-//         </div>
-//       ) }
-
-//       {/* הערה ממשתמש 2 */}
-//       {currentUserId === user2?.userId && editable &&(
-//         <div>
-//           <label>הערה מ-{user2.name}:</label>
-//           <textarea
-//             value={noteUser2}
-//             onChange={(e) => setNoteUser2(e.target.value)}
-//             onBlur={() => handleSave('notesUser2', noteUser2)}
-//           />
-//         </div>
-//       )}
-
-//       {chavruta.status === 'ended' && (
-//   <>
-//     {chavruta.notesUser1 && <p><strong>הערה מ-{user1.name}:</strong> {chavruta.notesUser1}</p>}
-//     {chavruta.notesUser2 && <p><strong>הערה מ-{user2.name}:</strong> {chavruta.notesUser2}</p>}
-//   </>
-// )}
-//       <p className="date">📅 התחיל ב: {new Date(chavruta.startedAt).toLocaleDateString('he-IL')}</p>
-//     </div>
-//   );
 };
 
 export default ChavrutaCard;

@@ -16,14 +16,6 @@ const JoinRequestList = () => {
   // הוספת state ל-endpoint
   const [endpoint, setEndpoint] = useState(isAdmin ? "joinRequests/user" : "joinRequests/user");
 
-  // const handleToggle = () => {
-  //   if (onlyMine) {
-  //     setEndpoint("joinRequests/"); // כל הבקשות
-  //   } else {
-  //     setEndpoint("joinRequests/user"); // רק שלי
-  //   }
-  //   setOnlyMine(!onlyMine);
-  // };
 
 // פונקציית רענון
   const fetchRequests = async () => {
