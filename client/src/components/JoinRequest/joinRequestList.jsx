@@ -1,49 +1,25 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState } from "react";
 import List from "../List.jsx";
 import JoinRequestCard from './joinRequestCard.jsx';
-import * as apiService from "../apiService.js";
 
 const JoinRequestList = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const currentUserId = currentUser?.id;
   const isAdmin = currentUser?.role === "admin";
-
-  // ברירת מחדל: אדמין רואה רק את שלו
   const [onlyMine, setOnlyMine] = useState(true);
-  const [sortKey, setSortKey] = useState(isAdmin ? "mine" : "");
-  const [requests, setRequests] = useState([]);
+  const [endpoint, setEndpoint] = useState("joinRequests/user");
 
-  // הוספת state ל-endpoint
-  const [endpoint, setEndpoint] = useState(isAdmin ? "joinRequests/user" : "joinRequests/user");
-
-
-// פונקציית רענון
-  const fetchRequests = async () => {
-    try {
-      const data = await apiService.getData(endpoint);
-      setRequests(data);
-    } catch {
-      setRequests([]);
-    }
+  const handleToggle = () => {
+    const nextOnlyMine = !onlyMine;
+    setOnlyMine(nextOnlyMine);
+    setEndpoint(nextOnlyMine ? "joinRequests/user" : "joinRequests/");
   };
-
-    useEffect(() => {
-    fetchRequests();
-    // eslint-disable-next-line
-  }, [endpoint]);
-
-const handleToggle = () => {
-  const nextOnlyMine = !onlyMine;
-  setOnlyMine(nextOnlyMine);
-  setEndpoint(nextOnlyMine ? "joinRequests/user" : "joinRequests/");
-  setSortKey(nextOnlyMine ? "mine" : "");
-};
 
   const renderItem = (request, refresh) => (
     <JoinRequestCard
       request={request}
       setRequests={refresh}
-        refreshRequests={fetchRequests}
+      refreshRequests={refresh}
       currentUserId={currentUserId}
     />
   );
@@ -53,18 +29,24 @@ const handleToggle = () => {
       <h2>📬 {isAdmin ? "הבקשות שלך (מנהל)" : "כל בקשות ההצטרפות"}</h2>
       {isAdmin && (
         <button onClick={handleToggle}>
-          {onlyMine ?  "הצג את כל הבקשות"   : "הצג רק את הבקשות שלי"}
+          {onlyMine ? "הצג את כל הבקשות" : "הצג רק את הבקשות שלי"}
         </button>
       )}
       <List
         endpoint={endpoint}
         renderItem={renderItem}
         filters={[
-          { label: "שלי", value: "mine" },
-          { label: "ID עולה", value: "id" }
+          { label: "ממתינות", value: "status_pending" },
+          { label: "אושרו", value: "status_approved" },
+          { label: "נדחו", value: "status_declined" }
         ]}
-        sort={sortKey}
-       // newItem={() => alert("טופס חדש להצטרפות")}
+        sortFilters={[
+          { label: "חדשות קודם", value: "date_desc" },
+          { label: "ישנות קודם", value: "date_asc" },
+          { label: "לפי ID", value: "id" }
+        ]}
+        defaultSort="date_desc"
+        newItem={() => {}}
       />
     </div>
   );

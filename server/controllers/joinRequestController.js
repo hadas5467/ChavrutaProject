@@ -6,13 +6,22 @@ import * as service from "../services/joinRequestService.js";
 // קבלת כל הבקשות (או לפי סינון)
 export const getAllJoinRequests = async (req, res) => {
   try {
-    const { userId, callId, status, joinRequestId } = req.query;
+ const { 
+      userId, callId, status, joinRequestId, targetUserId,
+      userSearch, search, startDate, endDate, sortBy, sortOrder,
+      subject, learningFormat, place
+    } = req.query; 
     let filter = {};
-    if (userId) filter.userId = userId;
-    if (callId) filter.callId = callId;
-    if (status) filter.status = status;
-    if (joinRequestId) filter.joinRequestId = joinRequestId;
-
+    if (targetUserId) filter.targetUserId = targetUserId;
+    if (userSearch) filter.userSearch = userSearch;
+    if (search) filter.search = search;
+    if (startDate) filter.startDate = startDate;
+    if (endDate) filter.endDate = endDate;
+    if (sortBy) filter.sortBy = sortBy;
+    if (sortOrder) filter.sortOrder = sortOrder;
+ if (subject) filter.subject = subject;
+    if (learningFormat) filter.learningFormat = learningFormat;
+    if (place) filter.place = place;
     const joinRequests = await joinRequestServices.findByFilter(filter);
     
     // תמיד מחזירים 200 עם מערך (גם אם ריק)
@@ -27,8 +36,24 @@ export const getJoinRequestsByUser = async (req, res) => {
   try {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: "משתמש לא מחובר" });
-
-    const joinRequests = await joinRequestServices.findByFilter({ targetUserId: userId });
+const { 
+       callId, status, joinRequestId, targetUserId,
+      userSearch, search, startDate, endDate, sortBy, sortOrder,
+      subject, learningFormat, place
+    } = req.query; 
+    let filter = {};
+    if (targetUserId) filter.targetUserId = targetUserId;
+    if (userSearch) filter.userSearch = userSearch;
+    if (search) filter.search = search;
+    if (startDate) filter.startDate = startDate;
+    if (endDate) filter.endDate = endDate;
+    if (sortBy) filter.sortBy = sortBy;
+    if (sortOrder) filter.sortOrder = sortOrder;
+ if (subject) filter.subject = subject;
+    if (learningFormat) filter.learningFormat = learningFormat;
+    if (place) filter.place = place;
+    const joinRequests = await joinRequestServices.findByFilter({ targetUserId: userId , ...filter });
+    
     res.status(200).json(joinRequests ?? []);
   } catch (error) {
     console.error("getJoinRequestsByUser error:", error);
