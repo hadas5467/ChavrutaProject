@@ -64,3 +64,18 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log("CORS ORIGIN:", process.env.FRONTEND_ORIGIN);
 });
+
+app.use((err, req, res, next) => {
+  console.error(err.stack); // שמירה לשרת בלבד
+
+  if (err.isValidationError) {
+    return res.status(400).json({ errors: err.errors });
+  }
+
+  if (err.isAuthError) {
+    return res.status(403).json({ message: "אין הרשאה" });
+  }
+
+  // אחרת
+  res.status(500).json({ message: "שגיאה בשרת" });
+});

@@ -12,20 +12,7 @@ import {
   validateLogin
 } from '../validations/userValidation.js';
 import { handleValidation } from '../Middleware/handleValidation.js';
-//מבנה יפה של בדיקות הרשאה שהתלבטנו על נכונותו
-// const authorizeUserOwner = authorizeOwner({
-//   tableName: 'USERS',
-//   idField: 'userId',
-//   ownerFields: ['userId'],
-//   paramName: 'id'
-// });
 
-// const authorizeUserOwnerOrAdmin = authorizeOwnerOrAdmin({
-//   tableName: 'USERS',
-//   idField: 'userId',
-//   ownerFields: ['userId'],
-//   paramName: 'id'
-// });
 const router = express.Router();
 
 router.get('/', verifyToken, getUsers);
@@ -54,3 +41,17 @@ catch (error) {
 });
 
 export default router;
+//מבנה יפה של בדיקות הרשאה שהתלבטנו על נכונותו
+// const authorizeUserOwner = authorizeOwner({
+//   tableName: 'USERS',
+//   idField: 'userId',
+//   ownerFields: ['userId'],
+//   paramName: 'id'
+// });
+
+// const authorizeUserOwnerOrAdmin = authorizeOwnerOrAdmin({
+//   tableName: 'USERS',
+//   idField: 'userId',
+//   ownerFields: ['userId'],
+//   paramName: 'id'
+// });

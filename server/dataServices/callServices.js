@@ -56,91 +56,94 @@ export const getIsCallRecipients = async (callId, userId) => {
   const result = await pool.query(sql,   [callId, userId]);
   return result;
 };
-export const findByFilter = async (filter = {}) => {
+export const findCallsForUser = async (targetUserId, filter = {}) => {
+  const params = [targetUserId];
+  
   let sql = `
-    SELECT 
+    SELECT DISTINCT
       c.*,
-      u.userId               AS senderId,
-      u.name                 AS senderName,
-      u.profile              AS senderProfile,
-      u.sex                  AS senderSex,
-      u.age                  AS senderAge,
-      u.sector               AS senderSector,
-      u.experienceLevel      AS senderExperienceLevel,
-      u.city                 AS senderCity,
-      u.country              AS senderCountry,
-      u.bio                  AS senderBio,
-      u.tags                 AS senderTags,
-      cr.targetUserId        AS targetUserId
+      u.userId AS senderId,
+      u.name AS senderName,
+      u.profile AS senderProfile,
+      u.sex AS senderSex,
+      u.age AS senderAge,
+      u.sector AS senderSector,
+      u.experienceLevel AS senderExperienceLevel,
+      u.city AS senderCity,
+      u.country AS senderCountry,
+      u.bio AS senderBio,
+      u.tags AS senderTags,
+      cr.targetUserId AS targetUserId
     FROM CALL_RECIPIENTS cr
     INNER JOIN CALLS c ON cr.callId = c.callId
     INNER JOIN USERS u ON c.userId = u.userId
-    WHERE c.isActive = 1
+    WHERE c.isActive = 1 AND cr.targetUserId = ?
   `;
   
-  const params = [];
-  
+  // הוספת פילטרים
   if (filter.sex) {
     sql += ' AND u.sex = ?';
     params.push(filter.sex);
   }
-  if (filter.targetUserId) {
-    sql += ' AND cr.targetUserId = ?'; // תיקון: cr.targetUserId במקום c.targetUserId
-    params.push(filter.targetUserId);
-  }
-  // הוספת פילטרים נוספים
+  
   if (filter.userId) {
     sql += ' AND c.userId = ?';
     params.push(filter.userId);
   }
+  
   if (filter.place) {
     sql += ' AND c.place = ?';
     params.push(filter.place);
   }
+  
   if (filter.learningFormat) {
     sql += ' AND c.learningFormat = ?';
     params.push(filter.learningFormat);
   }
+  
   if (filter.subject) {
     sql += ' AND c.subject = ?';
     params.push(filter.subject);
   }
+  
   if (filter.ageRange) {
     sql += ' AND c.ageRange = ?';
     params.push(filter.ageRange);
   }
+  
   if (filter.isActive !== undefined) {
     sql += ' AND c.isActive = ?';
     params.push(filter.isActive);
   }
+  
   if (filter.callId !== undefined) {
     sql += ' AND c.callId = ?';
     params.push(filter.callId);
   }
-   // חיפוש לפי שם משתמש (שולח הקריאה)
+  
   if (filter.userSearch) {
     sql += ' AND u.name LIKE ?';
     const searchTerm = `%${filter.userSearch}%`;
     params.push(searchTerm);
   }
   
-  // חיפוש בנושא או חומרים
   if (filter.subjectSearch) {
     sql += ' AND (c.subject LIKE ? OR c.material LIKE ?)';
     const searchTerm = `%${filter.subjectSearch}%`;
     params.push(searchTerm, searchTerm);
   }
   
-  // סינון לפי תאריך יצירה
   if (filter.startDate) {
     sql += ' AND c.createdAt >= ?';
     params.push(filter.startDate);
   }
+  
   if (filter.endDate) {
     sql += ' AND c.createdAt <= ?';
     params.push(filter.endDate);
   }
-    if (filter.search) {
+  
+  if (filter.search) {
     sql += ' AND (u.name LIKE ? OR c.subject LIKE ? OR c.material LIKE ? OR c.notes LIKE ?)';
     const searchTerm = `%${filter.search}%`;
     params.push(searchTerm, searchTerm, searchTerm, searchTerm);
@@ -148,40 +151,169 @@ export const findByFilter = async (filter = {}) => {
   
   // מיון
   const allowedSortBy = {
-  callCreatedAt: 'c.createdAt',
-  callTime: 'c.time',
-  callId: 'c.callId',
-};
+    callCreatedAt: 'c.createdAt',
+    callTime: 'c.time',
+    callId: 'c.callId',
+  };
 
-const safeSortBy = allowedSortBy[filter.sortBy];
-  if (filter.sortBy) {
-    sql += ` ORDER BY ${filter.sortBy} ${filter.sortOrder=== 'DESC' ? 'DESC' : 'ASC'}`;
+  if (filter.sortBy && allowedSortBy[filter.sortBy]) {
+    sql += ` ORDER BY ${allowedSortBy[filter.sortBy]} ${filter.sortOrder === 'DESC' ? 'DESC' : 'ASC'}`;
   } else {
     sql += ' ORDER BY c.createdAt DESC'; 
   }
   
-  
   const [rows] = await pool.query(sql, params);
+  
   return rows.map(row => ({
     id: row.callId,
     ...row,
     targetUserId: row.targetUserId,
     sender: {
-      userId:            row.senderId,
-      name:              row.senderName,
-      profile:           row.senderProfile,
-      sex:               row.senderSex,
-      age:               row.senderAge,
-      sector:            row.senderSector,
-      experienceLevel:   row.senderExperienceLevel,
-      city:              row.senderCity,
-      country:           row.senderCountry,
-      bio:               row.senderBio,
-      tags:              row.senderTags
+      userId: row.senderId,
+      name: row.senderName,
+      profile: row.senderProfile,
+      sex: row.senderSex,
+      age: row.senderAge,
+      sector: row.senderSector,
+      experienceLevel: row.senderExperienceLevel,
+      city: row.senderCity,
+      country: row.senderCountry,
+      bio: row.senderBio,
+      tags: row.senderTags
+    }
+  }));
+};export const findCallsForAdmin = async (filter = {}) => {
+  const params = [];
+  
+  let sql = `
+    SELECT DISTINCT
+      c.*,
+      u.userId AS senderId,
+      u.name AS senderName,
+      u.profile AS senderProfile,
+      u.sex AS senderSex,
+      u.age AS senderAge,
+      u.sector AS senderSector,
+      u.experienceLevel AS senderExperienceLevel,
+      u.city AS senderCity,
+      u.country AS senderCountry,
+      u.bio AS senderBio,
+      u.tags AS senderTags
+    FROM CALLS c
+    INNER JOIN USERS u ON c.userId = u.userId
+    WHERE c.isActive = 1
+  `;
+  
+  // הוספת פילטרים
+  if (filter.sex) {
+    sql += ' AND u.sex = ?';
+    params.push(filter.sex);
+  }
+  
+  if (filter.userId) {
+    sql += ' AND c.userId = ?';
+    params.push(filter.userId);
+  }
+  
+  if (filter.place) {
+    sql += ' AND c.place = ?';
+    params.push(filter.place);
+  }
+  
+  if (filter.learningFormat) {
+    sql += ' AND c.learningFormat = ?';
+    params.push(filter.learningFormat);
+  }
+  
+  if (filter.subject) {
+    sql += ' AND c.subject = ?';
+    params.push(filter.subject);
+  }
+  
+  if (filter.ageRange) {
+    sql += ' AND c.ageRange = ?';
+    params.push(filter.ageRange);
+  }
+  
+  if (filter.isActive !== undefined) {
+    sql += ' AND c.isActive = ?';
+    params.push(filter.isActive);
+  }
+  
+  if (filter.callId !== undefined) {
+    sql += ' AND c.callId = ?';
+    params.push(filter.callId);
+  }
+  
+  if (filter.userSearch) {
+    sql += ' AND u.name LIKE ?';
+    const searchTerm = `%${filter.userSearch}%`;
+    params.push(searchTerm);
+  }
+  
+  if (filter.subjectSearch) {
+    sql += ' AND (c.subject LIKE ? OR c.material LIKE ?)';
+    const searchTerm = `%${filter.subjectSearch}%`;
+    params.push(searchTerm, searchTerm);
+  }
+  
+  if (filter.startDate) {
+    sql += ' AND c.createdAt >= ?';
+    params.push(filter.startDate);
+  }
+  
+  if (filter.endDate) {
+    sql += ' AND c.createdAt <= ?';
+    params.push(filter.endDate);
+  }
+  
+  if (filter.search) {
+    sql += ' AND (u.name LIKE ? OR c.subject LIKE ? OR c.material LIKE ? OR c.notes LIKE ?)';
+    const searchTerm = `%${filter.search}%`;
+    params.push(searchTerm, searchTerm, searchTerm, searchTerm);
+  }
+  
+  // מיון
+  const allowedSortBy = {
+    callCreatedAt: 'c.createdAt',
+    callTime: 'c.time',
+    callId: 'c.callId',
+  };
+
+  if (filter.sortBy && allowedSortBy[filter.sortBy]) {
+    sql += ` ORDER BY ${allowedSortBy[filter.sortBy]} ${filter.sortOrder === 'DESC' ? 'DESC' : 'ASC'}`;
+  } else {
+    sql += ' ORDER BY c.createdAt DESC'; 
+  }
+  
+  const [rows] = await pool.query(sql, params);
+  
+  return rows.map(row => ({
+    id: row.callId,
+    ...row,
+    sender: {
+      userId: row.senderId,
+      name: row.senderName,
+      profile: row.senderProfile,
+      sex: row.senderSex,
+      age: row.senderAge,
+      sector: row.senderSector,
+      experienceLevel: row.senderExperienceLevel,
+      city: row.senderCity,
+      country: row.senderCountry,
+      bio: row.senderBio,
+      tags: row.senderTags
     }
   }));
 };
 
+export const findByFilterCall = async (filter = {}) => {
+  if (filter.targetUserId) {
+    return await findCallsForUser(filter.targetUserId, filter);
+  } else {
+    return await findCallsForAdmin(filter);
+  }
+};
 export const create = async (call) => {
   const sql = `
     INSERT INTO CALLS (userId, targetUserId, place, learningFormat, time, subject, ageRange, notes, preferredDuration, material, isActive)
