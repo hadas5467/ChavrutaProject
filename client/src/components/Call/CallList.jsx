@@ -12,6 +12,10 @@ const CallsList = () => {
   const [onlyMine, setOnlyMine] = useState(true); // מנהל רואה כברירת מחדל רק את הקריאות שלו
   const [sortKey, setSortKey] = useState(isAdmin ? 'mine' : ''); // ברירת מחדל למנהל
 
+   const sortFilters = [
+    { value: 'date_desc', label: 'חדשות ביותר' },
+    { value: 'date_asc', label: 'ישנות ביותר' }
+  ];
   const renderItem = (call, refreshItems) => (
     <CallCard
       key={call.id}
@@ -39,10 +43,7 @@ const CallsList = () => {
       <List
         endpoint="calls"
         renderItem={renderItem}
-        filters={[
-          { label: "שלי", value: "mine" },
-          { label: "ID עולה", value: "id" },
-        ]}
+        filters={sortFilters}
         newItem={() => navigate('/CallFrom')}
         sort={sortKey}
       />
