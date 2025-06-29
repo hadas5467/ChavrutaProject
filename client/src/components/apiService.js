@@ -60,7 +60,9 @@ export async function addData(apiPath, dataToAdd, isFormData = false) {
 
         return responseBody;
     } catch (error) {
-        alert(`שגיאה בהוספה: ${error.message}`);
+                throw new Error(error.message);
+
+        alert( error.message);
     }
 }
 

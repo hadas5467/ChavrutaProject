@@ -12,17 +12,34 @@ import cookieParser from 'cookie-parser';
 
 const app = express();
 
-// Middlewares
+// Middleware
+// const corsOptions = {
+//   origin: [
+//      'http://localhost:5173',
+//     'http://localhost:5175',
+//     'http://localhost:5176',
+//     'http://localhost:5179',
+//     'http://localhost:5181',
+//     'http://localhost:5182',
+//     'http://localhost:5183',
+//     'http://localhost:5184'
+//   ],
+    
+  
+//   credentials: true,               // מאפשר שליחת cookies
+// };
+
+
+// app.use(cors(corsOptions));
 const corsOptions = {
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5175',
-    'http://localhost:5176'
-  ],
+  origin: true, // מאפשר כל origin בפיתוח
   credentials: true,               // מאפשר שליחת cookies
 };
 
+
 app.use(cors(corsOptions));
+
+
 app.use(express.json());
 app.use('/uploads/males', express.static('uploads/males'));
 app.use('/uploads/females', express.static('uploads/females'));
@@ -45,4 +62,5 @@ app.get('/', (req, res) => {
 const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log("CORS ORIGIN:", process.env.FRONTEND_ORIGIN);
 });
