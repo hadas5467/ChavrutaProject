@@ -70,7 +70,8 @@ export const findByFilter = async (filter = {}) => {
       u.city                 AS senderCity,
       u.country              AS senderCountry,
       u.bio                  AS senderBio,
-      u.tags                 AS senderTags
+      u.tags                 AS senderTags,
+      cr.targetUserId        AS targetUserId
     FROM CALL_RECIPIENTS cr
     INNER JOIN CALLS c ON cr.callId = c.callId
     INNER JOIN USERS u ON c.userId = u.userId
@@ -146,10 +147,17 @@ export const findByFilter = async (filter = {}) => {
   }
   
   // מיון
+  const allowedSortBy = {
+  callCreatedAt: 'c.createdAt',
+  callTime: 'c.time',
+  callId: 'c.callId',
+};
+
+const safeSortBy = allowedSortBy[filter.sortBy];
   if (filter.sortBy) {
-    sql += ` ORDER BY ${filter.sortBy} ${filter.sortOrder || 'ASC'}`;
+    sql += ` ORDER BY ${filter.sortBy} ${filter.sortOrder=== 'DESC' ? 'DESC' : 'ASC'}`;
   } else {
-    sql += ' ORDER BY c.createdAt DESC'; // ברירת מחדל - החדשות ביותר קודם
+    sql += ' ORDER BY c.createdAt DESC'; 
   }
   
   
@@ -157,6 +165,7 @@ export const findByFilter = async (filter = {}) => {
   return rows.map(row => ({
     id: row.callId,
     ...row,
+    targetUserId: row.targetUserId,
     sender: {
       userId:            row.senderId,
       name:              row.senderName,

@@ -206,12 +206,22 @@ let sql = `
     sql += ' WHERE ' + conditions.join(' AND ');
   }
     // מיון
-  if (filter.sortBy) {
-    sql += ` ORDER BY ${filter.sortBy} ${filter.sortOrder || 'ASC'}`;
-  } else {
-    sql += ' ORDER BY c.startedAt DESC'; // ברירת מחדל - החדשות ביותר קודם
-  }
+  const allowedSortBy = {
+  callCreatedAt: 'c.startedAt',
+  callTime: 'c.time',
+  callId: 'c.chavrutaId',
+  user1Name: 'u1.name',
+  user2Name: 'u2.name',
+  subject: 'c.subject',
+};
 
+const safeSortBy = allowedSortBy[filter.sortBy];
+  if (safeSortBy) {
+    sql += ` ORDER BY ${safeSortBy} ${filter.sortOrder=== 'DESC' ? 'DESC' : 'ASC'}`;
+  } else {
+    sql += ' ORDER BY c.startedAt DESC'; 
+  }
+  
   const [rows] = await pool.query(sql, params);
   return rows.map(row => ({
     ...row,

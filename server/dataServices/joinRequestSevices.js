@@ -103,14 +103,21 @@ export const findByFilter = async (filter = {}, connection = pool) => {
   if (conditions.length > 0) {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
-  if (filter.sortBy) {
-    const validSortColumns = ['c.createdAt', 'jr.status', 'jr.joinRequestId'];
-    if (filter.sortBy && validSortColumns.includes(filter.sortBy)) {
-      sql += ` ORDER BY ${filter.sortBy} ${filter.sortOrder || 'ASC'}`;
-    }
+ 
+   
+  const allowedSortBy = {
+  callCreatedAt: 'c.createdAt',
+  callTime: 'jr.status',
+  callId: 'jr.joinRequestId',
+};
+
+const safeSortBy = allowedSortBy[filter.sortBy];
+  if (safeSortBy) {
+    sql += ` ORDER BY ${filter.sortBy} ${filter.sortOrder=== 'DESC' ? 'DESC' : 'ASC'}`;
   } else {
-    sql += ' ORDER BY c.createdAt DESC'; // ברירת מחדל - החדשות ביותר קודם
+    sql += ' ORDER BY c.createdAt DESC'; 
   }
+  
   const [rows] = await pool.query(sql, params);
   return rows.map(row => ({
     id: row.joinRequestId,

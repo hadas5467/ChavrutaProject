@@ -10,7 +10,7 @@
 //       userId, place, learningFormat, subject, ageRange, isActive, callId,
 //       userSearch, subjectSearch, startDate, endDate, sortBy, sortOrder, search
 //     } = req.query;
-     
+
 //     let filter = {};
 //     if (userSearch) filter.userSearch = userSearch;
 //     if (subjectSearch) filter.subjectSearch = subjectSearch;
@@ -32,8 +32,8 @@
 //       filter.targetUserId = userId;
 //     }
 
- 
-  
+
+
 //     if (place) filter.place = place;
 //     if (learningFormat) filter.learningFormat = learningFormat;
 //     if (subject) filter.subject = subject;
@@ -132,7 +132,12 @@ export const getCalls = async (req, res) => {
     if (sortBy) filter.sortBy = sortBy;
     if (sortOrder) filter.sortOrder = sortOrder;
     if (search) filter.search = search;
-
+    if (place) filter.place = place;
+    if (learningFormat) filter.learningFormat = learningFormat;
+    if (subject) filter.subject = subject;
+    if (ageRange) filter.ageRange = ageRange;
+    if (isActive !== undefined) filter.isActive = isActive;
+    if (callId) filter.callId = callId;
     if (!sex || !currentUserId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -145,12 +150,7 @@ export const getCalls = async (req, res) => {
       filter.targetUserId = userId;
     }
 
-    if (place) filter.place = place;
-    if (learningFormat) filter.learningFormat = learningFormat;
-    if (subject) filter.subject = subject;
-    if (ageRange) filter.ageRange = ageRange;
-    if (isActive !== undefined) filter.isActive = isActive;
-    if (callId) filter.callId = callId;
+
 
     const calls = await callServices.findByFilter(filter);
     res.status(200).json(calls ?? []);

@@ -61,7 +61,7 @@ const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFi
     }
   } else if (sort === 'date_desc') {
     if (isJoinRequest) {
-      queryParams.push('sortBy=createdAt&sortOrder=ASC'); // ← כאן הטעות במקור
+      queryParams.push('sortBy=createdAt&sortOrder=DESC'); // ← כאן הטעות במקור
     }
   }
     else if (sort === 'id') queryParams.push('_sort=id&_order=asc');
