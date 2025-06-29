@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as apiService from "../apiService.js";
 import { callSchema } from '../../Schema/CallSchema.js';
+import Header from '../Header';
 import {
   learningFormat, preferredDuration, ageRange
 } from '../formatHelpers';
@@ -88,6 +89,9 @@ const CallForm = ({ onSuccess }) => {
   };
 
   return (
+     <>
+    <Header />
+     <main className="profile-page">
      <div className="call-form-page">
     <form className="call-card call-form" onSubmit={handleSubmit}>
       <h3> יצירת קריאה חדשה</h3>
@@ -130,6 +134,8 @@ const CallForm = ({ onSuccess }) => {
       <button type="submit"> פרסם קריאה</button>
     </form>
     </div>
+    </main>
+     </>
   );
 };
 

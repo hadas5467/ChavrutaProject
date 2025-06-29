@@ -17,7 +17,7 @@ const router = express.Router();
 router.get('/',verifyToken,authorizeAdmin, getAllJoinRequests);
 router.get('/user',verifyToken, getJoinRequestsByUser);
 router.get('/byCall/:callId', verifyToken, getJoinRequestsByCall);
-router.post('/approve', verifyToken,validateCreateJoinRequest, handleValidation,   approveJoinRequestController);
+router.post('/approve', verifyToken,validateApproveJoinRequest, handleValidation,   approveJoinRequestController);
 router.post('/',verifyToken,validateCreateJoinRequest, handleValidation,   createJoinRequest);
 router.put('/:id',verifyToken, validateUpdateJoinRequest, handleValidation, authorizeAdmin, updateJoinRequest);
 router.delete('/:id',verifyToken,validateCreateJoinRequest, handleValidation,  deleteJoinRequest);

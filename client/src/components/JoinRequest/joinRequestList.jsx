@@ -15,6 +15,8 @@ const JoinRequestList = () => {
     setEndpoint(nextOnlyMine ? "joinRequests/user" : "joinRequests/");
   };
 
+ 
+
   const renderItem = (request, refresh) => (
     <JoinRequestCard
       request={request}
