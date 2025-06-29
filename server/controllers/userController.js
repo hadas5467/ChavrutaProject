@@ -268,11 +268,11 @@ export const createUser = async (req, res) => {
     };
 
     const existingUser = await userServices.findByFilter({ gmail: userData.gmail });
-    if (existingUser && existingUser.length > 0) {
-      return res.status(400).json({
-        message: "האימייל כבר רשום במערכת. אנא נסה אימייל אחר או התחבר."
-      });
-    }
+    // if (existingUser && existingUser.length > 0) {
+    //   return res.status(400).json({
+    //     message: "האימייל כבר רשום במערכת. אנא נסה אימייל אחר או התחבר."
+    //   });
+    // }
 
     const newUser = await userServices.create(userData);
     const token = generateToken(newUser);

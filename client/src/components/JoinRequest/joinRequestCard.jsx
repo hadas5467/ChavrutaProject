@@ -2,15 +2,16 @@
 import React, { useState } from "react";
 import "../../css/JoinRequestCard.css";
 import { learningFormat, preferredDuration, ageRange, experienceLevel, sector } from "../formatHelpers";
+import * as apiService from "../apiService";
 
 function JoinRequestCard({ request, setRequests, refreshRequests, currentUserId }) {
   const [showSenderDetails, setShowSenderDetails] = useState(false);
   const [showCallDetails, setShowCallDetails] = useState(false);
- const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const isOwner = request.targetUserId === currentUserId;
   const isAdmin = currentUser?.role === "admin";
 
-    const handleDelete = async () => {
+  const handleDelete = async () => {
     if (disabled) return;
     setDisabled(true);
     if (!(isOwner || isAdmin)) {
@@ -26,20 +27,25 @@ function JoinRequestCard({ request, setRequests, refreshRequests, currentUserId 
       alert("שגיאה במחיקת הבקשה ");
     }
   };
-const handleApprove = async () => {
-  try {
-    await apiService.addData("joinRequests/approve", {
-      user1: request.userId,
-      user2: request.targetUserId,
-      callId: request.callId
-    });
-    refreshRequests();
-    setRequests((prev) => prev.filter((r) => r.callId !== request.callId));
-    alert("חברותא נוצרה בהצלחה!");
-  } catch (err) {
-    alert("שגיאה ביצירת החברותא");
-  }
-};
+  const handleApprove = async () => {
+    try {
+      await apiService.addData("joinRequests/approve", {
+        user1: request.sender.userId,      // 📌 המבקש
+        user2: request.targetUserId,
+        callId: request.callId
+      });
+      refreshRequests();
+      setRequests((prev) => prev.filter((r) => r.callId !== request.callId));
+      alert("חברותא נוצרה בהצלחה!");
+    } catch (err) {
+      console.log("שליחה ל-approve עם:", {
+  user1: request.sender?.userId,
+  user2: request.targetUserId,
+  callId: request.callId
+});
+      alert("שגיאה ביצירת החברותא" + err);
+    }
+  };
 
   const statusLabel = {
     pending: "⏳ ממתינה",
@@ -82,7 +88,7 @@ const handleApprove = async () => {
           <p><strong>ביוגרפיה:</strong> {request.sender.bio}</p>
         </div>
       )}
-  {isOwner && (
+      {isOwner && (
         <div className="call-buttons">
           <button onClick={handleDelete}>מצטער, כבר לא רלוונטי</button>
           <button onClick={handleApprove}>מצוין! 👍</button>
