@@ -52,7 +52,7 @@ export const contactMethod = {
   email: "מייל",
   // whatsapp: "וואטסאפ",
   // sms: "SMS",
-  // system: "מערכת"
+   system: "מערכת"
 };
 
 export const chavrutaStatus = {

@@ -46,7 +46,7 @@ const JoinRequestList = () => {
           { label: "לפי ID", value: "id" }
         ]}
         defaultSort="date_desc"
-        newItem={() => {}}
+       // newItem={() => {}}
       />
     </div>
   );

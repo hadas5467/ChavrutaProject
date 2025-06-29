@@ -1,0 +1,149 @@
+.chavruta-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin: 1rem 0;
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s ease-in-out;
+}
+
+main.profile-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chavruta-scroll-container {
+  max-height: 70vh; /* התאימי לפי הצורך */
+  overflow-y: auto;
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* עיצוב פס הגלילה */
+.chavruta-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chavruta-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 8px;
+}
+
+.chavruta-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.chavruta-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.chavruta-title {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.admin-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.toggle-btn {
+  font-size: 1rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  border: 2px solid var(--color-bg);
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.toggle-btn:hover {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+
+.chavruta-info,
+.chavruta-card p {
+  font-size: 1rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.chavruta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.chavruta-buttons button {
+  font-size: 1rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  border: 2px solid var(--color-bg);
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.chavruta-buttons button:hover {
+  background-color: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+.user-details,
+.call-details {
+  background: var(--color-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  margin-top: 1rem;
+}
+
+.user-details h4,
+.call-details h4 {
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.chavruta-notes {
+  margin-top: 1.2rem;
+  background-color: var(--color-bg);
+  padding: 1rem;
+  border-left: 4px solid var(--color-accent);
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+.date {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  margin-top: 0.8rem;
+}
+
+/* התאמה לניידים */
+@media (max-width: 600px) {
+  .chavruta-card {
+    padding: 1rem;
+  }
+
+  .chavruta-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

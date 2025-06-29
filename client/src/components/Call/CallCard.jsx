@@ -81,9 +81,9 @@ function CallCard({ call, user, setCalls, currentUserId }) {
           {showUserDetails ? "הסתר פרטי משתמש" : "הצג פרטי משתמש"}
         </button>
 
-        {isAdmin && (
+        {/* {isAdmin && (
           <button onClick={() => handleDeleteCall(call.id)}>🗑 מחיקה</button>
-        )}
+        )} */}
 
         {isOwner && (
           <button className="join-btn" onClick={joinRequest}>

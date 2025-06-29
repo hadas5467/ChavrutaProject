@@ -132,7 +132,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addData } from "./apiService";
-import '../css/Home.css'; 
+import '../css/Home.css';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -153,42 +153,42 @@ const Header = () => {
     : null;
 
   return (
-    <header className="home-header">
-      <div className="header-left">
-        <h1>ברוך הבא למערכת חברותא</h1>
-        <p className="home-subtitle">מצא חברותא ללימוד משותף או הצטרף לקריאות קיימות</p>
-      </div>
+ <header className="home-header">
+  <div className="header-left">
+    <h1>ברוך הבא למערכת חברותא</h1>
+    <p className="home-subtitle">מצא חברותא ללימוד משותף או הצטרף לקריאות קיימות</p>
+  </div>
 
-      <div className="home-buttons">
-        <button className="log-out-btn" onClick={handleLogout}>
-          יציאה
-        </button>
+  <div className="header-right">
+    <button className="chavruta-history-btn" onClick={() => navigate('/home')}>
+      דף הבית
+    </button>
+    <button className="chavruta-history-btn" onClick={() => navigate('/ChavrutaList')}>
+      ניהול חברותות
+    </button>
+    <button className="log-out-btn" onClick={handleLogout}>
+      יציאה
+    </button>
+    <button
+      className="profile-image-button"
+      onClick={() => navigate('/UserProfile')}
+      style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+    >
+      <img
+        src={profileImageSrc}
+        alt="תמונת פרופיל"
+        className="profile-image"
+        style={{ maxWidth: 60, borderRadius: '50%' }}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = '/default-profile.png';
+        }}
+      />
+    </button>
+  </div>
+</header>
 
-        <button
-          className="profile-image-button"
-          onClick={() => navigate('/UserProfile')}
-          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-        >
-          <img
-            src={profileImageSrc}
-            alt="תמונת פרופיל"
-            className="profile-image"
-            style={{ maxWidth: 60, borderRadius: '50%' }}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = '/default-profile.png';
-            }}
-          />
-        </button>
 
-        <button className="chavruta-history-btn" onClick={() => navigate('/ChavrutaList')}>
-          ניהול חברותות
-        </button>
-        <button className="chavruta-history-btn" onClick={() => navigate('/home')}>
-          דף הבית
-        </button>
-      </div>
-    </header>
   );
 };
 

@@ -3,7 +3,7 @@ import List from '../List';
 import ChavrutaCard from './ChavrutaCard';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../Header';
-
+import '../../css/chavrutaList.css'; // Ensure this path is correct
 
 const ChavrutaList = ({ usersMap }) => {
   const navigate = useNavigate();
@@ -67,18 +67,25 @@ const ChavrutaList = ({ usersMap }) => {
     <Header />
     <main className="profile-page">
       {isAdmin && (
-        <button onClick={handleToggle}>
-          {onlyMine ? 'הצג את כל החברותות' : 'הצג רק את החברותות שלי'}
-        </button>
+       <div className="admin-toggle-wrapper">
+    <button className="toggle-btn" onClick={handleToggle}>
+      {onlyMine ? 'הצג את כל החברותות' : 'הצג רק את החברותות שלי'}
+    </button>
+  </div>
       )}
-      <List className="chavruta-list"
-        endpoint={endpoint}
-        renderItem={renderChavruta}
-       // newItem={() => navigate('new')}
-        filters={filters}
+      <div className="chavruta-scroll-container">
+        <List className="chavruta-list"
+          endpoint={endpoint}
+          renderItem={renderChavruta}
+         // newItem={() => navigate('new')}
+          filters={filters}
+        
+   
+      
         sort={listSortKey} 
         defaultSort={initialSort}
       />
+         </div>
   </main>
     </>
   );
