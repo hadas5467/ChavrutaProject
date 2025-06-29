@@ -146,6 +146,7 @@ let sql = `
 `;
   const params = [];
   const conditions = [];
+
   if (filter.chavrutaId) {
     conditions.push('c.chavrutaId = ?');
     params.push(filter.chavrutaId);
@@ -170,12 +171,51 @@ let sql = `
     conditions.push('c.status = ?');
     params.push(filter.status);
   }
+  if (filter.userSearch) {
+    conditions.push('(u1.name LIKE ? OR u2.name LIKE ?)');
+    const searchTerm = `%${filter.userSearch}%`;
+    params.push(searchTerm, searchTerm);
+  }
+  
+  // חיפוש בנושא או חומרים
+  if (filter.subjectSearch) {
+    conditions.push('(calls.subject LIKE ? OR calls.material LIKE ?)');
+    const searchTerm = `%${filter.subjectSearch}%`;
+    params.push(searchTerm, searchTerm);
+  }
+  
+  // סינון לפי תאריך יצירה
+  if (filter.startDate) {
+    conditions.push('c.startedAt >= ?');
+    params.push(filter.startDate);
+  }
+  if (filter.endDate) {
+    conditions.push('c.startedAt <= ?');
+    params.push(filter.endDate);
+  }
+  
+  // חיפוש כללי (לשמירה על תאימות לאחור)
+  if (filter.search) {
+    conditions.push('(u1.name LIKE ? OR u2.name LIKE ? OR calls.subject LIKE ? OR calls.material LIKE ?)');
+    const searchTerm = `%${filter.search}%`;
+    params.push(searchTerm, searchTerm, searchTerm, searchTerm);
+  }
+  
+  // הוספת WHERE רק אם יש תנאים
   if (conditions.length > 0) {
     sql += ' WHERE ' + conditions.join(' AND ');
   }
+    // מיון
+  if (filter.sortBy) {
+    sql += ` ORDER BY ${filter.sortBy} ${filter.sortOrder || 'ASC'}`;
+  } else {
+    sql += ' ORDER BY c.startedAt DESC'; // ברירת מחדל - החדשות ביותר קודם
+  }
+
   const [rows] = await pool.query(sql, params);
   return rows.map(row => ({
     ...row,
+     id: row.chavrutaId, 
     user1: {
       id: row.user1_id,
       name: row.user1_name,
