@@ -137,15 +137,10 @@ const FullSignUp = () => {
                 navigate('/home');
             }
         } catch (error) {
-            // בדיקת שגיאת מייל קיים
-            if (
-                error?.response?.data?.message === "האימייל כבר רשום במערכת. אנא נסה אימייל אחר או התחבר." ||
-                error?.message === "האימייל כבר רשום במערכת. אנא נסה אימייל אחר או התחבר."
-            ) {
+           
+    console.error('Error during registration:', error);
+            alert('שגיאה במערכת אנא  נסה שנית או היכנס כמשתמש קיים');
                 navigate('/login');
-            } else {
-                alert("האימייל כבר רשום במערכת. אנא נסה אימייל אחר או התחבר.");
-            }
         }
     };
     return (
