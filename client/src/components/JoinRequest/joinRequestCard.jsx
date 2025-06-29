@@ -6,6 +6,40 @@ import { learningFormat, preferredDuration, ageRange, experienceLevel, sector } 
 function JoinRequestCard({ request, setRequests, refreshRequests, currentUserId }) {
   const [showSenderDetails, setShowSenderDetails] = useState(false);
   const [showCallDetails, setShowCallDetails] = useState(false);
+ const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const isOwner = request.targetUserId === currentUserId;
+  const isAdmin = currentUser?.role === "admin";
+
+    const handleDelete = async () => {
+    if (disabled) return;
+    setDisabled(true);
+    if (!(isOwner || isAdmin)) {
+      alert("רק בעל הבקשה או מנהל יכולים למחוק בקשה זו.");
+      return;
+    }
+    if (!apiService.confirmAction("האם אתה בטוח שברצונך לדחות את הבקשה?")) return;
+    try {
+      await apiService.deleteData(`joinRequests/${request.id}`);
+      refreshRequests();
+      setRequests((prev) => prev.filter((r) => r.id !== request.id));
+    } catch (error) {
+      alert("שגיאה במחיקת הבקשה ");
+    }
+  };
+const handleApprove = async () => {
+  try {
+    await apiService.addData("joinRequests/approve", {
+      user1: request.userId,
+      user2: request.targetUserId,
+      callId: request.callId
+    });
+    refreshRequests();
+    setRequests((prev) => prev.filter((r) => r.callId !== request.callId));
+    alert("חברותא נוצרה בהצלחה!");
+  } catch (err) {
+    alert("שגיאה ביצירת החברותא");
+  }
+};
 
   const statusLabel = {
     pending: "⏳ ממתינה",
@@ -48,7 +82,12 @@ function JoinRequestCard({ request, setRequests, refreshRequests, currentUserId 
           <p><strong>ביוגרפיה:</strong> {request.sender.bio}</p>
         </div>
       )}
-
+  {isOwner && (
+        <div className="call-buttons">
+          <button onClick={handleDelete}>מצטער, כבר לא רלוונטי</button>
+          <button onClick={handleApprove}>מצוין! 👍</button>
+        </div>
+      )}
       <div className="request-buttons">
         <button onClick={() => setShowCallDetails(prev => !prev)}>
           {showCallDetails ? "הסתר פרטי קריאה" : "הצג פרטי קריאה"}

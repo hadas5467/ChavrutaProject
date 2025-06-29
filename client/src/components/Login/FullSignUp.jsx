@@ -137,13 +137,14 @@ const FullSignUp = () => {
                 navigate('/home');
             }
         } catch (error) {
-           
-    console.error('Error during registration:', error);
+
+            console.error('Error during registration:', error);
             alert('שגיאה במערכת אנא  נסה שנית או היכנס כמשתמש קיים');
-                navigate('/login');
+            navigate('/login');
         }
     };
     return (
+         <div className="signup-wrapper">
         <form className="signup-form" onSubmit={handleSubmit}>
             <div className="stepper">
                 {steps.map((label, idx) => (
@@ -153,6 +154,7 @@ const FullSignUp = () => {
 
             {step === 0 && (
                 <>
+                <div className="step-grid">
                     <InputField label="טלפון" name="phone" icon={<Phone />} value={formData.phone} onChange={e => handleChange('phone', e.target.value)} />
                     <SelectField label="גיל" name="age" value={formData.age} onChange={e => handleChange('age', e.target.value)} options={age} />
                     <SelectField label="מגזר" name="sector" value={formData.sector} onChange={e => handleChange('sector', e.target.value)} options={sector} />
@@ -178,6 +180,7 @@ const FullSignUp = () => {
                         {formData.profile && typeof formData.profile !== 'string' && (
                             <img src={URL.createObjectURL(formData.profile)} alt="תמונה" style={{ maxWidth: 120, borderRadius: '50%' }} />
                         )}
+                    </div>
                     </div>
                 </>
             )}
@@ -259,6 +262,7 @@ const FullSignUp = () => {
                 {step === steps.length - 1 && <button type="submit">סיום</button>}
             </div>
         </form>
+        </div>
     );
 };
 
@@ -292,6 +296,8 @@ const TextAreaField = ({ label, name, value, onChange, icon }) => (
             <textarea name={name} value={value} onChange={onChange} className="input" rows="3" required></textarea>
         </div>
     </div>
+
+  
 );
 
 export default FullSignUp;

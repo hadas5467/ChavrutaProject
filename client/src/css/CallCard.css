@@ -1,6 +1,9 @@
 /* CallCard.css - עיצוב מודרני לפי אפיון */
 .call-card {
-  background-color: var(--color-border);
+   background: var(--color-surface);
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  /* background-color: var(--color-border); */
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(46, 125, 117, 0.1);

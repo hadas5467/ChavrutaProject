@@ -12,7 +12,7 @@ const ChavrutaList = ({ usersMap }) => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const userId = currentUser?.id;
   const isAdmin = currentUser?.role === 'admin';
- 
+
 
   // שליפת סטטוס מה-query (אם קיים)
   const searchParams = new URLSearchParams(location.search);
@@ -24,9 +24,9 @@ const ChavrutaList = ({ usersMap }) => {
     { value: 'status_pending_start', label: 'ממתינות להתחלה' },
     { value: 'status_ended', label: 'הסתיימו' },
     { value: 'mine', label: 'שייכות לי' },
-  { value: 'date_desc', label: 'חדשות ביותר' },
+    { value: 'date_desc', label: 'חדשות ביותר' },
     { value: 'date_asc', label: 'ישנות ביותר' }
-    ];
+  ];
 
   // אם יש type ברוט – נשלח אותו כברירת מחדל
   const initialSort = type ? `status_${type}` : '';
@@ -41,7 +41,7 @@ const ChavrutaList = ({ usersMap }) => {
     const nextOnlyMine = !onlyMine;
     setOnlyMine(nextOnlyMine);
     setEndpoint(nextOnlyMine ? `chavrutas/user/${userId}` : 'chavrutas/');
-       setSortKey(nextOnlyMine ? 'mine' : initialSort);
+    setSortKey(nextOnlyMine ? 'mine' : initialSort);
   };
 
   const renderChavruta = (chavruta, refreshItems) => (
@@ -64,29 +64,26 @@ const ChavrutaList = ({ usersMap }) => {
 
   return (
     <>
-    <Header />
-    <main className="profile-page">
-      {isAdmin && (
-       <div className="admin-toggle-wrapper">
-    <button className="toggle-btn" onClick={handleToggle}>
-      {onlyMine ? 'הצג את כל החברותות' : 'הצג רק את החברותות שלי'}
-    </button>
-  </div>
-      )}
-      <div className="chavruta-scroll-container">
-        <List className="chavruta-list"
-          endpoint={endpoint}
-          renderItem={renderChavruta}
-         // newItem={() => navigate('new')}
-          filters={filters}
-        
-   
-      
-        sort={listSortKey} 
-        defaultSort={initialSort}
-      />
-         </div>
-  </main>
+      <Header />
+      <main className="profile-page">
+        {isAdmin && (
+          <div className="admin-toggle-wrapper">
+            <button className="toggle-btn" onClick={handleToggle}>
+              {onlyMine ? 'הצג את כל החברותות' : 'הצג רק את החברותות שלי'}
+            </button>
+          </div>
+        )}
+        <div className="chavruta-scroll-container">
+          <List className="chavruta-list"
+            endpoint={endpoint}
+            renderItem={renderChavruta}
+            // newItem={() => navigate('new')}
+            filters={filters}
+            sort={listSortKey}
+            defaultSort={initialSort}
+          />
+        </div>
+      </main>
     </>
   );
 };

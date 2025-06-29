@@ -3,7 +3,6 @@ import {Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { signUpSchema } from '../../Schema/signUpSchema';
 import '../../css/Signup.css';
-
 const SignUp = () => {
   useEffect(() => {
     localStorage.removeItem('currentUser');
@@ -82,6 +81,14 @@ const SignUp = () => {
         <button type="submit" className="signup-button">
           המשך לשלב הבא
         </button>
+          <div className="signup-text">
+          <p>
+            יש לך חשבון?{' '}
+            <Link to="/login" className="signup-link">
+              התחבר כאן
+            </Link>
+          </p>
+        </div>
       </form>
     </div>
   );
@@ -135,14 +142,7 @@ const PasswordField = ({ value, onChange, showPassword, setShowPassword }) => (
         {showPassword ? <EyeOff /> : <Eye />}
       </button>
     </div>
-     <div className="signup-text">
-          <p>
-            יש לך חשבון?{' '}
-            <Link to="/login" className="signup-link">
-              התחבר כאן
-            </Link>
-          </p>
-        </div>
+   
   </div>
 );
 

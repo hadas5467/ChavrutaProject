@@ -14,18 +14,19 @@
   background: var(--color-surface);
   border-radius: 12px;
   box-shadow: 0 3px 12px 0 rgba(46, 125, 117, 0.10);
-  padding: 1.4rem 0.9rem;
-  max-width: 210px;
+  padding: 1.6rem 1.2rem;
+  max-width: 260px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.9rem;
   margin: 1rem 0;
   border: 0.8px solid var(--color-border);
+  box-sizing: border-box;
 }
 
 .call-form h3 {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   color: var(--color-primary);
   text-align: center;
   margin-bottom: 0.7rem;
@@ -35,14 +36,14 @@
 .call-form input,
 .call-form select,
 .call-form textarea {
-  padding: 0.55rem 0.7rem;
+  padding: 0.6rem 0.8rem;
   border-radius: 6px;
   border: 1px solid var(--color-border);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   background: var(--color-bg);
   color: var(--color-text);
   transition: border var(--transition), box-shadow var(--transition);
-  margin-bottom: 0.12rem;
+  margin-bottom: 0.15rem;
 }
 
 .call-form input:focus,
@@ -54,14 +55,14 @@
 }
 
 .call-form label {
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   color: var(--color-muted);
   margin-bottom: 0.1rem;
   font-weight: 500;
 }
 
 .call-form textarea {
-  min-height: 38px;
+  min-height: 42px;
   resize: vertical;
 }
 
@@ -70,8 +71,8 @@
   color: var(--color-bg);
   border: none;
   border-radius: 6px;
-  padding: 0.55rem 0;
-  font-size: 0.65rem;
+  padding: 0.6rem 0;
+  font-size: 0.75rem;
   font-weight: 600;
   margin-top: 0.5rem;
   transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
@@ -88,15 +89,17 @@
 
 @media (max-width: 600px) {
   .call-form {
-    padding: 0.7rem 0.3rem;
-    max-width: 60vw;
-    border-radius: 8px;
+    padding: 0.9rem 0.5rem;
+    max-width: 70vw;
+    border-radius: 10px;
   }
+
   .call-form h3 {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
+
   .call-form button[type="submit"] {
-    font-size: 0.55rem;
-    padding: 0.45rem 0;
+    font-size: 0.65rem;
+    padding: 0.5rem 0;
   }
 }
