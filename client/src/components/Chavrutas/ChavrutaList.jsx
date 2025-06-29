@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import List from '../List';
 import ChavrutaCard from './ChavrutaCard';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Header from '../Header';
+
 
 const ChavrutaList = ({ usersMap }) => {
   const navigate = useNavigate();
@@ -61,7 +63,9 @@ const ChavrutaList = ({ usersMap }) => {
   );
 
   return (
-    <div>
+    <>
+    <Header />
+    <main className="profile-page">
       {isAdmin && (
         <button onClick={handleToggle}>
           {onlyMine ? 'הצג את כל החברותות' : 'הצג רק את החברותות שלי'}
@@ -75,7 +79,8 @@ const ChavrutaList = ({ usersMap }) => {
         sort={listSortKey} 
         defaultSort={initialSort}
       />
-    </div>
+  </main>
+    </>
   );
 };
 
