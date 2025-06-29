@@ -20,7 +20,18 @@ export const validateCreateUser = [
   body('languages').optional().isString(),
   body('bio').optional().isString(),
   body('experienceLevel').optional().isIn(['beginner', 'intermediate', 'advanced', 'expert']),
-  body('availability').optional().isObject(),
+  body('availability').optional().custom(value => {
+  try {
+    const parsed = JSON.parse(value);
+    if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+      throw new Error('הזמינות חייבת להיות אובייקט');
+    }
+    return true;
+  } catch (e) {
+    throw new Error('הזמינות אינה בפורמט JSON תקין');
+  }
+}),
+
   body('availabilityStatus').optional().isIn(['available_now', 'open_to_chavruta', 'open_to_lessons', 'not_available']),
   body('tags').optional().isString()
 ];
