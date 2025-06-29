@@ -10,30 +10,30 @@ export const validateUserIdParam = [
 export const validateCreateUser = [
   body('name').isString().notEmpty().withMessage('חובה למלא שם'),
   body('gmail').isEmail().withMessage('כתובת מייל לא תקינה'),
-  body('phone').optional().isString(),
+  body('phone').optional().matches(/^[0-9\-\+]{9,15}$/).withMessage("מספר טלפון לא תקין"),
 
   body('age').optional().isIn(['18-25', '25-35', '35-45', '45-60', '60+']),
   body('sector').optional().isIn(['secular', 'traditional', 'religious', 'getting_stronger', 'baal_teshuva', 'haredi']),
   body('contactMethod').optional().isIn(['email', 'whatsapp', 'sms', 'system']),
   body('city').optional().isString(),
   body('country').optional().isString(),
-  body('languages').optional().isString(),
+  body('languages.*').isString().withMessage('כל שפה צריכה להיות מחרוזת'),
   body('bio').optional().isString(),
   body('experienceLevel').optional().isIn(['beginner', 'intermediate', 'advanced', 'expert']),
   body('availability').optional().custom(value => {
-  try {
-    const parsed = JSON.parse(value);
-    if (typeof parsed !== 'object' || Array.isArray(parsed)) {
-      throw new Error('הזמינות חייבת להיות אובייקט');
+    try {
+      const parsed = JSON.parse(value);
+      if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+        throw new Error('הזמינות חייבת להיות אובייקט');
+      }
+      return true;
+    } catch (e) {
+      throw new Error('הזמינות אינה בפורמט JSON תקין');
     }
-    return true;
-  } catch (e) {
-    throw new Error('הזמינות אינה בפורמט JSON תקין');
-  }
-}),
+  }),
 
   body('availabilityStatus').optional().isIn(['available_now', 'open_to_chavruta', 'open_to_lessons', 'not_available']),
-  body('tags').optional().isString()
+body('tags').optional().isLength({ max: 100 })
 ];
 
 // ולידציה לעדכון משתמש
@@ -41,18 +41,28 @@ export const validateUpdateUser = [
   ...validateUserIdParam,
   body('name').optional().isString(),
   body('gmail').optional().isEmail(),
-  body('phone').optional().isString(),
+  body('phone').optional().matches(/^[0-9\-\+]{9,15}$/).withMessage("מספר טלפון לא תקין"),
   body('age').optional().isIn(['18-25', '25-35', '35-45', '45-60', '60+']),
   body('sector').optional().isIn(['secular', 'traditional', 'religious', 'getting_stronger', 'baal_teshuva', 'haredi']),
   body('contactMethod').optional().isIn(['email', 'whatsapp', 'sms', 'system']),
   body('city').optional().isString(),
   body('country').optional().isString(),
-  body('languages').optional().isString(),
+  body('languages.*').isString().withMessage('כל שפה צריכה להיות מחרוזת'),
   body('bio').optional().isString(),
   body('experienceLevel').optional().isIn(['beginner', 'intermediate', 'advanced', 'expert']),
-  body('availability').optional().isObject(),
+  body('availability').optional().custom(value => {
+    try {
+      const parsed = JSON.parse(value);
+      if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+        throw new Error('הזמינות חייבת להיות אובייקט');
+      }
+      return true;
+    } catch (e) {
+      throw new Error('הזמינות אינה בפורמט JSON תקין');
+    }
+  }),
   body('availabilityStatus').optional().isIn(['available_now', 'open_to_chavruta', 'open_to_lessons', 'not_available']),
-  body('tags').optional().isString()
+body('tags').optional().isLength({ max: 100 })
 ];
 
 // ולידציה ללוגאין

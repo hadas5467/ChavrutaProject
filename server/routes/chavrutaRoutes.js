@@ -1,7 +1,7 @@
 import express from 'express';
-import { updateChavruta, getAllChavrutas, createChavruta, deleteChavruta, getChavrutasByUser } from '../controllers/ChavrutaController.js';
+import { updateChavruta, getAllChavrutas, createChavruta, deleteChavruta, getChavrutasByUser } from '../controllers/chavrutaController.js';
 import {verifyToken} from '../Middleware/authenticate.js';
-import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
+import { authorizeAdmin } from '../Middleware/authorize.js';
 import {
   validateChavrutaIdParam,
   validateCreateChavruta,
@@ -11,30 +11,26 @@ import { handleValidation } from '../Middleware/handleValidation.js';
 
 
 const router = express.Router();
-const authorizeChavrutaOwner = authorizeOwner({
-  tableName: 'CHAVRUTA',
-  idField: 'chavrutaId',
-  ownerFields: ['user1', 'user2'],
-  paramName: 'id'
-});
 
-const authorizeChavrutaOwnerOrAdmin = authorizeOwnerOrAdmin({
-  tableName: 'CHAVRUTA',
-  idField: 'chavrutaId',
-  ownerFields: ['user1', 'user2'],
-  paramName: 'id'
-});
-
-// ב־routes
-router.put('/chavruta/:id', verifyToken, authorizeChavrutaOwner, updateChavruta);
-router.delete('/chavruta/:id', verifyToken, authorizeChavrutaOwnerOrAdmin, deleteChavruta);
-
-// Get all 
 router.get('/', verifyToken,authorizeAdmin, getAllChavrutas);
 router.get('/user/:id', verifyToken,  validateChavrutaIdParam, handleValidation, getChavrutasByUser);
-//router.get('/:id', getCavrutaById);
 router.post('/', verifyToken,  validateCreateChavruta, handleValidation, createChavruta);
-router.put('/:id', verifyToken,  validateUpdateChavruta, handleValidation, authorizeOwnerOrAdmin, updateChavruta);
-router.delete('/:id', verifyToken,  validateChavrutaIdParam, handleValidation, authorizeOwnerOrAdmin, deleteChavruta);
+router.put('/:id', verifyToken,  validateUpdateChavruta, handleValidation, updateChavruta);
+router.delete('/:id', verifyToken,  validateChavrutaIdParam, handleValidation, authorizeAdmin, deleteChavruta);
 
 export default router;
+
+// משהו יפה שהתלבטנו על נכונותו
+// const authorizeChavrutaOwner = authorizeOwner({
+//   tableName: 'CHAVRUTA',
+//   idField: 'chavrutaId',
+//   ownerFields: ['user1', 'user2'],
+//   paramName: 'id'
+// });
+
+// const authorizeChavrutaOwnerOrAdmin = authorizeOwnerOrAdmin({
+//   tableName: 'CHAVRUTA',
+//   idField: 'chavrutaId',
+//   ownerFields: ['user1', 'user2'],
+//   paramName: 'id'
+// });

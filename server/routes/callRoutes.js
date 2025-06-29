@@ -10,25 +10,26 @@ import {
 import { handleValidation } from '../Middleware/handleValidation.js';
 
 
-const authorizeCallOwner = authorizeOwner({
-  tableName: 'CALLS',
-  idField: 'callId',
-  ownerFields: ['userId'],
-  paramName: 'id'
-});
 
-const authorizeCallOwnerOrAdmin = authorizeOwnerOrAdmin({
-  tableName: 'CALLS',
-  idField: 'callId',
-  ownerFields: ['userId'],
-  paramName: 'id'
-});
 const router = express.Router();
 
 router.get('/', verifyToken, getCalls);
-//router.get('/:id', getCallById);
 router.post('/', verifyToken, createCall);
-router.put('/:id', verifyToken,validateCreateCall, handleValidation, authorizeCallOwner, updateCall);
-router.delete('/:id', verifyToken,validateCreateCall, handleValidation, authorizeCallOwnerOrAdmin, deleteCall);
+router.put('/:id', verifyToken,validateCreateCall, handleValidation, updateCall);
+router.delete('/:id', verifyToken,validateCreateCall, handleValidation, authorizeAdmin, deleteCall);
 
 export default router;
+//  Something nice we debated about its correctness
+// const authorizeCallOwner = authorizeOwner({
+//   tableName: 'CALLS',
+//   idField: 'callId',
+//   ownerFields: ['userId'],
+//   paramName: 'id'
+// });
+
+// const authorizeCallOwnerOrAdmin = authorizeOwnerOrAdmin({
+//   tableName: 'CALLS',
+//   idField: 'callId',
+//   ownerFields: ['userId'],
+//   paramName: 'id'
+// });

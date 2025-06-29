@@ -147,12 +147,12 @@ export const getCalls = async (req, res) => {
       filter.targetUserId = currentUserId; // תיקון: currentUserId במקום id
     } else if (userId) {
       // אם הוא מנהל וביקש מזהה ספציפי, סנן לפיו
-      filter.targetUserId = userId;
+        filter.targetUserId = userId;
     }
 
 
 
-    const calls = await callServices.findByFilter(filter);
+    const calls = await callServices.findByFilterCall(filter);
     res.status(200).json(calls ?? []);
   } catch (error) {
     console.error("getCalls error:", error);
