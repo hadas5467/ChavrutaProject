@@ -151,7 +151,7 @@ export const findByFilter = async (filter = {}) => {
   } else {
     sql += ' ORDER BY c.createdAt DESC'; // ברירת מחדל - החדשות ביותר קודם
   }
-  sql += ' ORDER BY c.createdAt DESC';
+  
   
   const [rows] = await pool.query(sql, params);
   return rows.map(row => ({
