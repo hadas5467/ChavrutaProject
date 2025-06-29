@@ -53,7 +53,7 @@
 
 /* ✅ HEADER בגובה 22% ובפרופורציה */
 .home-header {
-  width: 100%;
+  width: 100vw;
   height: 22vh;
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   padding: 0 2rem;
@@ -68,12 +68,44 @@
 }
 
 .home-header h1 {
-  font-size: 1.8rem;
+  font-size: 3.1rem;
   font-weight: bold;
   color: var(--color-bg);
   margin: 0;
   white-space: nowrap;
 }
+
+.home-header p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-bg);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.profile-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #888;
+  object-fit: cover;
+  background-color: #f0f0f0;
+  display: block;
+}
+
+.profile-image.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #eee;
+  text-align: center;
+}
+
+
+
 
 .home-subtitle {
   font-size: 1rem;

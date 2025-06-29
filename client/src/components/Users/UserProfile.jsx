@@ -4,6 +4,7 @@ import { User, Mail, Phone, Calendar, Edit, Save, X, Globe, MapPin, FileImage } 
 import { contactMethod, sector, age, languageMap, availabilityStatus, ageRange } from '../formatHelpers';
 import { fetchData, UpdateData } from '../apiService';
 import { UserProfileSchema } from '../../Schema/UserProfile'; // הוסיפי למעלה
+import Header from '../Header';
 
 const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -43,7 +44,7 @@ const ProfilePage = () => {
                     city: user.city || '',
                     bio: user.bio || '',
                     profile: user.profile || '',
-                   availability: user.availability || ""
+                    availability: user.availability || ""
                 };
                 setFormData(data);
                 setOriginalData(data);
@@ -120,6 +121,9 @@ const ProfilePage = () => {
     const availabilityOptions = Object.entries(availabilityStatus).map(([value, label]) => ({ value, label }));
 
     return (
+         <>
+    <Header />
+        <main className="profile-page">
         <div className="profile-container">
             <div className="profile-card">
                 <div className="profile-header">
@@ -307,6 +311,8 @@ const ProfilePage = () => {
                 </div>
             </div>
         </div>
+        </main>
+          </>
     );
 };
 
