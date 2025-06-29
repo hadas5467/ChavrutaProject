@@ -10,14 +10,15 @@ export const getCalls = async (req, res) => {
       userId, place, learningFormat, subject, ageRange, isActive, callId,
       userSearch, subjectSearch, startDate, endDate, sortBy, sortOrder, search
     } = req.query;
-     if (userSearch) filter.userSearch = userSearch;
+     
+    let filter = {};
+    if (userSearch) filter.userSearch = userSearch;
     if (subjectSearch) filter.subjectSearch = subjectSearch;
     if (startDate) filter.startDate = startDate;
     if (endDate) filter.endDate = endDate;
     if (sortBy) filter.sortBy = sortBy;
     if (sortOrder) filter.sortOrder = sortOrder;
     if (search) filter.search = search;
-    let filter = {};
 
     if (!sex || !currentUserId) {
       return res.status(401).json({ message: "Unauthorized" });

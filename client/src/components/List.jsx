@@ -171,7 +171,7 @@ const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFi
                 />
               </div>
               <div >
-             {isChavruta 
+             {endpoint.includes('chavrutas')
                 ? 'תאריך התחלת החברותא (לא תאריך יצירת הקריאה)'
                 : 'תאריך יצירת הקריאה'
               }
