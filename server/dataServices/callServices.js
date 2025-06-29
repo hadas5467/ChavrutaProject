@@ -116,7 +116,41 @@ export const findByFilter = async (filter = {}) => {
     sql += ' AND c.callId = ?';
     params.push(filter.callId);
   }
+   // חיפוש לפי שם משתמש (שולח הקריאה)
+  if (filter.userSearch) {
+    sql += ' AND u.name LIKE ?';
+    const searchTerm = `%${filter.userSearch}%`;
+    params.push(searchTerm);
+  }
   
+  // חיפוש בנושא או חומרים
+  if (filter.subjectSearch) {
+    sql += ' AND (c.subject LIKE ? OR c.material LIKE ?)';
+    const searchTerm = `%${filter.subjectSearch}%`;
+    params.push(searchTerm, searchTerm);
+  }
+  
+  // סינון לפי תאריך יצירה
+  if (filter.startDate) {
+    sql += ' AND c.createdAt >= ?';
+    params.push(filter.startDate);
+  }
+  if (filter.endDate) {
+    sql += ' AND c.createdAt <= ?';
+    params.push(filter.endDate);
+  }
+    if (filter.search) {
+    sql += ' AND (u.name LIKE ? OR c.subject LIKE ? OR c.material LIKE ? OR c.notes LIKE ?)';
+    const searchTerm = `%${filter.search}%`;
+    params.push(searchTerm, searchTerm, searchTerm, searchTerm);
+  }
+  
+  // מיון
+  if (filter.sortBy) {
+    sql += ` ORDER BY ${filter.sortBy} ${filter.sortOrder || 'ASC'}`;
+  } else {
+    sql += ' ORDER BY c.createdAt DESC'; // ברירת מחדל - החדשות ביותר קודם
+  }
   sql += ' ORDER BY c.createdAt DESC';
   
   const [rows] = await pool.query(sql, params);

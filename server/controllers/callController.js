@@ -6,7 +6,17 @@ export const getCalls = async (req, res) => {
     const sex = req.user.sex;
     const currentUserId = req.user.id;
     const role = req.user.role; // תיקון: role במקום id
-    const { userId, place, learningFormat, subject, ageRange, isActive, callId } = req.query;
+    const { 
+      userId, place, learningFormat, subject, ageRange, isActive, callId,
+      userSearch, subjectSearch, startDate, endDate, sortBy, sortOrder, search
+    } = req.query;
+     if (userSearch) filter.userSearch = userSearch;
+    if (subjectSearch) filter.subjectSearch = subjectSearch;
+    if (startDate) filter.startDate = startDate;
+    if (endDate) filter.endDate = endDate;
+    if (sortBy) filter.sortBy = sortBy;
+    if (sortOrder) filter.sortOrder = sortOrder;
+    if (search) filter.search = search;
     let filter = {};
 
     if (!sex || !currentUserId) {
