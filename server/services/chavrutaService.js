@@ -5,7 +5,7 @@ import { create as createChavruta, getChavrutaById } from '../dataServices/chavr
 import { update as updateCall } from '../dataServices/callServices.js';
 import { updateByCallAndUser as updateJoinRequest } from '../dataServices/joinRequestSevices.js';
 
-export const handleChavrutaCreation = async (chavrutaData) => {
+export const handleChavrutaCreation = async (chavrutaData, connection = pool) => {
   const { user1, user2, callId, notesUser1 = '', notesUser2 = '' } = chavrutaData;
 
   // שליפת הקריאה

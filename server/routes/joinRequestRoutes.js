@@ -1,5 +1,5 @@
 import express from 'express';
-import {  getAllJoinRequests,getJoinRequestsByUser, getJoinRequestsByCall, createJoinRequest, updateJoinRequest, deleteJoinRequest } from '../controllers/joinRequestController.js';
+import { approveJoinRequestController , getAllJoinRequests,getJoinRequestsByUser, getJoinRequestsByCall, createJoinRequest, updateJoinRequest, deleteJoinRequest } from '../controllers/joinRequestController.js';
 import { verifyToken } from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
 //רעיון יפיפה של בדיקות הרשאה שהתלבטנו על נכונותו
@@ -27,6 +27,7 @@ router.get('/byCall/:callId', verifyToken, getJoinRequestsByCall);
 
 //router.get('/',verifyToken, getJoinRequests);
 //router.get('/:id', getjoinRequesById);
+router.post('/approve', verifyToken, approveJoinRequestController);
 router.post('/',verifyToken, createJoinRequest);
 router.put('/:id',verifyToken, authorizeJoinRequestOwnerOrAdmin, updateJoinRequest);
 router.delete('/:id',verifyToken, deleteJoinRequest);

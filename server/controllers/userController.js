@@ -29,6 +29,15 @@ export const loginUser = async (req, res) => {
   }
 };
 
+export const logoutUser = (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: false, // true בפרודקשן
+  });
+  res.status(200).json({ message: "הת déחברת בהצלחה" });
+};
+
 
 export const getUsers = async (req, res) => {
   try {

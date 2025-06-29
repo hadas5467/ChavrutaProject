@@ -1,5 +1,8 @@
 import * as joinRequestServices from "../dataServices/joinRequestSevices.js";
 import * as service from "../services/joinRequestService.js";
+//import { approveJoinRequest } from '../services/joinRequestService.js';
+
+
 // קבלת כל הבקשות (או לפי סינון)
 export const getAllJoinRequests = async (req, res) => {
   try {
@@ -32,6 +35,23 @@ export const getJoinRequestsByUser = async (req, res) => {
     res.status(500).json({ message: "שגיאה בשרת" });
   }
 };
+
+
+export const approveJoinRequestController = async (req, res) => {
+  try {
+    const { user1, user2, callId } = req.body;
+    if (!user1 || !user2 || !callId) {
+      return res.status(400).json({ message: "שדות חסרים" });
+    }
+
+    const result = await service.approveJoinRequest({ user1, user2, callId });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("approveJoinRequest error:", error);
+    res.status(500).json({ message: "שגיאה באישור הבקשה" });
+  }
+};
+
 
 export const getJoinRequestsByCall = async (req, res) => {
   try {
@@ -78,19 +98,41 @@ export const updateJoinRequest = async (req, res) => {
 };
 
 // מחיקת בקשה
+// export const deleteJoinRequest = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//      await service.handleJoinRequestDelete(id);
+//     let result = await joinRequestServices.deleteJoinRequest(id);// נניח שיש פונקציה שמטפלת במחיקת בקשה
+//     if (!result || result.affectedRows === 0) {
+//       return res.status(404).json({ message: "לא נמצא" });
+//     }
+//     res.status(200).json({ message: "נמחק בהצלחה" });
+//   } catch (error) {
+//     console.error("deleteJoinRequest error:", error);
+//     res.status(500).json({ message: "שגיאה בשרת" });
+//   }
+// };
+
+
+import { handleJoinRequestDelete } from '../services/joinRequestService.js';
+
 export const deleteJoinRequest = async (req, res) => {
   try {
     const id = req.params.id;
-     await service.handleJoinRequestDelete(id);
-    let result = await joinRequestServices.deleteJoinRequest(id);// נניח שיש פונקציה שמטפלת במחיקת בקשה
+
+    const result = await handleJoinRequestDelete(id); // ✔️ מחיקה + מייל
+
     if (!result || result.affectedRows === 0) {
       return res.status(404).json({ message: "לא נמצא" });
     }
+
     res.status(200).json({ message: "נמחק בהצלחה" });
   } catch (error) {
     console.error("deleteJoinRequest error:", error);
     res.status(500).json({ message: "שגיאה בשרת" });
   }
 };
+
+
 
 //npm install nodemailer

@@ -1,6 +1,6 @@
 import pool from './DB.js';
-export const getCallCreatorByJoinRequestId = async (joinRequestId) => {
-  const [rows] = await pool.query(`
+export const getCallCreatorByJoinRequestId = async (joinRequestId , connection = pool) => {
+  const [rows] = await connection.query(`
 SELECT 
   jr.userId AS creatorId,
   u.name AS creatorName,
@@ -20,7 +20,7 @@ WHERE jr.joinRequestId = ?
 
 
 // קבלת בקשות הצטרפות עם סינון
-export const findByFilter = async (filter = {}) => {
+export const findByFilter = async (filter = {}, connection = pool) => {
   let sql = 'SELECT * FROM JOIN_REQUESTS';
   const params = [];
   const conditions = [];
@@ -55,7 +55,7 @@ export const findByFilter = async (filter = {}) => {
 };
 
 // יצירת בקשת הצטרפות חדשה
-export const create = async (joinRequest) => {
+export const create = async (joinRequest, connection = pool) => {
   const sql = `INSERT INTO JOIN_REQUESTS (callId, userId, targetUserId, details, status)
     VALUES (?, ?, ?, ?, ?)`;
   const params = [
@@ -70,7 +70,7 @@ export const create = async (joinRequest) => {
 };
 
 // עדכון בקשת הצטרפות
-export const update = async (joinRequestId, joinRequest) => {
+export const update = async (joinRequestId, joinRequest, connection = pool) => {
   const fields = [];
   const params = [];
   for (const key of ['callId', 'userId', 'details', 'status']) {
@@ -88,13 +88,13 @@ export const update = async (joinRequestId, joinRequest) => {
 };
 
 // מחיקת בקשת הצטרפות
-export const deleteJoinRequest = async (joinRequestId) => {
+export const deleteJoinRequest = async (joinRequestId, connection = pool) => {
   const sql = 'DELETE FROM JOIN_REQUESTS WHERE joinRequestId = ?';
-  const [result] = await pool.query(sql, [joinRequestId]);
+  const [result] = await connection.query(sql, [joinRequestId]);
   return result;
 };
 
-export const updateByCallAndUser = async ({ callId, userId }, updateFields) => {
+export const updateByCallAndUser = async ({ callId, userId }, updateFields, connection = pool) => {
   const fields = [];
   const params = [];
   for (const key of ['callId', 'userId', 'details', 'status']) {

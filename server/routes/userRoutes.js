@@ -1,10 +1,17 @@
 import express from 'express';
-import { getUsers,getById, loginUser, createUser, updateUser, deleteUser } from '../controllers/userController.js';
+import { getUsers,getById, loginUser,logoutUser, createUser, updateUser, deleteUser } from '../controllers/userController.js';
 import { verifyToken } from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
 import upload  from '../Middleware/multer.js';
 import { checkImageAccess } from '../Middleware/imageAccess.js';
 import path from 'path';
+import {
+  validateUserIdParam,
+  validateCreateUser,
+  validateUpdateUser,
+  validateLogin
+} from '../validations/userValidation.js';
+import { handleValidation } from '../validations/handleValidation.js';
 //מבנה יפה של בדיקות הרשאה שהתלבטנו על נכונותו
 // const authorizeUserOwner = authorizeOwner({
 //   tableName: 'USERS',
@@ -23,8 +30,9 @@ const router = express.Router();
 
 router.get('/', verifyToken, getUsers);
 router.get('/:id', verifyToken, getById);
-router.post('/logIn', loginUser);
-router.post('/register', upload.single("profile"), createUser);
+router.post('/logIn' , validateLogin, handleValidation, loginUser);
+router.post('/register', upload.single("profile"),validateCreateUser, handleValidation, createUser);
+router.post('/logout', logoutUser);
 router.put('/:id', verifyToken, upload.single("profile"), updateUser);
 //להפוך בהמשך לחסימת משתמש
 router.delete('/:id', verifyToken, authorizeAdmin, deleteUser);

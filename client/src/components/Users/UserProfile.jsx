@@ -28,7 +28,6 @@ const ProfilePage = () => {
             const userId = JSON.parse(localStorage.getItem('currentUser'))?.id;
             if (!userId) return;
 
-
             try {
                 const user = await fetchData(`users/${userId}`);
                 if (!user) return;
@@ -44,7 +43,7 @@ const ProfilePage = () => {
                     city: user.city || '',
                     bio: user.bio || '',
                     profile: user.profile || '',
-                    availability: JSON.stringify(user.availability || {})
+                   availability: user.availability || ""
                 };
                 setFormData(data);
                 setOriginalData(data);
@@ -55,12 +54,12 @@ const ProfilePage = () => {
 
         loadUserData();
     }, []);
+
     const handleSave = async () => {
         try {
             const userId = JSON.parse(localStorage.getItem('currentUser'))?.id;
             if (!userId) return;
 
-            // המרה לשמות השדות של הסכמה
             const dataForValidation = {
                 name: formData.fullName,
                 gmail: formData.email,
@@ -72,9 +71,9 @@ const ProfilePage = () => {
                 country: 'ישראל',
                 languages: Array.isArray(formData.languages) ? formData.languages : [formData.languages],
                 bio: formData.bio,
-                experienceLevel: '', // אם יש לך שדה כזה
+                experienceLevel: '',
                 availabilityStatus: formData.availability,
-                tags: [] // אם יש לך תגיות
+                tags: []
             };
 
             const result = UserProfileSchema.safeParse(dataForValidation);
@@ -103,7 +102,6 @@ const ProfilePage = () => {
             console.error('שגיאה בעדכון המשתמש:', err);
         }
     };
-
 
     const handleCancel = () => {
         if (originalData) {
@@ -154,21 +152,36 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="form-grid">
-                    {/* שדות רגילים */}
                     {[
                         { label: 'שם מלא', key: 'fullName', icon: <User />, type: 'text' },
                         { label: 'כתובת מייל', key: 'email', icon: <Mail />, type: 'email', editable: false },
                         { label: 'מספר טלפון', key: 'phoneNumber', icon: <Phone />, type: 'tel' },
-                        // { label: 'גיל', key: 'age', icon: <Calendar />, type: 'text', editable: true, options: age },
-                    
                         { label: 'שפות', key: 'languages', icon: <Globe />, type: 'select', editable: true, options: languageOptions },
                         { label: 'עיר', key: 'city', icon: <MapPin />, type: 'text' },
-                      //  { label: 'תמונת פרופיל (URL)', key: 'profile', icon: <FileImage />, type: 'text' },
-                        { label: 'זמינות', key: 'availability', icon: <Calendar />, type: 'select', editable: true, options: availabilityOptions }
+                        { label: 'זמינות', key: 'availability', icon: <Calendar />, type: 'custom' }
                     ].map(({ label, key, icon, type, editable = true, options }) => (
                         <div key={key}>
                             <label className="field-label">{label}</label>
-                            {isEditing && editable ? (
+                            {type === 'custom' && key === 'availability' ? (
+                                isEditing ? (
+                                    <select
+                                        value={formData.availability}
+                                        onChange={e => setFormData({ ...formData, availability: e.target.value })}
+                                        className="input"
+                                    >
+                                        {Object.entries(availabilityStatus).map(([value, label]) => (
+                                            <option key={value} value={value}>
+                                                {label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    <div className="input-display">
+                                        {icon}
+                                        <span>{availabilityStatus[formData.availability] || formData.availability}</span>
+                                    </div>
+                                )
+                            ) : isEditing && editable ? (
                                 type === 'select' ? (
                                     <select
                                         value={formData[key]}
@@ -197,26 +210,27 @@ const ProfilePage = () => {
                             )}
                         </div>
                     ))}
-    <div>
-                            <label className="field-label">גיל</label>
-                            {isEditing ? (
-                                <select
-                                    value={formData.age}
-                                    onChange={e => setFormData({ ...formData, age: e.target.value })}
-                                    className="input"
-                                >
-                                    <option value="">בחר גיל</option>
-                                    {Object.entries(ageRange).map(([value, label]) => (
-                                        <option key={value} value={value}>{label}</option>
-                                    ))}
-                                </select>
-                            ) : (
-                                <div className="input-display">
-                                    <span>{ageRange[formData.age] || formData.age}</span>
-                                </div>
-                            )}
-                        </div> 
-                    {/* ביוגרפיה */}
+
+                    <div>
+                        <label className="field-label">גיל</label>
+                        {isEditing ? (
+                            <select
+                                value={formData.age}
+                                onChange={e => setFormData({ ...formData, age: e.target.value })}
+                                className="input"
+                            >
+                                <option value="">בחר גיל</option>
+                                {Object.entries(ageRange).map(([value, label]) => (
+                                    <option key={value} value={value}>{label}</option>
+                                ))}
+                            </select>
+                        ) : (
+                            <div className="input-display">
+                                <span>{ageRange[formData.age] || formData.age}</span>
+                            </div>
+                        )}
+                    </div>
+
                     <div>
                         <label className="field-label">ביוגרפיה</label>
                         {isEditing ? (
@@ -231,6 +245,7 @@ const ProfilePage = () => {
                             </div>
                         )}
                     </div>
+
                     <div>
                         <label className="field-label">תמונת פרופיל</label>
                         {formData.profile && (
@@ -247,7 +262,7 @@ const ProfilePage = () => {
                             </div>
                         )}
                     </div>
-                    {/* סקטור */}
+
                     <div>
                         <label className="field-label">סקטור</label>
                         {isEditing ? (
@@ -269,7 +284,6 @@ const ProfilePage = () => {
                         )}
                     </div>
 
-                    {/* אמצעי תקשורת מועדף */}
                     <div>
                         <label className="field-label">אמצעי התקשרות מועדף</label>
                         {isEditing ? (

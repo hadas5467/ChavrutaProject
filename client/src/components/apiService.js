@@ -2,7 +2,7 @@ const BASE_URL = "http://localhost:4000/api";
 
 export function confirmAction(message) {
     const userConfirmed = window.confirm(message);
-    return userConfirmed; // מחזירה true אם המשתמש אישר, false אם ביטל
+    return userConfirmed; 
 }
 
 // שליפה מהשרת
@@ -37,7 +37,6 @@ export async function addData(apiPath, dataToAdd, isFormData = false) {
 
         if (isFormData) {
             options.body = dataToAdd; // FormData
-            // לא להגדיר headers, הדפדפן יגדיר Content-Type מתאים
         } else {
             options.headers = { "Content-Type": "application/json" };
             options.body = JSON.stringify(dataToAdd);
