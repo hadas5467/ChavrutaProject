@@ -1,10 +1,11 @@
+/* מרכז את הדף ומגדיר רקע */
 .login-wrapper {
   min-height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom right, #e0f2fe, #f0f9ff);
+  background: linear-gradient(to bottom right, #ebf8ff, #dbeafe);
   padding: 1rem;
   direction: rtl;
   box-sizing: border-box;
@@ -18,6 +19,7 @@
   align-items: center;
 }
 
+/* תיבת ההתחברות */
 .login-box {
   width: 100%;
   background: white;
@@ -39,7 +41,7 @@
 }
 
 .icon-bg {
-  background-color: #a78bfa;
+  background-color: #dbeafe;
   padding: 0.75rem;
   border-radius: 50%;
 }
@@ -47,7 +49,7 @@
 .icon {
   width: 2rem;
   height: 2rem;
-  color: #ffffff;
+  color: #2563eb;
 }
 
 .login-title {
@@ -140,25 +142,23 @@
 
 .login-button {
   width: 100%;
-  background: linear-gradient(to right, #06b6d4, #0ea5e9);
+  background-color: #2563eb;
   color: white;
   padding: 0.75rem;
   font-size: 1rem;
   border: none;
-  border-radius: 999px;
+  border-radius: 0.5rem;
   font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  transition: background 0.3s, transform 0.2s;
+  transition: background-color 0.3s;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
 }
 
 .login-button:hover {
-  background: linear-gradient(to right, #0ea5e9, #06b6d4);
-  transform: translateY(-2px);
+  background-color: #1d4ed8;
 }
 
 .login-button:disabled {
@@ -197,6 +197,7 @@
   text-decoration: underline;
 }
 
+/* רספונסיביות למסכים קטנים */
 @media (max-width: 480px) {
   .login-wrapper {
     padding: 0.5rem;
@@ -222,5 +223,25 @@
   .login-button {
     font-size: 0.95rem;
     padding: 0.65rem;
+  }
+}
+
+/* רספונסיביות למסכים בינוניים */
+@media (min-width: 481px) and (max-width: 900px) {
+  .login-container {
+    max-width: 400px;
+  }
+  .login-box {
+    padding: 1.75rem;
+  }
+}
+
+/* רספונסיביות למסכים גדולים */
+@media (min-width: 901px) {
+  .login-container {
+    max-width: 450px;
+  }
+  .login-box {
+    padding: 2.5rem;
   }
 }
