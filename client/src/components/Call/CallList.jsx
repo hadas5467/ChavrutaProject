@@ -103,7 +103,7 @@ const CallsList = () => {
       <List
         endpoint="calls"
         renderItem={renderItem}
-        filters={sortFilters}
+        sortFilters={sortFilters}
         newItem={() => navigate('/CallFrom')}
         sort={sortKey}
       />

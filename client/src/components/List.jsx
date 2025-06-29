@@ -20,6 +20,14 @@ const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFi
   const [subjectSearch, setSubjectSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
+
+   useEffect(() => {
+    setSort(initialSort || defaultSort);
+  }, [initialSort, defaultSort]);
+
+  useEffect(() => {
+    fetchFilteredData();
+  }, [endpoint, search, userSearch, subjectSearch, sort, statusFilter, idFilter, startDate, endDate]);
   const handleClick = () => {
     if (newItem) {
       newItem();
@@ -52,7 +60,12 @@ const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFi
       const status = statusFilter.replace('status_', '');
       queryParams.push(`status=${status}`);
     }
-
+if (sort === 'mine') {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (currentUser) {
+        queryParams.push(`userId=${currentUser.id}`);
+      }
+    }
     if (sort === 'completed') queryParams.push('completed=true');
     else if (sort === 'unCompleted') queryParams.push('completed=false');
     else if (sort === 'date_asc') {
