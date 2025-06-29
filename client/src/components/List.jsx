@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchData } from './apiService';
-
+import '../css/list.css';
 const RenderedItem = React.memo(({ item, refreshItems, handleDelete, renderItem }) => {
   return (
     <li>
@@ -9,7 +9,7 @@ const RenderedItem = React.memo(({ item, refreshItems, handleDelete, renderItem 
   );
 });
 
-const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFilters , sort: initialSort = '' }) => {
+const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFilters, sort: initialSort = '' }) => {
   const [items, setItems] = useState([]);
   const [search, setSearch] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -56,14 +56,14 @@ const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFi
     if (sort === 'completed') queryParams.push('completed=true');
     else if (sort === 'unCompleted') queryParams.push('completed=false');
     else if (sort === 'date_asc') {
-    if (isJoinRequest) {
-      queryParams.push('sortBy=createdAt&sortOrder=ASC');
+      if (isJoinRequest) {
+        queryParams.push('sortBy=createdAt&sortOrder=ASC');
+      }
+    } else if (sort === 'date_desc') {
+      if (isJoinRequest) {
+        queryParams.push('sortBy=createdAt&sortOrder=DESC'); // ← כאן הטעות במקור
+      }
     }
-  } else if (sort === 'date_desc') {
-    if (isJoinRequest) {
-      queryParams.push('sortBy=createdAt&sortOrder=DESC'); // ← כאן הטעות במקור
-    }
-  }
     else if (sort === 'id') queryParams.push('_sort=id&_order=asc');
     else if (sort === 'alphabetical') queryParams.push('_sort=title&_order=asc');
 
@@ -88,7 +88,10 @@ const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFi
   return (
     <div>
       <div>
-        <button onClick={handleClick}>NEW</button>
+        {!endpoint.includes('joinRequests') && !endpoint.includes('chavrutas') && (
+          <button onClick={handleClick}>קריאה חדשה</button>
+        )}
+        <div className="list-controls">
         <input type="text" placeholder="חיפוש כללי..." value={search} onChange={(e) => setSearch(e.target.value)} />
         {(endpoint.includes('chavrutas') || endpoint.includes('calls') || endpoint.includes('joinRequests')) && (
           <input type="text" placeholder="חיפוש לפי שם החבר..." value={userSearch} onChange={(e) => setUserSearch(e.target.value)} />
@@ -108,16 +111,17 @@ const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFi
             </div>
           </>
         )}
-       {(!endpoint.includes('joinRequests') && <div>
+        {(!endpoint.includes('joinRequests') && <div>
           <label>סנן לפי</label>
           <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
             <option value="">הכל </option>
             {filters?.map((filter) => (
               <option key={filter.value} value={filter.value}>{filter.label}</option>
-        ))}
+            ))}
           </select>
         </div>)}
-        <div>
+</div>
+        {/* <div>
           <label>מיון לפי תאריך:</label>
           <select onChange={(e) => setSort(e.target.value)} value={sort}>
             <option value="">ברירת מחדל</option>
@@ -125,7 +129,7 @@ const List = ({ endpoint, renderItem, filters, newItem, defaultSort = '', sortFi
               <option key={filter.value} value={filter.value}>{filter.label}</option>
             ))}
           </select>
-        </div>
+        </div> */}
       </div>
       <ul>
         {items.map((item) => (

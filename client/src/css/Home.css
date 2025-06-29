@@ -21,6 +21,23 @@
   box-sizing: border-box;
 }
 
+.header-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.8rem;
+  justify-content: flex-start;
+}
+
+.header-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.8rem;
+  justify-content: flex-start;
+}
+
+
 .home-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
