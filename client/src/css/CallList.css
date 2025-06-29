@@ -1,18 +1,15 @@
-.calls-page-container {
-  direction: rtl;
-  padding: 2rem;
-  max-width: 900px;
-  margin: auto;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+.calls-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  padding: 0;
+  list-style: none;
 }
 
-.calls-page-container h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #333;
-  font-size: 2rem;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 0.5rem;
+.calls-list li {
+  flex: 1 1 300px;
+  max-width: 360px;
 }
 
 .calls-filters {
@@ -20,86 +17,10 @@
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .calls-filters input,
-.calls-filters select,
-.calls-filters button {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-}
-
-.calls-filters input:focus,
-.calls-filters select:focus {
-  outline: none;
-  border-color: #888;
-  box-shadow: 0 0 5px rgba(100, 100, 100, 0.3);
-}
-
-.calls-filters button {
-  background-color: #f5f5f5;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.calls-filters button:hover {
-  background-color: #e0e0e0;
-}
-
-.calls-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.calls-list li {
-  margin-bottom: 1.5rem;
-}
-
-.calls-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  justify-content: flex-start;
-}
-
-.calls-controls input,
-.calls-controls select {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
-
-/* CallList.css - עיצוב רשימת שיחות */
-.call-list-container {
-  composes: container from './theme.css';
-  display: flex;
-  flex-direction: column;
-  gap: 1.5em;
-  background: var(--color-bg);
-}
-
-@media (max-width: 600px) {
-  .call-list-container {
-    padding: 0.5em 0.1em;
-  }
-}
-/* לדוג' ב-client/css/ChavrutaList.css או בקובץ הראשי */
-.chavruta-list, .requests-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px; /* ריווח בין כרטיסים */
-  justify-content: flex-start; /* או center אם תרצה */
-}
-
-.chavruta-card, .call-card {
-  min-width: 300px;
-  max-width: 350px;
-  flex: 1 1 300px;
+.calls-filters select {
+  width: 180px;
 }

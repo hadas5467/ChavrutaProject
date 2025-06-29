@@ -7,7 +7,7 @@ import {
   validateCreateChavruta,
   validateUpdateChavruta
 } from '../validations/chavrutaValidation.js';
-import { handleValidationChavruta } from '../Middleware/handleValidationChavruta.js';
+import { handleValidation } from '../Middleware/handleValidation.js';
 
 
 const router = express.Router();
@@ -31,10 +31,10 @@ router.delete('/chavruta/:id', verifyToken, authorizeChavrutaOwnerOrAdmin, delet
 
 // Get all 
 router.get('/', verifyToken,authorizeAdmin, getAllChavrutas);
-router.get('/user/:id', verifyToken,  validateCreateChavruta, handleValidationChavruta, getChavrutasByUser);
+router.get('/user/:id', verifyToken,  validateChavrutaIdParam, handleValidation, getChavrutasByUser);
 //router.get('/:id', getCavrutaById);
-router.post('/', verifyToken,  validateCreateChavruta, handleValidationChavruta, createChavruta);
-router.put('/:id', verifyToken,  validateUpdateChavruta, handleValidationChavruta, authorizeOwnerOrAdmin, updateChavruta);
-router.delete('/:id', verifyToken,  validateChavrutaIdParam, handleValidationChavruta, authorizeOwnerOrAdmin, deleteChavruta);
+router.post('/', verifyToken,  validateCreateChavruta, handleValidation, createChavruta);
+router.put('/:id', verifyToken,  validateUpdateChavruta, handleValidation, authorizeOwnerOrAdmin, updateChavruta);
+router.delete('/:id', verifyToken,  validateChavrutaIdParam, handleValidation, authorizeOwnerOrAdmin, deleteChavruta);
 
 export default router;

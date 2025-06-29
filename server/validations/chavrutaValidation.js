@@ -23,3 +23,4 @@ export const validateUpdateChavruta = [
   body('notesUser1').optional().isString(),
   body('notesUser2').optional().isString()
 ];
+

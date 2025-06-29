@@ -6,8 +6,8 @@ import { callSchema } from '../../Schema/CallSchema.js';
 import {
   learningFormat, preferredDuration, ageRange
 } from '../formatHelpers';
-import '../../css/CallCard.css'
-
+//import '../../css/CallForm.css'; // 🔹 ודא שהקובץ נמצא בתיקיית css
+import '../../css/CallFrom.css'
 const CallForm = ({ onSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -88,8 +88,9 @@ const CallForm = ({ onSuccess }) => {
   };
 
   return (
+     <div className="call-form-page">
     <form className="call-card call-form" onSubmit={handleSubmit}>
-      <h3>📢 יצירת קריאה חדשה</h3>
+      <h3> יצירת קריאה חדשה</h3>
       <input name="subject" placeholder="נושא" value={formData.subject} onChange={handleChange} required />
       <input name="material" placeholder="חומר לימוד" value={formData.material} onChange={handleChange} />
       <input name="place" placeholder="אופציונלי- כתובת מדויקת" value={formData.place} onChange={handleChange} />
@@ -126,8 +127,9 @@ const CallForm = ({ onSuccess }) => {
       </select>
 
       <textarea name="notes" placeholder="הערות" value={formData.notes} onChange={handleChange} />
-      <button type="submit">📌 פרסם קריאה</button>
+      <button type="submit"> פרסם קריאה</button>
     </form>
+    </div>
   );
 };
 

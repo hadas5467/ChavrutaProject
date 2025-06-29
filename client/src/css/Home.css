@@ -1,88 +1,215 @@
-/* Home.css - עיצוב דף הבית */
 .home-container {
-  composes: container from './theme.css';
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2em;
+  align-items: stretch; /* במקום center */
+  padding: 3rem 2rem;
+  gap: 3rem;
+  min-height: 100vh;
   background: var(--color-bg);
-  min-height: 80vh;
 }
-
-.home-title {
-  font-size: 2.5rem;
-  color: var(--color-primary);
-  margin-bottom: 0.5em;
-  text-align: center;
-}
-
-.home-description {
-  font-size: 1.2rem;
-  color: var(--color-text);
-  max-width: 600px;
-  text-align: center;
-  margin-bottom: 2em;
-}
-
-.home-actions {
+.home-header {
+  width: 100vw;
+  min-height: 22vh;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  padding: 1rem 2rem;
   display: flex;
-  gap: 1em;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.home-btn {
-  composes: btn from './theme.css';
-  font-size: 1.1rem;
-  min-width: 160px;
-}
-
-@media (max-width: 600px) {
-  .home-title {
-    font-size: 2rem;
-  }
-  .home-description {
-    font-size: 1rem;
-  }
-  .home-actions {
-    flex-direction: column;
-    gap: 0.5em;
-  }
-}
-
-/* Home Navigation & Footer */
-.home-navbar {
-  composes: navbar from './UserProfile.css';
-}
-
-.home-footer {
-  composes: footer from './UserProfile.css';
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--box-shadow);
+  color: var(--color-bg);
+  box-sizing: border-box;
 }
 
 .home-content {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  width: 100%;
+  width: 100vh;
   max-width: 1200px;
-  padding: 0 1rem;
+  padding: 0 2rem; /* מוסיף שוליים פנימיים */
+  box-sizing: border-box;
 }
 
 .home-section {
-  flex: 1;
+  background: var(--color-surface);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--color-border);
+  padding: 2rem;
+  transition: all var(--transition);
+  min-height: 400px;
+  box-sizing: border-box;
 }
 
-.right-section {
-  order: 1;
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.3rem;
 }
 
-.left-section {
-  order: 2;
+
+/* ✅ HEADER בגובה 22% ובפרופורציה */
+.home-header {
+  width: 100%;
+  height: 22vh;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--box-shadow);
+  color: var(--color-bg);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.home-header h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-bg);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.home-subtitle {
+  font-size: 1rem;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.home-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+}
+
+button, .btn {
+  font-size: 1rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  box-shadow: var(--box-shadow);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.log-out-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-bg);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+.log-out-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.profile-image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.profile-image-wrapper img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+}
+
+.profile-btn, .chavruta-history-btn {
+  background: var(--color-bg);
+  color: var(--color-primary);
+  border: 2px solid var(--color-bg);
+}
+.profile-btn:hover, .chavruta-history-btn:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-color: var(--color-accent);
+}
+
+.home-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.home-section {
+  background: var(--color-surface);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--color-border);
+  padding: 2.5rem;
+  transition: all var(--transition);
+}
+
+.home-section:hover {
+  box-shadow: 0 8px 24px 0 rgba(46, 125, 117, 0.12);
+  transform: translateY(-2px);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: var(--color-accent);
+  border-radius: 2px;
 }
 
 @media (max-width: 768px) {
-  .home-content {
+  .home-header {
     flex-direction: column;
-    gap: 1rem;
+    height: auto;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .home-header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .home-subtitle {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .home-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .home-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 }

@@ -70,8 +70,9 @@ export const login = async (gmail, password) => {
     id: rows2[0].userId,
     name: rows2[0].name,
     sex: rows2[0].sex,
-    role: rows2[0].role
-  }; 
+    role: rows2[0].role,
+    profile: rows2[0].profile, 
+   }; 
 };
 
 // יצירת משתמש חדש

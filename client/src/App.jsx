@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import { BrowserRouter, Routes, Route ,useLocation} from 'react-router-dom';
+// ...שאר הייבוא...
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
@@ -29,9 +29,37 @@ import CallFrom from './components/Call/CallFrom';
 // import LessonList from './components/Lessons/LeesonList';
 
 function App() {
+  //  const location = useLocation();
+  // // רשימת נתיבים שבהם לא נרצה להציג את ה-Header
+  // const hideHeaderPaths = ['/login', '/signup'];
+
+  // const shouldShowHeader = !hideHeaderPaths.includes(location.pathname);
+
+
+  // return (
+  //   <>
+  //     {shouldShowHeader && <Header />}
+  //     <Routes>
+  //       <Route path="/" element={<Login />} />
+  //       <Route path="/login" element={<Login />} />
+  //       <Route path="/signUp" element={<SignUp />} />
+  //       <Route path="/fullSignUp" element={<FullSignUp />} />
+  //       <Route path="/home" element={
+  //         <ProtectedRoute>
+  //           <Home />
+  //         </ProtectedRoute>
+  //       } />
+  //       <Route path="/chavrutaList" element={<ChavrutaList />} />
+  //       <Route path="/CallFrom" element={<CallFrom />} />
+  //       <Route path="/UserProfile" element={<UserProfile />} />
+  //     </Routes>
+  //     {/* <Footer /> */}
+  //   </>
+  // );
   return (
+    
     <BrowserRouter>
-      <Header />
+      {/* <Header /> */}
 
       <Routes>
         <Route path="/" element={<Login />} />
@@ -71,9 +99,60 @@ function App() {
         </Route>   */}
       </Routes>
 
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }
 
 export default App;
+
+
+// import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+// // ...שאר הייבוא...
+// import Header from './components/Header';
+// import Footer from './components/Footer';
+// import Home from './components/Home';
+// import ProtectedRoute from './components/Users/ProtectedRoute';
+// import Login from './components/Login/LogIn';
+// import SignUp from './components/Login/SignUp';
+// import FullSignUp from './components/Login/FullSignUp';
+// import UserProfile from './components/Users/UserProfile';
+// import ChavrutaList from './components/Chavrutas/ChavrutaList';
+// import CallFrom from './components/Call/CallFrom';
+
+// function AppContent() {
+//   const location = useLocation();
+//   const hideHeaderPaths = ['/', '/login', '/signUp', '/fullSignUp'];
+//   const shouldShowHeader = !hideHeaderPaths.includes(location.pathname);
+
+//   return (
+//     <>
+//       {shouldShowHeader && <Header />}
+//       <Routes>
+//         <Route path="/" element={<Login />} />
+//         <Route path="/login" element={<Login />} />
+//         <Route path="/signUp" element={<SignUp />} />
+//         <Route path="/fullSignUp" element={<FullSignUp />} />
+//         <Route path="/home" element={
+//           <ProtectedRoute>
+//             <Home />
+//           </ProtectedRoute>
+//         } />
+//         <Route path="/chavrutaList" element={<ChavrutaList />} />
+//         <Route path="/CallFrom" element={<CallFrom />} />
+//         <Route path="/UserProfile" element={<UserProfile />} />
+//       </Routes>
+//       {/* <Footer /> */}
+//     </>
+//   );
+// }
+
+// function App() {
+//   return (
+//     <BrowserRouter>
+//       <AppContent />
+//     </BrowserRouter>
+//   );
+// }
+
+// export default App;

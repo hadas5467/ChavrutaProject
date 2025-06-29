@@ -1,40 +1,50 @@
-/* CallCard.css - עיצוב כרטיס שיחה */
+/* CallCard.css - עיצוב מודרני לפי אפיון */
 .call-card {
-  composes: card from './theme.css';
+  background-color: var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(46, 125, 117, 0.1);
+  color: var(--color-text);
   display: flex;
   flex-direction: column;
-  gap: 1em;
-  background: var(--color-surface);
+  gap: 0.8rem;
+  transition: transform 0.2s ease;
 }
 
-.call-title {
-  font-size: 1.3rem;
+.call-card:hover {
+  transform: scale(1.02);
+}
+
+.call-card h3 {
+  font-size: 1.5rem;
   color: var(--color-primary);
-  margin-bottom: 0.3em;
+  margin-bottom: 0.3rem;
 }
 
-.call-info {
-  color: var(--color-muted);
+.call-card p {
+  margin: 0;
   font-size: 1rem;
-  margin-bottom: 0.5em;
+  color: var(--color-text-secondary);
 }
 
-.call-actions {
+.call-buttons {
   display: flex;
-  gap: 0.5em;
-  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
 }
 
-.call-btn {
-  composes: btn from './theme.css';
+.call-buttons button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   font-size: 1rem;
+  font-family: var(--font-main);
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  border: none;
+  background-color: var(--color-accent);
+  color: white;
 }
 
-@media (max-width: 600px) {
-  .call-card {
-    padding: 0.7em;
-  }
-  .call-title {
-    font-size: 1.1rem;
-  }
+.call-buttons button:hover {
+  background-color: var(--color-primary);
 }

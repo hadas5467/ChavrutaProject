@@ -11,7 +11,7 @@ import {
   validateUpdateUser,
   validateLogin
 } from '../validations/userValidation.js';
-import { handleValidationUser } from '../Middleware/handleValidationUser.js';
+import { handleValidation } from '../Middleware/handleValidation.js';
 //מבנה יפה של בדיקות הרשאה שהתלבטנו על נכונותו
 // const authorizeUserOwner = authorizeOwner({
 //   tableName: 'USERS',
@@ -29,13 +29,13 @@ import { handleValidationUser } from '../Middleware/handleValidationUser.js';
 const router = express.Router();
 
 router.get('/', verifyToken, getUsers);
-router.get('/:id', verifyToken,  validateUserIdParam, handleValidationUser,getById);
-router.post('/logIn' , validateLogin, handleValidationUser, loginUser);
-router.post('/register', upload.single("profile"),validateCreateUser, handleValidationUser, createUser);
+router.get('/:id', verifyToken,  validateUserIdParam, handleValidation,getById);
+router.post('/logIn' , validateLogin, handleValidation, loginUser);
+router.post('/register', upload.single("profile"),validateCreateUser, handleValidation, createUser);
 router.post('/logout', logoutUser);
-router.put('/:id', verifyToken, upload.single("profile"),validateUpdateUser, handleValidationUser, updateUser);
+router.put('/:id', verifyToken, upload.single("profile"),validateUpdateUser, handleValidation, updateUser);
 //להפוך בהמשך לחסימת משתמש
-router.delete('/:id', verifyToken, validateUserIdParam, handleValidationUser, authorizeAdmin, deleteUser);
+router.delete('/:id', verifyToken, validateUserIdParam, handleValidation, authorizeAdmin, deleteUser);
 router.get('/profile/:filename', verifyToken, checkImageAccess, (req, res) => {
 
 const filename = req.params.filename;

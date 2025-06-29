@@ -1,42 +1,102 @@
+.call-form-page {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(46, 125, 117, 0.10) 0%, rgba(102, 178, 168, 0.10) 100%, #fff 80%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0;
+}
+
 .call-form {
-  background-color: #f8f8f8;
-  border: 2px dashed #ccc;
-  padding: 1rem;
-  margin: 1.5rem auto;
-  border-radius: 1rem;
-  max-width: 500px;
-  direction: rtl;
-  text-align: right;
+  background: var(--color-surface);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px 0 rgba(46, 125, 117, 0.10);
+  padding: 1.4rem 0.9rem;
+  max-width: 210px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 1rem 0;
+  border: 0.8px solid var(--color-border);
+}
+
+.call-form h3 {
+  font-size: 1.05rem;
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 0.7rem;
+  font-weight: 700;
 }
 
 .call-form input,
-.call-form textarea,
-.call-form select {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.8rem;
-  border: 1px solid #bbb;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+.call-form select,
+.call-form textarea {
+  padding: 0.55rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  font-size: 0.65rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: border var(--transition), box-shadow var(--transition);
+  margin-bottom: 0.12rem;
+}
+
+.call-form input:focus,
+.call-form select:focus,
+.call-form textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1.5px rgba(46, 125, 117, 0.10);
+  outline: none;
 }
 
 .call-form label {
-  font-weight: bold;
-  margin-top: 0.5rem;
-  display: block;
+  font-size: 0.55rem;
+  color: var(--color-muted);
+  margin-bottom: 0.1rem;
+  font-weight: 500;
 }
 
-.call-form button {
-  background-color: #4caf50;
-  color: white;
+.call-form textarea {
+  min-height: 38px;
+  resize: vertical;
+}
+
+.call-form button[type="submit"] {
+  background: var(--color-primary);
+  color: var(--color-bg);
   border: none;
-  padding: 0.7rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+  border-radius: 6px;
+  padding: 0.55rem 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+  box-shadow: 0 1px 4px 0 rgba(46, 125, 117, 0.10);
   cursor: pointer;
-  width: 100%;
 }
 
-.call-form button:hover {
-  background-color: #388e3c;
+.call-form button[type="submit"]:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 12px 0 rgba(46, 125, 117, 0.15);
+}
+
+@media (max-width: 600px) {
+  .call-form {
+    padding: 0.7rem 0.3rem;
+    max-width: 60vw;
+    border-radius: 8px;
+  }
+  .call-form h3 {
+    font-size: 0.8rem;
+  }
+  .call-form button[type="submit"] {
+    font-size: 0.55rem;
+    padding: 0.45rem 0;
+  }
 }
