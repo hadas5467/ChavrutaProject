@@ -2,6 +2,16 @@ import express from 'express';
 import { approveJoinRequestController , getAllJoinRequests,getJoinRequestsByUser, getJoinRequestsByCall, createJoinRequest, updateJoinRequest, deleteJoinRequest } from '../controllers/joinRequestController.js';
 import { verifyToken } from '../Middleware/authenticate.js';
 import { authorizeAdmin,authorizeOwner,authorizeOwnerOrAdmin } from '../Middleware/authorize.js';
+import {
+  validateJoinRequestIdParam,
+  validateCreateJoinRequest,
+  validateUpdateJoinRequest,
+  validateApproveJoinRequest
+} from '../validations/joinRequestValidation.js';
+import { handleValidation } from '../Middleware/handleValidation.js';
+
+
+
 //רעיון יפיפה של בדיקות הרשאה שהתלבטנו על נכונותו
 // const authorizeJoinRequestOwner = authorizeOwner({
 //   tableName: 'JOIN_REQUESTS',
@@ -27,9 +37,9 @@ router.get('/byCall/:callId', verifyToken, getJoinRequestsByCall);
 
 //router.get('/',verifyToken, getJoinRequests);
 //router.get('/:id', getjoinRequesById);
-router.post('/approve', verifyToken, approveJoinRequestController);
-router.post('/',verifyToken, createJoinRequest);
-router.put('/:id',verifyToken, authorizeJoinRequestOwnerOrAdmin, updateJoinRequest);
-router.delete('/:id',verifyToken, deleteJoinRequest);
+router.post('/approve', verifyToken,validateCreateJoinRequest, handleValidation,   approveJoinRequestController);
+router.post('/',verifyToken,validateCreateJoinRequest, handleValidation,   createJoinRequest);
+router.put('/:id',verifyToken, validateUpdateJoinRequest, handleValidation, authorizeJoinRequestOwnerOrAdmin, updateJoinRequest);
+router.delete('/:id',verifyToken,validateCreateJoinRequest, handleValidation,  deleteJoinRequest);
 
 export default router;
