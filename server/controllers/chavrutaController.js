@@ -4,14 +4,24 @@ import { handleChavrutaCreation } from '../services/chavrutaService.js';
 // קבלת כל החברותות (או לפי סינון)
 export const getAllChavrutas = async (req, res) => {
   try {
-    const { chavrutaId, user1, user2, callId, status } = req.query;
+      const { 
+      chavrutaId, user1, user2, callId, status, search,
+      userSearch, subjectSearch, startDate, endDate, sortBy, sortOrder
+    } = req.query;
+    
     let filter = {};
     if (chavrutaId) filter.chavrutaId = chavrutaId;
     if (user1) filter.user1 = user1;
     if (user2) filter.user2 = user2;
     if (callId) filter.callId = callId;
     if (status) filter.status = status;
-
+    if (search) filter.search = search;
+    if (userSearch) filter.userSearch = userSearch;
+    if (subjectSearch) filter.subjectSearch = subjectSearch;
+    if (startDate) filter.startDate = startDate;
+    if (endDate) filter.endDate = endDate;
+    if (sortBy) filter.sortBy = sortBy;
+    if (sortOrder) filter.sortOrder = sortOrder;
     const chavrutas = await chavrutaServices.findByFilter(filter);
     // תמיד מחזירים 200 עם מערך (גם אם ריק)
     res.status(200).json(chavrutas ?? []);
@@ -25,10 +35,21 @@ export const getChavrutasByUser = async (req, res) => {
   try {
     const userId = req.params.id;
     // קבל סינונים נוספים מה-query
-    const { callId, status } = req.query;
-    let filter = { userId };
+       const { 
+      callId, status, search, userSearch, subjectSearch, 
+      startDate, endDate, sortBy, sortOrder 
+    } = req.query;
+ let filter = { userId };
     if (callId) filter.callId = callId;
     if (status) filter.status = status;
+    if (search) filter.search = search;
+    if (userSearch) filter.userSearch = userSearch;
+    if (subjectSearch) filter.subjectSearch = subjectSearch;
+    if (startDate) filter.startDate = startDate;
+    if (endDate) filter.endDate = endDate;
+    if (sortBy) filter.sortBy = sortBy;
+    if (sortOrder) filter.sortOrder = sortOrder;
+
 
     const chavrutas = await chavrutaServices.findByFilter(filter);
     res.status(200).json(chavrutas ?? []);

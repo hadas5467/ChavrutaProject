@@ -20,10 +20,11 @@ const ChavrutaList = ({ usersMap }) => {
   const filters = [
     { value: 'status_active', label: 'חברותות פעילות' },
     { value: 'status_pending_start', label: 'ממתינות להתחלה' },
-    { value: 'status_paused', label: 'בהפסקה' },
     { value: 'status_ended', label: 'הסתיימו' },
     { value: 'mine', label: 'שייכות לי' },
-  ];
+  { value: 'date_desc', label: 'חדשות ביותר' },
+    { value: 'date_asc', label: 'ישנות ביותר' }
+    ];
 
   // אם יש type ברוט – נשלח אותו כברירת מחדל
   const initialSort = type ? `status_${type}` : '';
@@ -32,13 +33,13 @@ const ChavrutaList = ({ usersMap }) => {
   const [onlyMine, setOnlyMine] = useState(!isAdmin);
   const [endpoint, setEndpoint] = useState(isAdmin ? `chavrutas/user/${userId}` : `chavrutas/user/${userId}`);
   const [sortKey, setSortKey] = useState(isAdmin ? 'mine' : initialSort);
- const listSortKey = onlyMine ? sortKey : '';
+  const listSortKey = sortKey;
 
   const handleToggle = () => {
     const nextOnlyMine = !onlyMine;
     setOnlyMine(nextOnlyMine);
     setEndpoint(nextOnlyMine ? `chavrutas/user/${userId}` : 'chavrutas/');
-    setSortKey(nextOnlyMine ? 'mine' : '');
+       setSortKey(nextOnlyMine ? 'mine' : initialSort);
   };
 
   const renderChavruta = (chavruta, refreshItems) => (
